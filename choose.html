@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Выбор сценария — Trajecta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(107245981,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMXPMT81Y5"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BMXPMT81Y5');</script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#020617;--card:#0d1b35;--card2:#111f3a;
+      --accent:#C6FF00;--ag:rgba(198,255,0,0.45);--ad:rgba(198,255,0,0.1);--am:rgba(198,255,0,0.22);
+      --blue:rgba(96,165,250,0.9);--bd:rgba(96,165,250,0.12);
+      --purple:rgba(167,139,250,0.9);--pd:rgba(167,139,250,0.1);
+      --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+      --text:#f0f4ff;--muted:rgba(240,244,255,0.48);--dim:rgba(240,244,255,0.22);
+      --D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;
+    }
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+
+    .bg-g{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(198,255,0,0.05) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 90% 80%,rgba(96,165,250,0.04) 0%,transparent 55%);}
+    .bg-gr{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(198,255,0,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(198,255,0,0.02) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,black 10%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,black 10%,transparent 100%);}
+
+    header{display:flex;justify-content:flex-start;align-items:center;padding:0 48px;height:72px;border-bottom:1px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(2,6,23,0.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+    .logo{font-family:var(--D);font-size:1.55rem;font-weight:800;color:var(--text);letter-spacing:-0.02em;}
+    .logo span{color:var(--accent);text-shadow:0 0 16px var(--ag);}
+
+    .prog{position:fixed;top:72px;left:0;right:0;height:2px;background:rgba(255,255,255,0.06);z-index:99;}
+    .prog-f{height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);box-shadow:0 0 8px var(--ag);width:25%;transition:width .6s cubic-bezier(.4,0,.2,1);}
+
+    .sdots{position:fixed;top:82px;right:48px;display:flex;gap:6px;align-items:center;z-index:99;}
+    .sd{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all .3s;}
+    .sd.active{background:var(--accent);box-shadow:0 0 6px var(--ag);width:18px;border-radius:3px;}
+
+    main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:108px 24px 64px;}
+
+    .pbadge{display:inline-flex;align-items:center;gap:8px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.72rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:24px;animation:fup .45s .05s ease both;}
+    .bdot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    @keyframes fup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+    .ptitle{font-family:var(--D);font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-.035em;line-height:1.05;text-align:center;margin-bottom:12px;animation:fup .45s .1s ease both;}
+    .ptitle em{font-style:normal;color:var(--accent);}
+    .psub{font-size:1rem;color:var(--muted);text-align:center;max-width:460px;line-height:1.7;margin-bottom:52px;animation:fup .45s .16s ease both;}
+
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:940px;animation:fup .5s .22s ease both;}
+
+    .sc{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:36px 28px;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;display:flex;flex-direction:column;}
+    .sc::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+    .sc:hover{transform:translateY(-7px);}
+    .sc:hover::after{opacity:1;}
+
+    .sw{border-color:rgba(198,255,0,.18);}
+    .sw::after{background:radial-gradient(circle at 30% 20%,rgba(198,255,0,.08),transparent 65%);}
+    .sw:hover{border-color:rgba(198,255,0,.55);box-shadow:0 28px 64px rgba(0,0,0,.45);}
+    .sw.picked{border-color:rgba(198,255,0,.7);background:rgba(198,255,0,.05);box-shadow:0 0 0 2px rgba(198,255,0,.18);}
+    .sw.picked::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 70%);}
+
+    .gr{border-color:rgba(96,165,250,.18);}
+    .gr::after{background:radial-gradient(circle at 30% 20%,rgba(96,165,250,.08),transparent 65%);}
+    .gr:hover{border-color:rgba(96,165,250,.5);box-shadow:0 28px 64px rgba(0,0,0,.45);}
+    .gr.picked{border-color:rgba(96,165,250,.7);background:rgba(96,165,250,.05);box-shadow:0 0 0 2px rgba(96,165,250,.18);}
+    .gr.picked::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(96,165,250,.9),transparent 70%);}
+
+    .re{border-color:rgba(167,139,250,.18);}
+    .re::after{background:radial-gradient(circle at 30% 20%,rgba(167,139,250,.08),transparent 65%);}
+    .re:hover{border-color:rgba(167,139,250,.5);box-shadow:0 28px 64px rgba(0,0,0,.45);}
+    .re.picked{border-color:rgba(167,139,250,.7);background:rgba(167,139,250,.05);box-shadow:0 0 0 2px rgba(167,139,250,.18);}
+    .re.picked::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(167,139,250,.9),transparent 70%);}
+
+    .chk{position:absolute;top:18px;right:18px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;border:1.5px solid var(--border2);color:transparent;transition:all .22s;}
+    .sw.picked .chk{background:rgba(198,255,0,.15);border-color:var(--accent);color:var(--accent);}
+    .gr.picked .chk{background:rgba(96,165,250,.15);border-color:var(--blue);color:var(--blue);}
+    .re.picked .chk{background:rgba(167,139,250,.15);border-color:var(--purple);color:var(--purple);}
+
+    .cemoji{font-size:2.8rem;margin-bottom:20px;display:block;}
+    .cbadge{display:inline-block;font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:12px;}
+    .sw .cbadge{background:var(--ad);color:var(--accent);border:1px solid var(--am);}
+    .gr .cbadge{background:var(--bd);color:var(--blue);border:1px solid rgba(96,165,250,.25);}
+    .re .cbadge{background:var(--pd);color:var(--purple);border:1px solid rgba(167,139,250,.25);}
+
+    .cname{font-family:var(--D);font-size:1.3rem;font-weight:800;letter-spacing:-.025em;margin-bottom:10px;}
+    .cdesc{font-size:.875rem;color:var(--muted);line-height:1.65;margin-bottom:24px;flex:1;}
+
+    .cstats{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+    .cst{display:flex;align-items:center;gap:8px;font-size:.8rem;}
+    .cst-ico{font-size:.88rem;}
+    .cst-lbl{color:var(--muted);}
+    .cst-val{margin-left:auto;font-weight:600;font-size:.78rem;}
+    .sw .cst-val{color:var(--accent);}
+    .gr .cst-val{color:var(--blue);}
+    .re .cst-val{color:var(--purple);}
+
+    .ccta{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid var(--border);}
+    .ccta-txt{font-size:.85rem;font-weight:600;}
+    .sw .ccta-txt{color:var(--accent);}
+    .gr .ccta-txt{color:var(--blue);}
+    .re .ccta-txt{color:var(--purple);}
+    .carr{font-size:1.1rem;transition:transform .2s;}
+    .sc:hover .carr{transform:translateX(5px);}
+
+    .trust{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:36px;flex-wrap:wrap;animation:fup .5s .3s ease both;}
+    .ti{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);}
+    .ti-ico{width:28px;height:28px;border-radius:50%;background:var(--ad);border:1px solid var(--am);display:flex;align-items:center;justify-content:center;font-size:.82rem;}
+
+    /* Loading */
+    .lov{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;pointer-events:none;transition:opacity .35s;}
+    .lov.show{opacity:1;pointer-events:all;}
+    .llogo{font-family:var(--D);font-size:2rem;font-weight:800;}
+    .llogo span{color:var(--accent);}
+    .lbar{width:200px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
+    .lfill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width .6s ease;box-shadow:0 0 8px var(--ag);}
+    .ltxt{font-size:.82rem;color:var(--muted);}
+
+    @media(max-width:900px){.cards{grid-template-columns:1fr;max-width:480px;gap:12px;}}
+    @media(max-width:480px){header{padding:0 20px;}.sdots{right:20px;}main{padding:96px 16px 52px;}.ptitle{font-size:1.85rem;}}
+  </style>
+</head>
+<body>
+
+<div class="lov" id="lov">
+  <div class="llogo">Traject<span>a</span></div>
+  <div class="lbar"><div class="lfill" id="lfill"></div></div>
+  <div class="ltxt" id="ltxt">Инициализация модели...</div>
+</div>
+
+<div class="bg-g"></div>
+<div class="bg-gr"></div>
+
+<header>
+  <a href="index.html" class="logo">Traject<span>a</span></a>
+</header>
+<div class="prog"><div class="prog-f"></div></div>
+<div class="sdots"><div class="sd active"></div><div class="sd"></div><div class="sd"></div></div>
+
+<main>
+  <div class="pbadge"><span class="bdot"></span>Шаг 1 из 3</div>
+  <h1 class="ptitle">Выбери своё<br><em>состояние</em></h1>
+  <p class="psub">Каждый сценарий — отдельная прогностическая модель. Выбери ту, что соответствует твоей ситуации прямо сейчас.</p>
+
+  <div class="cards">
+
+    <div class="sc sw" id="c-switch" onclick="pick('switch',this)">
+      <div class="chk" id="k-switch"></div>
+      <span class="cemoji">🔄</span>
+      <div class="cbadge">Сценарий 1</div>
+      <div class="cname">Смена профессии</div>
+      <p class="cdesc">Хочешь кардинально поменять сферу. Система моделирует траекторию перехода и прогнозирует доход на новом пути.</p>
+      <div class="cstats">
+        <div class="cst"><span class="cst-ico">💰</span><span class="cst-lbl">Потенциал дохода</span><span class="cst-val">Высокий</span></div>
+        <div class="cst"><span class="cst-ico">⚡</span><span class="cst-lbl">Уровень риска</span><span class="cst-val">Высокий</span></div>
+        <div class="cst"><span class="cst-ico">⏱</span><span class="cst-lbl">Горизонт</span><span class="cst-val">12–24 мес.</span></div>
+      </div>
+      <div class="ccta"><span class="ccta-txt">Выбрать сценарий</span><span class="carr">→</span></div>
+    </div>
+
+    <div class="sc gr" id="c-grow" onclick="pick('grow',this)">
+      <div class="chk" id="k-grow"></div>
+      <span class="cemoji">📈</span>
+      <div class="cbadge">Сценарий 2</div>
+      <div class="cname">Рост дохода</div>
+      <p class="cdesc">Остаёшься в своей сфере, но хочешь значительно увеличить доход. Строим оптимальный путь роста.</p>
+      <div class="cstats">
+        <div class="cst"><span class="cst-ico">💰</span><span class="cst-lbl">Потенциал дохода</span><span class="cst-val">Средний</span></div>
+        <div class="cst"><span class="cst-ico">⚡</span><span class="cst-lbl">Уровень риска</span><span class="cst-val">Низкий</span></div>
+        <div class="cst"><span class="cst-ico">⏱</span><span class="cst-lbl">Горизонт</span><span class="cst-val">6–18 мес.</span></div>
+      </div>
+      <div class="ccta"><span class="ccta-txt">Выбрать сценарий</span><span class="carr">→</span></div>
+    </div>
+
+    <div class="sc re" id="c-restart" onclick="pick('restart',this)">
+      <div class="chk" id="k-restart"></div>
+      <span class="cemoji">🔁</span>
+      <div class="cbadge">Сценарий 3</div>
+      <div class="cname">Перезапуск</div>
+      <p class="cdesc">Выгорание, кризис или потеря работы. Моделируем сценарий восстановления и нового старта с нуля.</p>
+      <div class="cstats">
+        <div class="cst"><span class="cst-ico">💰</span><span class="cst-lbl">Потенциал дохода</span><span class="cst-val">Широкий</span></div>
+        <div class="cst"><span class="cst-ico">⚡</span><span class="cst-lbl">Неопределённость</span><span class="cst-val">Высокая</span></div>
+        <div class="cst"><span class="cst-ico">⏱</span><span class="cst-lbl">Горизонт</span><span class="cst-val">6–24 мес.</span></div>
+      </div>
+      <div class="ccta"><span class="ccta-txt">Выбрать сценарий</span><span class="carr">→</span></div>
+    </div>
+
+  </div>
+
+  <div class="trust">
+    <div class="ti"><div class="ti-ico">🧠</div><span>AI‑алгоритм</span></div>
+    <div class="ti"><div class="ti-ico">🔒</div><span>Без регистрации</span></div>
+    <div class="ti"><div class="ti-ico">⏱</div><span>5 минут</span></div>
+    <div class="ti"><div class="ti-ico">💾</div><span>Данные у тебя</span></div>
+  </div>
+</main>
+
+<script>
+  function save(k,v){try{localStorage.setItem('tr_'+k,JSON.stringify(v));}catch(e){}}
+  function load(k){try{return JSON.parse(localStorage.getItem('tr_'+k));}catch(e){return null;}}
+
+  // Pre-select
+  const saved=load('scenario');
+  if(saved){
+    const c=document.getElementById('c-'+saved);
+    const k=document.getElementById('k-'+saved);
+    if(c)c.classList.add('picked');
+    if(k)k.textContent='✓';
+  }
+
+  function pick(sc,el){
+    ['switch','grow','restart'].forEach(s=>{
+      const c=document.getElementById('c-'+s);
+      const k=document.getElementById('k-'+s);
+      if(c)c.classList.remove('picked');
+      if(k)k.textContent='';
+    });
+    el.classList.add('picked');
+    document.getElementById('k-'+sc).textContent='✓';
+    save('scenario',sc);
+
+    // Loading animation
+    const lov=document.getElementById('lov');
+    const lf=document.getElementById('lfill');
+    const lt=document.getElementById('ltxt');
+    const msgs=['Инициализация модели...','Загрузка параметров...','Подготовка алгоритма...','Готово!'];
+    const pcts=[20,55,85,100];
+    lov.classList.add('show');
+    let i=0;
+    const t=setInterval(()=>{
+      lf.style.width=pcts[i]+'%';
+      lt.textContent=msgs[i];
+      i++;
+      if(i>=msgs.length){clearInterval(t);setTimeout(()=>{window.location.href='test.html';},300);}
+    },380);
+  }
+</script>
+</body>
+</html>
