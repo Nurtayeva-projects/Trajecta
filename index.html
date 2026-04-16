@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FutureSim — AI-платформа сценарного анализа</title>
+  <meta name="description" content="Смоделируй последствия своих решений. AI-платформа прогнозирования дохода и карьерной траектории.">
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(107245981,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMXPMT81Y5"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BMXPMT81Y5');</script>
+  <style>
+    .page-bg { position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 60% at 70% 10%,rgba(198,255,0,0.06) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 10% 80%,rgba(96,165,250,0.05) 0%,transparent 60%); }
+    .page-grid { position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(198,255,0,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(198,255,0,0.022) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 70% 70% at 50% 40%,black 20%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 40%,black 20%,transparent 100%); }
+    .page-wrap { position:relative;z-index:1; }
+
+    /* HERO */
+    .hero { min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:80px;max-width:1280px;margin:0 auto;padding:140px 48px 80px; }
+    .hero-h1 { font-family:var(--font-display);font-size:clamp(2.8rem,5.5vw,5.4rem);font-weight:800;line-height:0.94;letter-spacing:-0.04em;margin-bottom:28px;animation:fadeUp 0.6s 0.1s ease both; }
+    .hero-h1 em { font-style:normal;color:var(--accent);text-shadow:0 0 40px rgba(198,255,0,0.3); }
+    .hero-h1 .dim { color:var(--text-dim); }
+    .hero-sub { font-size:1.1rem;color:var(--text-muted);line-height:1.72;max-width:460px;margin-bottom:44px;animation:fadeUp 0.6s 0.2s ease both; }
+    .hero-sub strong { color:rgba(240,244,255,0.82);font-weight:600; }
+    .hero-actions { display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp 0.6s 0.3s ease both; }
+    .hero-proof { display:flex;align-items:center;gap:14px;margin-top:32px;animation:fadeUp 0.6s 0.4s ease both; }
+    .proof-avs { display:flex; }
+    .proof-av { width:30px;height:30px;border-radius:50%;border:2px solid var(--bg);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:0.88rem;margin-left:-8px; }
+    .proof-av:first-child { margin-left:0; }
+    .proof-text { font-size:0.8rem;color:var(--text-muted); }
+    .proof-text strong { color:var(--accent); }
+
+    /* SIM PREVIEW */
+    .hero-right { animation:fadeUp 0.7s 0.25s ease both;position:relative; }
+    .float-card { position:absolute;background:var(--card2);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 14px;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.5);pointer-events:none; }
+    .fc-1 { right:-20px;top:60px;animation:floatBob 4s ease-in-out infinite; }
+    .fc-2 { left:-20px;bottom:80px;animation:floatBob 5s ease-in-out infinite 1s reverse; }
+    @keyframes floatBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .fc-label { color:var(--text-muted);font-size:0.66rem;text-transform:uppercase;letter-spacing:0.08em; }
+    .fc-val { color:var(--accent);font-weight:700;font-family:var(--font-display);font-size:0.9rem;margin-top:2px; }
+
+    .sim-card { background:var(--card);border:1px solid rgba(255,255,255,0.09);border-radius:20px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden; }
+    .sim-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 60%); }
+    .sim-head { display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--border); }
+    .sim-status { display:flex;align-items:center;gap:6px;background:var(--accent-dim);border:1px solid var(--accent-mid);color:var(--accent);font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px; }
+    .sim-dot { width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 1.5s infinite; }
+    .sim-title { font-family:var(--font-display);font-size:0.9rem;font-weight:700;color:var(--text-muted);margin-left:auto; }
+    .sim-tag { display:inline-flex;align-items:center;gap:6px;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);color:rgba(96,165,250,0.9);font-size:0.72rem;font-weight:600;padding:4px 12px;border-radius:100px;margin-bottom:18px; }
+    .sim-metrics { display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px; }
+    .sim-metric { background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center; }
+    .sim-metric-val { font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--accent);letter-spacing:-0.02em; }
+    .sim-metric-label { font-size:0.62rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-top:3px; }
+    .sim-bar { margin-bottom:12px; }
+    .sim-bar-head { display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.78rem; }
+    .sim-bar-name { color:var(--text-muted); }
+    .sim-bar-val { font-weight:700;color:var(--accent);font-family:var(--font-display); }
+    .sim-bar-track { height:5px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden; }
+    .sim-bar-fill { height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);border-radius:3px;transition:width 1.5s cubic-bezier(0.4,0,0.2,1); }
+
+    /* STATS */
+    .stats-bar { border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(255,255,255,0.012);padding:28px 48px;display:flex;justify-content:center; }
+    .stat-item { flex:1;text-align:center;padding:0 32px;position:relative; }
+    .stat-item+.stat-item::before { content:'';position:absolute;left:0;top:10%;bottom:10%;width:1px;background:var(--border); }
+    .stat-num { font-family:var(--font-display);font-size:2.4rem;font-weight:800;color:var(--accent);letter-spacing:-0.04em;display:block; }
+    .stat-label { font-size:0.76rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-top:5px;display:block; }
+
+    /* SECTIONS */
+    .sw { max-width:1200px;margin:0 auto;padding:100px 48px; }
+    .sw-sm { max-width:1200px;margin:0 auto;padding:0 48px 100px; }
+
+    /* HOW */
+    .steps-row { display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:48px; }
+    .step { background:var(--card);padding:36px 28px;transition:background 0.2s; }
+    .step:hover { background:var(--card2); }
+    .step-n { font-family:var(--font-display);font-size:2.6rem;font-weight:800;color:rgba(198,255,0,0.1);line-height:1;margin-bottom:18px; }
+    .step-ico { width:42px;height:42px;background:var(--accent-dim);border:1px solid var(--accent-mid);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:16px; }
+    .step h3 { font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:10px; }
+    .step p { font-size:0.86rem;color:var(--text-muted);line-height:1.65; }
+
+    /* SCENARIOS */
+    .sc-row { display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px; }
+    .sc-card { background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px 28px;cursor:pointer;transition:all 0.25s cubic-bezier(0.4,0,0.2,1);text-decoration:none;display:block;position:relative;overflow:hidden; }
+    .sc-card::after { content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s; }
+    .sc-card:hover { transform:translateY(-6px); }
+    .sc-card:hover::after { opacity:1; }
+    .sc-c1 { border-color:rgba(198,255,0,0.2); }
+    .sc-c1::after { background:radial-gradient(circle at 30% 20%,rgba(198,255,0,0.06),transparent 65%); }
+    .sc-c1:hover { border-color:rgba(198,255,0,0.5);box-shadow:0 20px 50px rgba(0,0,0,0.4); }
+    .sc-c2::after { background:radial-gradient(circle at 30% 20%,rgba(96,165,250,0.07),transparent 65%); }
+    .sc-c2:hover { border-color:rgba(96,165,250,0.4);box-shadow:0 20px 50px rgba(0,0,0,0.4); }
+    .sc-c3::after { background:radial-gradient(circle at 30% 20%,rgba(167,139,250,0.07),transparent 65%); }
+    .sc-c3:hover { border-color:rgba(167,139,250,0.4);box-shadow:0 20px 50px rgba(0,0,0,0.4); }
+    .sc-emoji { font-size:2.4rem;margin-bottom:18px;display:block; }
+    .sc-badge { display:inline-block;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:10px; }
+    .sc-c1 .sc-badge { background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-mid); }
+    .sc-c2 .sc-badge { background:rgba(96,165,250,0.12);color:rgba(96,165,250,0.9);border:1px solid rgba(96,165,250,0.25); }
+    .sc-c3 .sc-badge { background:rgba(167,139,250,0.1);color:rgba(167,139,250,0.9);border:1px solid rgba(167,139,250,0.25); }
+    .sc-name { font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:10px;letter-spacing:-0.02em; }
+    .sc-desc { font-size:0.875rem;color:var(--text-muted);line-height:1.65;margin-bottom:20px; }
+    .sc-go { font-size:0.85rem;color:var(--text-muted);display:flex;align-items:center;gap:6px;transition:gap 0.2s,color 0.2s; }
+    .sc-card:hover .sc-go { gap:12px;color:var(--text); }
+
+    /* B2B */
+    .b2b-row { display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px; }
+    .b2b-card { background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;transition:border-color 0.2s,transform 0.2s; }
+    .b2b-card:hover { border-color:var(--border2);transform:translateY(-3px); }
+    .b2b-ico { font-size:2rem;margin-bottom:14px; }
+    .b2b-card h3 { font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:8px; }
+    .b2b-card p { font-size:0.86rem;color:var(--text-muted);line-height:1.65; }
+
+    /* CTA */
+    .cta-s { padding:0 48px 100px; }
+    .cta-in { max-width:1200px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:28px;padding:80px 60px;display:flex;align-items:center;gap:60px;position:relative;overflow:hidden; }
+    .cta-in::before { content:'';position:absolute;inset:-1px;background:linear-gradient(135deg,rgba(198,255,0,0.15),transparent 55%);border-radius:29px;z-index:0;pointer-events:none; }
+    .cta-in::after { content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(198,255,0,0.06),transparent 70%);pointer-events:none; }
+    .cta-l { flex:1;position:relative;z-index:1; }
+    .cta-l h2 { font-family:var(--font-display);font-size:clamp(2rem,3.5vw,3rem);font-weight:800;letter-spacing:-0.035em;line-height:1.05;margin-bottom:14px; }
+    .cta-l p { font-size:1rem;color:var(--text-muted);line-height:1.7; }
+    .cta-r { flex-shrink:0;text-align:center;position:relative;z-index:1; }
+    .cta-r .btn { display:block;margin-bottom:14px; }
+    .cta-meta { font-size:0.76rem;color:var(--text-muted);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border);padding:32px 48px;display:flex;align-items:center;gap:32px;flex-wrap:wrap; }
+    .f-logo { font-family:var(--font-display);font-size:1.15rem;font-weight:800; }
+    .f-logo span { color:var(--accent); }
+    .f-links { display:flex;gap:24px; }
+    .f-links a { font-size:0.82rem;color:var(--text-muted);transition:color 0.2s; }
+    .f-links a:hover { color:var(--text); }
+    .f-copy { font-size:0.76rem;color:var(--text-muted);margin-left:auto; }
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){
+      .hero{grid-template-columns:1fr;gap:40px;padding:130px 32px 60px;}
+      .hero-right{display:none;}
+      .steps-row{grid-template-columns:repeat(2,1fr);}
+      .sc-row{grid-template-columns:1fr;gap:12px;}
+      .b2b-row{grid-template-columns:1fr 1fr;}
+      .cta-in{flex-direction:column;gap:32px;padding:48px 36px;text-align:center;}
+      .sw,.sw-sm{padding:72px 32px;}
+    }
+    @media(max-width:640px){
+      .hero{padding:110px 20px 52px;}
+      .stats-bar{padding:20px;flex-wrap:wrap;}
+      .stat-item{flex:1 1 50%;padding:12px 16px;}
+      .stat-item+.stat-item::before{display:none;}
+      .steps-row{grid-template-columns:1fr;background:transparent;gap:10px;border-radius:0;}
+      .step{border-radius:var(--radius)!important;border:1px solid var(--border);}
+      .b2b-row{grid-template-columns:1fr;}
+      .cta-s{padding:0 20px 60px;}
+      .cta-in{padding:40px 24px;}
+      footer{padding:24px 20px;}
+      .f-copy{margin-left:0;width:100%;}
+      .f-links{display:none;}
+      .sw,.sw-sm{padding:56px 20px;}
+    }
+  </style>
+</head>
+<body>
+<div class="page-bg"></div>
+<div class="page-grid"></div>
+
+<header class="site-header" id="siteHeader">
+  <a href="index.html" class="logo">Future<span>Sim</span></a>
+  <nav class="header-nav">
+    <a href="#how" class="nav-link">Как работает</a>
+    <a href="#scenarios" class="nav-link">Сценарии</a>
+    <a href="#b2b" class="nav-link">B2B</a>
+    <a href="choose.html" class="btn" style="padding:10px 22px;font-size:0.85rem;">Смоделировать →</a>
+  </nav>
+</header>
+
+<div class="page-wrap">
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div style="margin-bottom:28px;animation:fadeUp 0.6s 0.05s ease both">
+        <span class="badge"><span class="badge-dot"></span>AI-платформа сценарного анализа</span>
+      </div>
+      <h1 class="hero-h1">А если бы ты<br>мог <em>увидеть</em><br><span class="dim">будущее заранее?</span></h1>
+      <p class="hero-sub"><strong>FutureSim</strong> — система сценарного моделирования. Анализирует твою поведенческую модель и строит прогноз дохода, карьерной траектории и вероятности успеха.</p>
+      <div class="hero-actions">
+        <a href="choose.html" class="btn btn-lg">Смоделировать сценарий →</a>
+        <a href="#how" class="btn btn-outline">Как работает</a>
+      </div>
+      <div class="hero-proof">
+        <div class="proof-avs">
+          <div class="proof-av">👨‍💻</div><div class="proof-av">👩‍🎨</div>
+          <div class="proof-av">👨‍🔬</div><div class="proof-av">👩‍💼</div>
+        </div>
+        <p class="proof-text">Уже <strong>3 200+</strong> сценариев смоделировано</p>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div style="position:relative;padding:20px 32px 20px 24px">
+        <div class="float-card fc-1"><div class="fc-label">Вероятность</div><div class="fc-val">78% ↑</div></div>
+        <div class="float-card fc-2"><div class="fc-label">Алгоритм</div><div class="fc-val">Активен ✓</div></div>
+        <div class="sim-card">
+          <div class="sim-head">
+            <div class="sim-status"><span class="sim-dot"></span>Симуляция</div>
+            <div class="sim-title">Прогноз · 2025–2030</div>
+          </div>
+          <div class="sim-tag">🔄 Смена профессии</div>
+          <div class="sim-metrics">
+            <div class="sim-metric"><div class="sim-metric-val">800к</div><div class="sim-metric-label">Через 2 года</div></div>
+            <div class="sim-metric"><div class="sim-metric-val">78%</div><div class="sim-metric-label">Вероятность</div></div>
+            <div class="sim-metric"><div class="sim-metric-val">Средний</div><div class="sim-metric-label">Риск</div></div>
+          </div>
+          <div class="sim-bar">
+            <div class="sim-bar-head"><span class="sim-bar-name">Потенциал роста</span><span class="sim-bar-val">88%</span></div>
+            <div class="sim-bar-track"><div class="sim-bar-fill" id="pb1" style="width:0%"></div></div>
+          </div>
+          <div class="sim-bar">
+            <div class="sim-bar-head"><span class="sim-bar-name">Вероятность успеха</span><span class="sim-bar-val">78%</span></div>
+            <div class="sim-bar-track"><div class="sim-bar-fill" id="pb2" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-item reveal"><span class="stat-num" data-target="3">0</span><span class="stat-label">Сценария</span></div>
+    <div class="stat-item reveal reveal-d1"><span class="stat-num" data-target="7">0</span><span class="stat-label">Параметров модели</span></div>
+    <div class="stat-item reveal reveal-d2"><span class="stat-num">5 мин</span><span class="stat-label">Настройка</span></div>
+    <div class="stat-item reveal reveal-d3"><span class="stat-num">10 лет</span><span class="stat-label">Горизонт прогноза</span></div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-outer">
+    <div class="ticker-track">
+      <span class="ticker-item"><span>🔄</span>Смена профессии<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>📈</span>Рост дохода<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>🔁</span>Перезапуск<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>🧠</span>Поведенческая модель<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>🎯</span>Алгоритм прогнозирования<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>🔮</span>Цифровой двойник<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>📊</span>Вероятность успеха<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>🔄</span>Смена профессии<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>📈</span>Рост дохода<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>🔁</span>Перезапуск<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>🧠</span>Поведенческая модель<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>🎯</span>Алгоритм прогнозирования<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>🔮</span>Цифровой двойник<span class="ticker-sep">·</span></span>
+      <span class="ticker-item"><span>📊</span>Вероятность успеха<span class="ticker-sep">·</span></span>
+    </div>
+  </div>
+
+  <!-- HOW -->
+  <section class="sw" id="how">
+    <div class="reveal">
+      <span class="section-label">Как работает</span>
+      <h2 class="section-title">Алгоритм за <em>4 шага</em></h2>
+      <p class="section-sub">От выбора сценария до персонального прогноза — без шаблонов и обобщений.</p>
+    </div>
+    <div class="steps-row reveal reveal-d1">
+      <div class="step"><div class="step-n">01</div><div class="step-ico">🎯</div><h3>Выбор сценария</h3><p>Три сценария под разные жизненные состояния. Каждый имеет свою базовую прогностическую модель.</p></div>
+      <div class="step"><div class="step-n">02</div><div class="step-ico">🧠</div><h3>Настройка модели</h3><p>7 параметров: отношение к риску, скорость решений, горизонт планирования, приоритеты и навыки.</p></div>
+      <div class="step"><div class="step-n">03</div><div class="step-ico">⚙️</div><h3>Расчёт алгоритма</h3><p>Система обрабатывает комбинацию параметров и строит персональную траекторию с вероятностями.</p></div>
+      <div class="step"><div class="step-n">04</div><div class="step-ico">📊</div><h3>Прогноз и пути</h3><p>Прогноз дохода на 2 и 5 лет, уровень риска, профиль навыков и два пути дальнейшего развития.</p></div>
+    </div>
+  </section>
+
+  <!-- SCENARIOS -->
+  <section class="sw-sm" id="scenarios">
+    <div class="reveal">
+      <span class="section-label">Сценарии</span>
+      <h2 class="section-title">Выбери своё <em>состояние</em></h2>
+      <p class="section-sub">Не тест и не профориентация. Сценарный анализ — прогноз конкретно под твою ситуацию.</p>
+    </div>
+    <div class="sc-row reveal reveal-d1">
+      <a href="choose.html" class="sc-card sc-c1">
+        <span class="sc-emoji">🔄</span><div class="sc-badge">Смена профессии</div>
+        <div class="sc-name">Карьерный свитч</div>
+        <p class="sc-desc">Хочешь уйти из текущей сферы? Моделируем траекторию перехода с прогнозом дохода на новом пути.</p>
+        <div class="sc-go">Запустить симуляцию <span>→</span></div>
+      </a>
+      <a href="choose.html" class="sc-card sc-c2">
+        <span class="sc-emoji">📈</span><div class="sc-badge">Рост дохода</div>
+        <div class="sc-name">Увеличение дохода</div>
+        <p class="sc-desc">Ты на своём месте, но хочешь зарабатывать больше. Анализируем твою модель и строим путь роста.</p>
+        <div class="sc-go">Запустить симуляцию <span>→</span></div>
+      </a>
+      <a href="choose.html" class="sc-card sc-c3">
+        <span class="sc-emoji">🔁</span><div class="sc-badge">Перезапуск</div>
+        <div class="sc-name">Выход из кризиса</div>
+        <p class="sc-desc">Выгорание или потеря работы? Моделируем сценарий восстановления и нового старта с нуля.</p>
+        <div class="sc-go">Запустить симуляцию <span>→</span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- B2B -->
+  <section class="sw-sm" id="b2b">
+    <div class="reveal">
+      <span class="section-label">B2B решение</span>
+      <h2 class="section-title">Для бизнеса и <em>HR</em></h2>
+      <p class="section-sub">FutureSim масштабируется в корпоративный инструмент оценки и развития людей.</p>
+    </div>
+    <div class="b2b-row reveal reveal-d1">
+      <div class="b2b-card"><div class="b2b-ico">🏢</div><h3>HR и подбор</h3><p>Алгоритм определяет карьерные траектории кандидатов и прогнозирует потенциал роста в компании.</p></div>
+      <div class="b2b-card"><div class="b2b-ico">📚</div><h3>Корп. обучение</h3><p>Выявляет мотивацию и поведенческую модель сотрудников, формирует персональные треки развития.</p></div>
+      <div class="b2b-card"><div class="b2b-ico">🚀</div><h3>Развитие команды</h3><p>Помогает руководителям видеть кто готов к росту, кто в риске выгорания, кому нужна смена роли.</p></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-s">
+    <div class="cta-in reveal">
+      <div class="cta-l">
+        <h2>Готов увидеть свою<br><span style="color:var(--accent)">траекторию?</span></h2>
+        <p>Настройка займёт 5 минут. Прогноз персональный — не шаблонный. Данные хранятся только в твоём браузере.</p>
+      </div>
+      <div class="cta-r">
+        <a href="choose.html" class="btn btn-lg">Смоделировать сценарий →</a>
+        <div class="cta-meta">
+          <span>⏱ 5 минут</span><span>🔒 Без регистрации</span><span>🧠 AI-алгоритм</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="f-logo">Future<span>Sim</span></div>
+    <div class="f-links">
+      <a href="#how">Как работает</a><a href="#scenarios">Сценарии</a>
+      <a href="#b2b">B2B</a><a href="choose.html">Запустить</a>
+    </div>
+    <span class="f-copy">© 2025 FutureSim · AI-платформа сценарного анализа</span>
+  </footer>
+</div>
+
+<script src="script.js"></script>
+<script>
+  setTimeout(() => {
+    const b1=document.getElementById('pb1'),b2=document.getElementById('pb2');
+    if(b1)b1.style.width='88%'; if(b2)b2.style.width='78%';
+  }, 800);
+  if(window.innerWidth>1024){
+    document.addEventListener('mousemove',e=>{
+      const mx=(e.clientX/window.innerWidth-0.5)*2,my=(e.clientY/window.innerHeight-0.5)*2;
+      const bg=document.querySelector('.page-bg');
+      if(bg)bg.style.transform=`translate(${mx*12}px,${my*8}px)`;
+    },{passive:true});
+  }
+</script>
+</body>
+</html>
