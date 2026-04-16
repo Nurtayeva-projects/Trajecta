@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Выбор сценария — FutureSim</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(107245981,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMXPMT81Y5"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BMXPMT81Y5');</script>
+  <style>
+    main { min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 24px 60px; }
+
+    .page-eyebrow { margin-bottom:24px;animation:fadeUp 0.5s 0.05s ease both; }
+    .page-title { font-family:var(--font-display);font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-0.035em;line-height:1.05;text-align:center;margin-bottom:12px;animation:fadeUp 0.5s 0.1s ease both; }
+    .page-title em { font-style:normal;color:var(--accent); }
+    .page-sub { font-size:1rem;color:var(--text-muted);text-align:center;max-width:480px;line-height:1.7;margin-bottom:52px;animation:fadeUp 0.5s 0.15s ease both; }
+
+    /* CARDS */
+    .cards { display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:900px;animation:fadeUp 0.5s 0.2s ease both; }
+
+    .sc-card {
+      background:var(--card);border:1.5px solid var(--border);
+      border-radius:var(--radius-lg);padding:36px 28px;
+      cursor:pointer;transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+      position:relative;overflow:hidden;text-align:left;
+    }
+    .sc-card::before { content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s; }
+    .sc-card:hover { transform:translateY(-6px); }
+    .sc-card:hover::before { opacity:1; }
+
+    /* color variants */
+    .c-switch { border-color:rgba(198,255,0,0.2); }
+    .c-switch::before { background:radial-gradient(circle at 30% 20%,rgba(198,255,0,0.07),transparent 65%); }
+    .c-switch:hover { border-color:rgba(198,255,0,0.55);box-shadow:0 24px 60px rgba(0,0,0,0.45); }
+    .c-switch.selected { border-color:rgba(198,255,0,0.7);background:rgba(198,255,0,0.05);box-shadow:0 0 0 2px rgba(198,255,0,0.2); }
+
+    .c-grow { border-color:rgba(96,165,250,0.2); }
+    .c-grow::before { background:radial-gradient(circle at 30% 20%,rgba(96,165,250,0.07),transparent 65%); }
+    .c-grow:hover { border-color:rgba(96,165,250,0.5);box-shadow:0 24px 60px rgba(0,0,0,0.45); }
+    .c-grow.selected { border-color:rgba(96,165,250,0.7);background:rgba(96,165,250,0.05);box-shadow:0 0 0 2px rgba(96,165,250,0.2); }
+
+    .c-restart { border-color:rgba(167,139,250,0.2); }
+    .c-restart::before { background:radial-gradient(circle at 30% 20%,rgba(167,139,250,0.07),transparent 65%); }
+    .c-restart:hover { border-color:rgba(167,139,250,0.5);box-shadow:0 24px 60px rgba(0,0,0,0.45); }
+    .c-restart.selected { border-color:rgba(167,139,250,0.7);background:rgba(167,139,250,0.05);box-shadow:0 0 0 2px rgba(167,139,250,0.2); }
+
+    .card-emoji { font-size:2.8rem;margin-bottom:20px;display:block; }
+    .card-badge { display:inline-block;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:12px; }
+    .c-switch .card-badge { background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-mid); }
+    .c-grow   .card-badge { background:rgba(96,165,250,0.12);color:rgba(96,165,250,0.9);border:1px solid rgba(96,165,250,0.25); }
+    .c-restart .card-badge { background:rgba(167,139,250,0.1);color:rgba(167,139,250,0.9);border:1px solid rgba(167,139,250,0.25); }
+
+    .card-name { font-family:var(--font-display);font-size:1.3rem;font-weight:800;letter-spacing:-0.025em;margin-bottom:10px; }
+    .card-desc { font-size:0.875rem;color:var(--text-muted);line-height:1.65;margin-bottom:24px; }
+
+    .card-stats { display:flex;flex-direction:column;gap:7px;margin-bottom:24px; }
+    .card-stat { display:flex;align-items:center;gap:8px;font-size:0.8rem; }
+    .cs-icon { font-size:0.9rem; }
+    .cs-label { color:var(--text-muted); }
+    .cs-val { margin-left:auto;font-weight:600;font-size:0.78rem; }
+    .c-switch .cs-val { color:var(--accent); }
+    .c-grow   .cs-val { color:rgba(96,165,250,0.9); }
+    .c-restart .cs-val { color:rgba(167,139,250,0.9); }
+
+    .card-cta { display:flex;align-items:center;justify-content:space-between;padding-top:20px;border-top:1px solid var(--border); }
+    .card-cta-text { font-size:0.85rem;font-weight:600; }
+    .c-switch .card-cta-text { color:var(--accent); }
+    .c-grow   .card-cta-text { color:rgba(96,165,250,0.9); }
+    .c-restart .card-cta-text { color:rgba(167,139,250,0.9); }
+    .card-arrow { font-size:1.1rem;transition:transform 0.2s; }
+    .sc-card:hover .card-arrow { transform:translateX(4px); }
+
+    /* selected check */
+    .card-check {
+      position:absolute;top:18px;right:18px;
+      width:26px;height:26px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:0.75rem;border:1.5px solid var(--border);
+      transition:all 0.2s;color:transparent;
+    }
+    .c-switch.selected .card-check { background:rgba(198,255,0,0.15);border-color:var(--accent);color:var(--accent); }
+    .c-grow.selected   .card-check { background:rgba(96,165,250,0.15);border-color:rgba(96,165,250,0.8);color:rgba(96,165,250,0.9); }
+    .c-restart.selected .card-check { background:rgba(167,139,250,0.15);border-color:rgba(167,139,250,0.8);color:rgba(167,139,250,0.9); }
+
+    /* trust */
+    .trust-row { display:flex;align-items:center;justify-content:center;gap:24px;margin-top:36px;flex-wrap:wrap;animation:fadeUp 0.5s 0.3s ease both; }
+    .trust-item { display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--text-muted); }
+    .trust-ico { width:28px;height:28px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--accent-mid);display:flex;align-items:center;justify-content:center;font-size:0.82rem; }
+
+    @media(max-width:900px){ .cards{grid-template-columns:1fr;max-width:480px;gap:12px;} }
+    @media(max-width:480px){ main{padding:92px 16px 48px;} }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html" class="logo">Future<span>Sim</span></a>
+</header>
+
+<div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div>
+<div class="step-dots"></div>
+
+<main>
+  <div class="page-eyebrow">
+    <span class="badge"><span class="badge-dot"></span>Шаг 1 из 3</span>
+  </div>
+  <h1 class="page-title">Выбери своё<br><em>состояние</em></h1>
+  <p class="page-sub">Каждый сценарий — отдельная прогностическая модель. Выбери ту, которая соответствует твоей ситуации сейчас.</p>
+
+  <div class="cards">
+
+    <!-- SWITCH -->
+    <div class="sc-card c-switch" onclick="select('switch', this)">
+      <div class="card-check" id="check-switch"></div>
+      <span class="card-emoji">🔄</span>
+      <div class="card-badge">Сценарий 1</div>
+      <div class="card-name">Смена профессии</div>
+      <p class="card-desc">Хочешь кардинально поменять сферу деятельности. Система моделирует траекторию перехода.</p>
+      <div class="card-stats">
+        <div class="card-stat"><span class="cs-icon">💰</span><span class="cs-label">Потенциал дохода</span><span class="cs-val">Высокий</span></div>
+        <div class="card-stat"><span class="cs-icon">⚡</span><span class="cs-label">Уровень риска</span><span class="cs-val">Высокий</span></div>
+        <div class="card-stat"><span class="cs-icon">⏱</span><span class="cs-label">Горизонт</span><span class="cs-val">12–24 мес.</span></div>
+      </div>
+      <div class="card-cta"><span class="card-cta-text">Выбрать сценарий</span><span class="card-arrow">→</span></div>
+    </div>
+
+    <!-- GROW -->
+    <div class="sc-card c-grow" onclick="select('grow', this)">
+      <div class="card-check" id="check-grow"></div>
+      <span class="card-emoji">📈</span>
+      <div class="card-badge">Сценарий 2</div>
+      <div class="card-name">Рост дохода</div>
+      <p class="card-desc">Остаёшься в своей сфере, но хочешь значительно увеличить доход. Строим путь роста.</p>
+      <div class="card-stats">
+        <div class="card-stat"><span class="cs-icon">💰</span><span class="cs-label">Потенциал дохода</span><span class="cs-val">Средний</span></div>
+        <div class="card-stat"><span class="cs-icon">⚡</span><span class="cs-label">Уровень риска</span><span class="cs-val">Низкий</span></div>
+        <div class="card-stat"><span class="cs-icon">⏱</span><span class="cs-label">Горизонт</span><span class="cs-val">6–18 мес.</span></div>
+      </div>
+      <div class="card-cta"><span class="card-cta-text">Выбрать сценарий</span><span class="card-arrow">→</span></div>
+    </div>
+
+    <!-- RESTART -->
+    <div class="sc-card c-restart" onclick="select('restart', this)">
+      <div class="card-check" id="check-restart"></div>
+      <span class="card-emoji">🔁</span>
+      <div class="card-badge">Сценарий 3</div>
+      <div class="card-name">Перезапуск</div>
+      <p class="card-desc">Выгорание, кризис или потеря работы. Моделируем сценарий восстановления и нового старта.</p>
+      <div class="card-stats">
+        <div class="card-stat"><span class="cs-icon">💰</span><span class="cs-label">Потенциал дохода</span><span class="cs-val">Широкий</span></div>
+        <div class="card-stat"><span class="cs-icon">⚡</span><span class="cs-label">Неопределённость</span><span class="cs-val">Высокая</span></div>
+        <div class="card-stat"><span class="cs-icon">⏱</span><span class="cs-label">Горизонт</span><span class="cs-val">6–24 мес.</span></div>
+      </div>
+      <div class="card-cta"><span class="card-cta-text">Выбрать сценарий</span><span class="card-arrow">→</span></div>
+    </div>
+
+  </div>
+
+  <div class="trust-row">
+    <div class="trust-item"><div class="trust-ico">🧠</div><span>AI-алгоритм</span></div>
+    <div class="trust-item"><div class="trust-ico">🔒</div><span>Без регистрации</span></div>
+    <div class="trust-item"><div class="trust-ico">⏱</div><span>5 минут</span></div>
+    <div class="trust-item"><div class="trust-ico">💾</div><span>Данные у тебя</span></div>
+  </div>
+</main>
+
+<script src="script.js"></script>
+<script>
+  setStepDots(0, 3);
+
+  function select(scenario, el) {
+    // Clear all
+    document.querySelectorAll('.sc-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.card-check').forEach(c => c.textContent = '');
+    // Select
+    el.classList.add('selected');
+    document.getElementById('check-' + scenario).textContent = '✓';
+    // Save
+    FS.set('scenario', scenario);
+    // Navigate
+    setTimeout(() => navigateTo('test.html'), 400);
+  }
+
+  // Pre-select if already set
+  const saved = FS.get('scenario');
+  if (saved) {
+    const el = document.querySelector('.c-' + saved);
+    if (el) { el.classList.add('selected'); document.getElementById('check-' + saved).textContent = '✓'; }
+  }
+</script>
+</body>
+</html>
