@@ -1,0 +1,306 @@
+/* ═══════════════════════════════════════
+   FutureSim — Core Script
+   ═══════════════════════════════════════ */
+
+'use strict';
+
+/* ── STORAGE ── */
+const FS = {
+  get: (key) => {
+    try { return JSON.parse(localStorage.getItem('fs_' + key)); }
+    catch { return null; }
+  },
+  set: (key, val) => {
+    try { localStorage.setItem('fs_' + key, JSON.stringify(val)); }
+    catch {}
+  },
+  clear: () => {
+    ['scenario','answers','result','paid'].forEach(k => localStorage.removeItem('fs_' + k));
+  }
+};
+
+/* ── SCROLL REVEAL ── */
+function initReveal() {
+  const els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  els.forEach(el => obs.observe(el));
+}
+
+/* ── HEADER SCROLL ── */
+function initHeaderScroll() {
+  const h = document.querySelector('.site-header');
+  if (!h) return;
+  window.addEventListener('scroll', () => {
+    h.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+}
+
+/* ── COUNTER ANIMATION ── */
+function animateCounter(el, target, suffix = '') {
+  let current = 0;
+  const step = Math.ceil(target / 40);
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = current.toLocaleString('ru-RU') + suffix;
+    if (current >= target) clearInterval(timer);
+  }, 35);
+}
+
+function initCounters() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseInt(el.dataset.target);
+      const suffix = el.dataset.suffix || '';
+      if (!isNaN(target)) animateCounter(el, target, suffix);
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-target]').forEach(el => obs.observe(el));
+}
+
+/* ── PROGRESS BAR ── */
+function setProgress(pct) {
+  const fill = document.querySelector('.progress-fill');
+  if (fill) fill.style.width = pct + '%';
+}
+
+/* ── STEP DOTS ── */
+function setStepDots(active, total) {
+  const wrap = document.querySelector('.step-dots');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i < active ? ' done' : i === active ? ' active' : '');
+    wrap.appendChild(d);
+  }
+}
+
+/* ── PAYWALL MODAL ── */
+function openModal(id = 'paywallModal') {
+  const m = document.getElementById(id);
+  if (m) m.classList.add('open');
+}
+function closeModal(id = 'paywallModal') {
+  const m = document.getElementById(id);
+  if (m) m.classList.remove('open');
+}
+function initModalBackdrop() {
+  document.querySelectorAll('.modal-wrap').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+  });
+}
+
+/* ── FORECAST ENGINE ── */
+const ForecastEngine = {
+
+  // Base income ranges by scenario (тысяч тенге)
+  BASE: {
+    switch:  { min: 400,  max: 700,  growth: 0.22, risk: 0.72 },
+    grow:    { min: 600,  max: 900,  growth: 0.16, risk: 0.85 },
+    restart: { min: 280,  max: 550,  growth: 0.26, risk: 0.58 },
+  },
+
+  // Modifiers from answers
+  MODIFIERS: {
+    risk: {
+      low:    { incomeMulti: 0.85, probMulti: 1.1,  timeMulti: 1.2 },
+      medium: { incomeMulti: 1.0,  probMulti: 1.0,  timeMulti: 1.0 },
+      high:   { incomeMulti: 1.25, probMulti: 0.88, timeMulti: 0.8 },
+    },
+    speed: {
+      slow:   { incomeMulti: 0.9,  probMulti: 1.05, timeMulti: 1.4 },
+      medium: { incomeMulti: 1.0,  probMulti: 1.0,  timeMulti: 1.0 },
+      fast:   { incomeMulti: 1.15, probMulti: 0.92, timeMulti: 0.75 },
+    },
+    priority: {
+      money:     { incomeMulti: 1.2,  probMulti: 0.9, label: 'Доход' },
+      stability: { incomeMulti: 0.9,  probMulti: 1.1, label: 'Стабильность' },
+      interest:  { incomeMulti: 1.05, probMulti: 1.0, label: 'Интерес' },
+    },
+    horizon: {
+      short: { incomeMulti: 0.7,  growthMulti: 0.8 },
+      mid:   { incomeMulti: 1.0,  growthMulti: 1.0 },
+      long:  { incomeMulti: 1.35, growthMulti: 1.25 },
+    },
+    skills: {
+      low:    { incomeMulti: 0.75, probMulti: 0.85 },
+      medium: { incomeMulti: 1.0,  probMulti: 1.0 },
+      high:   { incomeMulti: 1.3,  probMulti: 1.15 },
+    }
+  },
+
+  calculate(scenario, answers) {
+    const base = this.BASE[scenario] || this.BASE.switch;
+    const M = this.MODIFIERS;
+
+    const riskMod   = M.risk[answers.risk]       || M.risk.medium;
+    const speedMod  = M.speed[answers.speed]      || M.speed.medium;
+    const prioMod   = M.priority[answers.priority]|| M.priority.interest;
+    const horizMod  = M.horizon[answers.horizon]  || M.horizon.mid;
+    const skillMod  = M.skills[answers.skills]    || M.skills.medium;
+
+    const incomeMulti = riskMod.incomeMulti * speedMod.incomeMulti * prioMod.incomeMulti * horizMod.incomeMulti * skillMod.incomeMulti;
+    const probMulti   = riskMod.probMulti   * speedMod.probMulti   * skillMod.probMulti;
+    const timeMulti   = riskMod.timeMulti   * speedMod.timeMulti;
+    const growMulti   = base.growth * horizMod.growthMulti;
+
+    const incomeNow   = Math.round(base.min  * incomeMulti / 10) * 10;
+    const incomeNowMax= Math.round(base.max  * incomeMulti / 10) * 10;
+    const income2y    = Math.round(incomeNow  * (1 + growMulti * 2 * timeMulti) / 10) * 10;
+    const income2yMax = Math.round(incomeNowMax * (1 + growMulti * 2 * timeMulti) / 10) * 10;
+    const income5y    = Math.round(incomeNow  * (1 + growMulti * 5 * timeMulti) / 10) * 10;
+    const income5yMax = Math.round(incomeNowMax * (1 + growMulti * 5 * timeMulti) / 10) * 10;
+
+    const prob = Math.round(Math.min(Math.max(base.risk * probMulti, 0.42), 0.96) * 100);
+
+    const riskLevel = answers.risk === 'high'
+      ? 'Высокий'
+      : answers.risk === 'low'
+      ? 'Низкий'
+      : 'Средний';
+
+    const riskClass = answers.risk === 'high' ? 'red' : answers.risk === 'low' ? 'green' : 'yellow';
+
+    // Time to first result
+    const timeToResult = answers.horizon === 'short'
+      ? '3–6 месяцев'
+      : answers.horizon === 'long'
+      ? '12–18 месяцев'
+      : '6–12 месяцев';
+
+    // Skill profile (0–100)
+    const skills = this._calcSkills(scenario, answers);
+
+    // Motivation profile
+    const motivation = this._calcMotivation(answers);
+
+    // Strengths
+    const strengths = this._calcStrengths(scenario, answers);
+
+    // Income chart data (10 points over 5 years)
+    const chartData = [];
+    for (let i = 0; i <= 9; i++) {
+      chartData.push(Math.round(incomeNow * (1 + growMulti * (i * 0.55) * timeMulti)));
+    }
+
+    return {
+      scenario,
+      answers,
+      income: {
+        now:    `${incomeNow.toLocaleString('ru-RU')} – ${incomeNowMax.toLocaleString('ru-RU')} тг`,
+        y2:     `${income2y.toLocaleString('ru-RU')} – ${income2yMax.toLocaleString('ru-RU')} тг`,
+        y5:     `${income5y.toLocaleString('ru-RU')} – ${income5yMax.toLocaleString('ru-RU')} тг`,
+        nowVal: incomeNow,
+        y2Val:  income2y,
+        y5Val:  income5y,
+      },
+      probability: prob,
+      riskLevel,
+      riskClass,
+      timeToResult,
+      skills,
+      motivation,
+      strengths,
+      chartData,
+      priortyLabel: prioMod.label,
+    };
+  },
+
+  _calcSkills(scenario, answers) {
+    const base = {
+      switch:  { analytics: 65, communication: 55, creativity: 70, strategy: 60 },
+      grow:    { analytics: 75, communication: 70, creativity: 50, strategy: 80 },
+      restart: { analytics: 55, communication: 75, creativity: 65, strategy: 45 },
+    }[scenario] || { analytics: 60, communication: 60, creativity: 60, strategy: 60 };
+
+    const riskBoost = answers.risk === 'high' ? 10 : answers.risk === 'low' ? -5 : 0;
+    const skillBoost = answers.skills === 'high' ? 12 : answers.skills === 'low' ? -12 : 0;
+
+    return {
+      analytics:     Math.min(base.analytics     + skillBoost, 98),
+      communication: Math.min(base.communication + riskBoost,  98),
+      creativity:    Math.min(base.creativity     + (answers.priority === 'interest' ? 10 : 0), 98),
+      strategy:      Math.min(base.strategy       + (answers.horizon === 'long' ? 10 : 0), 98),
+    };
+  },
+
+  _calcMotivation(answers) {
+    const map = { money: 85, stability: 70, interest: 90, freedom: 80 };
+    const prio = answers.priority || 'interest';
+    return {
+      money:     prio === 'money'     ? map.money     : Math.round(map.money     * 0.6),
+      freedom:   answers.risk === 'high' ? 85         : 55,
+      interest:  prio === 'interest'  ? map.interest  : Math.round(map.interest  * 0.65),
+      stability: prio === 'stability' ? map.stability : Math.round(map.stability * 0.55),
+    };
+  },
+
+  _calcStrengths(scenario, answers) {
+    const all = [
+      { id: 'analytical', label: 'Аналитическое мышление', icon: '🔬' },
+      { id: 'strategic',  label: 'Стратегическое видение', icon: '🧭' },
+      { id: 'adaptive',   label: 'Адаптивность',           icon: '🌊' },
+      { id: 'creative',   label: 'Творческий подход',      icon: '✨' },
+      { id: 'decisive',   label: 'Решительность',          icon: '⚡' },
+      { id: 'resilient',  label: 'Устойчивость к стрессу', icon: '🛡️' },
+    ];
+
+    const picks = {
+      switch:  ['adaptive', 'creative', 'decisive', 'resilient'],
+      grow:    ['analytical', 'strategic', 'decisive', 'adaptive'],
+      restart: ['resilient', 'adaptive', 'creative', 'strategic'],
+    }[scenario] || ['adaptive', 'strategic', 'creative', 'decisive'];
+
+    if (answers.risk === 'high') {
+      if (!picks.includes('decisive')) picks[3] = 'decisive';
+    }
+    if (answers.skills === 'high') {
+      if (!picks.includes('analytical')) picks[0] = 'analytical';
+    }
+
+    return all.filter(s => picks.includes(s.id)).slice(0, 4);
+  }
+};
+
+/* ── SHARE ── */
+function shareResult() {
+  const result = FS.get('result');
+  if (!result) return;
+  const text = `Моя траектория по FutureSim:\nДоход через 2 года: ${result.income.y2}\nВероятность: ${result.probability}%\nУзнай свою: `;
+  const url = window.location.origin + '/index.html';
+  if (navigator.share) {
+    navigator.share({ title: 'FutureSim — мой прогноз', text: text + url });
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text + url).then(() => {
+      const btn = document.querySelector('[onclick="shareResult()"]');
+      if (btn) { const o = btn.textContent; btn.textContent = '✓ Скопировано'; setTimeout(() => btn.textContent = o, 2000); }
+    });
+  }
+}
+
+/* ── TRANSITION ── */
+function navigateTo(url, delay = 320) {
+  document.body.style.cssText = 'opacity:0;transform:translateY(-12px);transition:opacity 0.32s,transform 0.32s';
+  setTimeout(() => { window.location.href = url; }, delay);
+}
+
+/* ── INIT ON LOAD ── */
+document.addEventListener('DOMContentLoaded', () => {
+  initReveal();
+  initHeaderScroll();
+  initCounters();
+  initModalBackdrop();
+
+  // Fade in page
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.4s ease';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { document.body.style.opacity = '1'; });
+  });
+});
