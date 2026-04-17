@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Стратегия — Trajecta</title>
+  <title>Стратегия развития — Trajecta</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
       --bg:#020617;--card:#0d1b35;--card2:#111f3a;
       --accent:#C6FF00;--ag:rgba(198,255,0,.45);--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);
       --blue:rgba(96,165,250,.9);--bd:rgba(96,165,250,.12);
-      --orange:rgba(255,140,60,.9);--od:rgba(255,140,60,.1);
+      --orange:rgba(255,140,60,.9);--od:rgba(255,140,60,.1);--om:rgba(255,140,60,.22);
       --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
       --text:#f0f4ff;--muted:rgba(240,244,255,.48);--dim:rgba(240,244,255,.22);
       --D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;
@@ -26,157 +26,170 @@
     a{color:inherit;text-decoration:none;}
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:rgba(198,255,0,.2);border-radius:3px}
 
-    /* BG */
     .bg-g{position:fixed;inset:0;pointer-events:none;z-index:0;
-      background:
-        radial-gradient(ellipse 65% 45% at 50% 0%,rgba(198,255,0,.05) 0%,transparent 60%),
-        radial-gradient(ellipse 45% 35% at 90% 70%,rgba(96,165,250,.04) 0%,transparent 55%);}
+      background:radial-gradient(ellipse 65% 45% at 50% 0%,rgba(198,255,0,.05) 0%,transparent 60%),
+                 radial-gradient(ellipse 45% 35% at 90% 70%,rgba(96,165,250,.04) 0%,transparent 55%);}
     .bg-gr{position:fixed;inset:0;pointer-events:none;z-index:0;
       background-image:linear-gradient(rgba(198,255,0,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(198,255,0,.018) 1px,transparent 1px);
       background-size:64px 64px;
       mask-image:radial-gradient(ellipse 70% 55% at 50% 25%,black 10%,transparent 100%);
       -webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 25%,black 10%,transparent 100%);}
 
-    header{display:flex;justify-content:flex-start;align-items:center;padding:0 48px;height:72px;border-bottom:1px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(2,6,23,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+    /* HEADER */
+    header{display:flex;justify-content:flex-start;align-items:center;padding:0 48px;height:72px;border-bottom:1px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(2,6,23,.88);backdrop-filter:blur(20px);}
     .logo{font-family:var(--D);font-size:1.55rem;font-weight:800;color:var(--text);letter-spacing:-.02em;}
     .logo span{color:var(--accent);text-shadow:0 0 16px var(--ag);}
     .hbtns{margin-left:auto;display:flex;gap:10px;}
 
+    /* BUTTONS */
     .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#020617;font-family:var(--B);font-weight:700;font-size:.9rem;padding:10px 22px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;white-space:nowrap;text-decoration:none;}
     .btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(198,255,0,.4);}
     .btn-lg{font-size:1rem;padding:16px 36px;border-radius:10px;}
     .btn-g{background:transparent;color:var(--muted);border:1px solid var(--border2);}
     .btn-g:hover{color:var(--text);border-color:rgba(255,255,255,.22);box-shadow:none;}
-    .btn-orange{background:rgba(255,140,60,.9);color:#020617;}
-    .btn-orange:hover{box-shadow:0 8px 28px rgba(255,140,60,.4);}
 
+    /* PROGRESS */
     .prog{position:fixed;top:72px;left:0;right:0;height:2px;background:rgba(255,255,255,.06);z-index:99;}
-    .prog-f{height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);box-shadow:0 0 8px var(--ag);width:85%;}
+    .prog-f{height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);box-shadow:0 0 8px var(--ag);width:90%;}
 
-    /* MAIN LAYOUT */
+    /* LAYOUT */
     .wrap{position:relative;z-index:1;}
     .page{max-width:900px;margin:0 auto;padding:108px 40px 100px;}
 
-    /* HERO */
-    .ph-badge{display:inline-flex;align-items:center;gap:8px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.72rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:24px;animation:fup .5s ease both;}
+    /* ANIMATIONS */
     @keyframes fup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-    .bdot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-    .ph-title{font-family:var(--D);font-size:clamp(2rem,4.5vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1.05;margin-bottom:12px;animation:fup .5s .1s ease both;}
-    .ph-title em{font-style:normal;color:var(--accent);}
-    .ph-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:36px;animation:fup .5s .15s ease both;}
-    .ph-sub strong{color:rgba(240,244,255,.82);}
+    @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
 
-    /* PROFILE SUMMARY BAR */
-    .profile-bar{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:36px;animation:fup .5s .2s ease both;}
-    .pb-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+    /* HERO */
+    .badge{display:inline-flex;align-items:center;gap:8px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.72rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:24px;animation:fup .5s ease both;}
+    .bdot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s infinite;}
+    .page-title{font-family:var(--D);font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:800;letter-spacing:-.04em;line-height:1.05;margin-bottom:12px;animation:fup .5s .1s ease both;}
+    .page-title em{font-style:normal;color:var(--accent);}
+    .page-sub{font-size:1rem;color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:32px;animation:fup .5s .15s ease both;}
+    .page-sub strong{color:rgba(240,244,255,.82);}
+
+    /* PROFILE BAR */
+    .profile-bar{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:28px;animation:fup .5s .2s ease both;}
+    .pb-item{}
+    .pb-label{font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
     .pb-val{font-family:var(--D);font-size:.95rem;font-weight:800;letter-spacing:-.01em;}
     .pb-sep{width:1px;height:36px;background:var(--border);flex-shrink:0;}
 
-    /* WARNING BOX */
-    .warning-box{background:rgba(255,80,50,.06);border:1px solid rgba(255,80,50,.22);border-radius:16px;padding:20px 24px;display:flex;align-items:flex-start;gap:14px;margin-bottom:32px;animation:fup .5s .25s ease both;}
-    .wb-ico{font-size:1.5rem;flex-shrink:0;margin-top:1px;}
-    .wb-tag{font-size:.67rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,120,80,.85);margin-bottom:6px;}
-    .wb-title{font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:5px;letter-spacing:-.015em;}
-    .wb-desc{font-size:.875rem;color:var(--muted);line-height:1.6;}
-    .wb-desc strong{color:rgba(255,160,100,.9);}
+    /* WARNING */
+    .warning{background:rgba(255,80,50,.055);border:1px solid rgba(255,80,50,.2);border-radius:16px;padding:18px 24px;display:flex;align-items:flex-start;gap:14px;margin-bottom:28px;animation:fup .5s .25s ease both;}
+    .w-ico{font-size:1.5rem;flex-shrink:0;margin-top:2px;}
+    .w-tag{font-size:.67rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,120,80,.85);margin-bottom:6px;}
+    .w-title{font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:5px;}
+    .w-desc{font-size:.875rem;color:var(--muted);line-height:1.6;}
+    .w-desc strong{color:rgba(255,160,100,.9);}
 
     /* SECTION LABEL */
-    .sec-label{font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-    .sec-label::before{content:'';width:16px;height:1px;background:var(--muted);opacity:.5;}
+    .sec-lbl{font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+    .sec-lbl::before{content:'';width:16px;height:1px;background:var(--muted);opacity:.5;}
 
-    /* PATH CARDS */
-    .paths-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+    /* PATH CARDS GRID */
+    .paths-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
 
-    .pcard{border-radius:20px;padding:28px 24px;border:1.5px solid var(--border);background:rgba(255,255,255,.02);cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;display:flex;flex-direction:column;}
+    /* PATH CARD */
+    .pcard{border-radius:18px;padding:26px 22px;border:1.5px solid var(--border);background:rgba(255,255,255,.02);display:flex;flex-direction:column;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;}
     .pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
     .pcard::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
     .pcard:hover{transform:translateY(-5px);}
     .pcard:hover::after{opacity:1;}
-    .pcard.selected{transform:translateY(-3px);}
 
     /* Path A — влияние (orange) */
-    .pa{border-color:rgba(255,140,60,.22);}
-    .pa::before{background:linear-gradient(90deg,rgba(255,140,60,.8),transparent 70%);}
+    .pa{border-color:rgba(255,140,60,.2);}
+    .pa::before{background:linear-gradient(90deg,rgba(255,140,60,.7),transparent 70%);}
     .pa::after{background:radial-gradient(circle at 30% 20%,rgba(255,140,60,.07),transparent 65%);}
-    .pa:hover{border-color:rgba(255,140,60,.55);box-shadow:0 24px 56px rgba(0,0,0,.4);}
-    .pa.selected{border-color:rgba(255,140,60,.75);background:rgba(255,140,60,.06);box-shadow:0 0 0 2px rgba(255,140,60,.2);}
-    .pa .ptype{color:rgba(255,140,60,.85);}
-    .pa .pmetric-val{color:rgba(255,140,60,.9);}
-    .pa .pcta{color:rgba(255,140,60,.9);}
+    .pa:hover{border-color:rgba(255,140,60,.5);box-shadow:0 24px 56px rgba(0,0,0,.4);}
+    .pa.sel{border-color:rgba(255,140,60,.7);background:rgba(255,140,60,.06);box-shadow:0 0 0 2px rgba(255,140,60,.2);}
+    .pa .ptype-tag{color:rgba(255,140,60,.85);}
+    .pa .pm-val{color:rgba(255,140,60,.9);}
+    .pa .pcta-txt{color:rgba(255,140,60,.9);}
+    .pa .pbar-fill{background:linear-gradient(90deg,rgba(255,140,60,.8),rgba(255,180,80,.6));}
+    .pa .pcheck{border-color:rgba(255,140,60,.6);}
+    .pa.sel .pcheck{background:rgba(255,140,60,.15);border-color:rgba(255,140,60,.8);color:rgba(255,140,60,.9);}
 
     /* Path B — управление (blue) */
-    .pb{border-color:rgba(96,165,250,.22);}
-    .pb::before{background:linear-gradient(90deg,rgba(96,165,250,.8),transparent 70%);}
-    .pb::after{background:radial-gradient(circle at 30% 20%,rgba(96,165,250,.07),transparent 65%);}
-    .pb:hover{border-color:rgba(96,165,250,.55);box-shadow:0 24px 56px rgba(0,0,0,.4);}
-    .pb.selected{border-color:rgba(96,165,250,.75);background:rgba(96,165,250,.06);box-shadow:0 0 0 2px rgba(96,165,250,.2);}
-    .pb .ptype{color:rgba(96,165,250,.85);}
-    .pb .pmetric-val{color:rgba(96,165,250,.9);}
-    .pb .pcta{color:rgba(96,165,250,.9);}
+    .pb2{border-color:rgba(96,165,250,.2);}
+    .pb2::before{background:linear-gradient(90deg,rgba(96,165,250,.7),transparent 70%);}
+    .pb2::after{background:radial-gradient(circle at 30% 20%,rgba(96,165,250,.07),transparent 65%);}
+    .pb2:hover{border-color:rgba(96,165,250,.5);box-shadow:0 24px 56px rgba(0,0,0,.4);}
+    .pb2.sel{border-color:rgba(96,165,250,.7);background:rgba(96,165,250,.06);box-shadow:0 0 0 2px rgba(96,165,250,.2);}
+    .pb2 .ptype-tag{color:rgba(96,165,250,.85);}
+    .pb2 .pm-val{color:rgba(96,165,250,.9);}
+    .pb2 .pcta-txt{color:rgba(96,165,250,.9);}
+    .pb2 .pbar-fill{background:linear-gradient(90deg,rgba(96,165,250,.8),rgba(140,200,255,.6));}
+    .pb2 .pcheck{border-color:rgba(96,165,250,.6);}
+    .pb2.sel .pcheck{background:rgba(96,165,250,.15);border-color:rgba(96,165,250,.8);color:rgba(96,165,250,.9);}
 
-    .pcard-head{margin-bottom:18px;}
-    .pemoji{font-size:2.2rem;display:block;margin-bottom:12px;}
-    .ptype{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
-    .pname{font-family:var(--D);font-size:1.2rem;font-weight:800;letter-spacing:-.02em;margin-bottom:8px;}
-    .pdesc{font-size:.875rem;color:var(--muted);line-height:1.65;margin-bottom:18px;flex:1;}
+    /* Card internals */
+    .pcheck{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:transparent;transition:all .2s;}
+    .pemoji{font-size:2rem;display:block;margin-bottom:12px;}
+    .ptype-tag{font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+    .pname{font-family:var(--D);font-size:1.1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:8px;}
+    .pdesc{font-size:.85rem;color:var(--muted);line-height:1.62;margin-bottom:16px;flex:1;}
 
-    /* Metrics inside card */
-    .pmetrics{display:flex;flex-direction:column;gap:8px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:16px;}
+    /* Metrics */
+    .pmetrics{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:14px;display:flex;flex-direction:column;gap:7px;}
     .pmetric{display:flex;align-items:center;justify-content:space-between;font-size:.8rem;}
-    .pmetric-label{color:var(--muted);}
-    .pmetric-val{font-weight:700;font-family:var(--D);font-size:.85rem;}
+    .pm-lbl{color:var(--muted);}
+    .pm-val{font-weight:700;font-family:var(--D);font-size:.85rem;}
 
-    /* Mini bar */
-    .pbar{display:flex;flex-direction:column;gap:5px;margin-bottom:18px;}
-    .pb-item{display:flex;align-items:center;gap:8px;font-size:.76rem;}
-    .pb-name{color:var(--muted);min-width:80px;}
-    .pb-track{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
-    .pb-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
-    .pa .pb-fill{background:linear-gradient(90deg,rgba(255,140,60,.8),rgba(255,180,80,.6));}
-    .pb .pb-fill{background:linear-gradient(90deg,rgba(96,165,250,.8),rgba(140,200,255,.6));}
+    /* Mini bars */
+    .pbars{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+    .pbar-row{display:flex;align-items:center;gap:8px;font-size:.74rem;}
+    .pbar-name{color:var(--muted);min-width:76px;}
+    .pbar-track{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+    .pbar-fill{height:100%;border-radius:3px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
 
-    .pcta{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border);font-size:.82rem;font-weight:600;}
+    /* CTA row */
+    .pcta{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
+    .pcta-txt{font-size:.82rem;font-weight:600;}
     .pcta-arr{transition:transform .2s;}
     .pcard:hover .pcta-arr{transform:translateX(4px);}
 
-    /* SELECTED INDICATOR */
-    .pcard .pcheck{position:absolute;top:16px;right:16px;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:transparent;transition:all .2s;}
-    .pa.selected .pcheck{background:rgba(255,140,60,.15);border-color:rgba(255,140,60,.7);color:rgba(255,140,60,.9);}
-    .pb.selected .pcheck{background:rgba(96,165,250,.15);border-color:rgba(96,165,250,.7);color:rgba(96,165,250,.9);}
+    /* BLUR WRAP */
+    .blur-wrap{position:relative;border-radius:18px;overflow:hidden;}
+    .blur-ov{position:absolute;inset:0;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);background:rgba(2,6,23,.78);border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:10;padding:28px;text-align:center;}
+    .bo-ico{font-size:1.8rem;}
+    .bo-title{font-family:var(--D);font-size:1.05rem;font-weight:800;letter-spacing:-.02em;}
+    .bo-desc{font-size:.82rem;color:var(--muted);line-height:1.6;max-width:280px;}
+    .bo-feats{display:flex;flex-direction:column;gap:5px;text-align:left;width:100%;max-width:260px;}
+    .bo-feat{display:flex;align-items:center;gap:8px;font-size:.79rem;color:rgba(240,244,255,.7);}
+    .bo-feat-ico{color:var(--accent);}
+    .bo-price{display:inline-flex;align-items:center;gap:6px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.76rem;font-weight:700;padding:4px 13px;border-radius:100px;}
 
-    /* NO CHOICE WARNING */
-    .no-choice{background:rgba(255,80,50,.06);border:1px solid rgba(255,80,50,.18);border-radius:14px;padding:18px 22px;text-align:center;margin-bottom:24px;}
-    .nc-title{font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:6px;}
-    .nc-desc{font-size:.875rem;color:var(--muted);line-height:1.6;}
-    .nc-loss{font-family:var(--D);font-size:1.4rem;font-weight:800;color:#ff6060;margin:10px 0 4px;}
+    /* ROADMAP */
+    .roadmap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px 28px;}
+    .rm-head{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+    .rm-ico{font-size:1rem;}
+    .rm-title{font-family:var(--D);font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+    .rm-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
+    .rm-item:last-child{border-bottom:none;}
+    .rm-num{width:28px;height:28px;border-radius:50%;background:var(--ad);border:1px solid var(--am);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-size:.74rem;font-weight:800;color:var(--accent);flex-shrink:0;margin-top:2px;}
+    .rm-period{font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+    .rm-step-title{font-family:var(--D);font-size:.95rem;font-weight:800;margin-bottom:4px;}
+    .rm-desc{font-size:.82rem;color:var(--muted);line-height:1.55;}
+    .rm-income{margin-top:7px;display:inline-flex;align-items:center;gap:5px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:100px;}
 
     /* ROADMAP BLUR */
-    .roadmap-wrap{position:relative;border-radius:18px;overflow:hidden;margin-bottom:16px;}
-    .roadmap-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 28px;}
-    .roadmap-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
-    .roadmap-item:last-child{border-bottom:none;}
-    .ri-num{width:28px;height:28px;border-radius:50%;background:var(--ad);border:1px solid var(--am);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-size:.75rem;font-weight:800;color:var(--accent);flex-shrink:0;margin-top:2px;}
-    .ri-body{}
-    .ri-period{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-    .ri-title{font-family:var(--D);font-size:.95rem;font-weight:800;margin-bottom:4px;letter-spacing:-.015em;}
-    .ri-desc{font-size:.82rem;color:var(--muted);line-height:1.55;}
-    .ri-income{margin-top:6px;display:inline-flex;align-items:center;gap:6px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:100px;}
+    .rm-blur-wrap{position:relative;border-radius:18px;overflow:hidden;}
+    .rm-blur-ov{position:absolute;inset:0;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);background:rgba(2,6,23,.75);border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:10;padding:32px;text-align:center;}
 
-    .roadmap-blur{position:absolute;inset:0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(2,6,23,.72);border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:10;padding:32px;text-align:center;}
-    .rb-ico{font-size:2rem;}
-    .rb-title{font-family:var(--D);font-size:1.15rem;font-weight:800;letter-spacing:-.02em;}
-    .rb-desc{font-size:.875rem;color:var(--muted);line-height:1.6;max-width:320px;}
-    .rb-feats{display:flex;flex-direction:column;gap:6px;text-align:left;width:100%;max-width:280px;}
-    .rb-feat{display:flex;align-items:center;gap:8px;font-size:.8rem;color:rgba(240,244,255,.7);}
-    .rb-feat-ico{color:var(--accent);}
-    .rb-price{display:inline-flex;align-items:center;gap:7px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.78rem;font-weight:700;padding:5px 14px;border-radius:100px;}
+    /* FINAL CTA */
+    .final-cta{background:linear-gradient(135deg,rgba(198,255,0,.08),rgba(198,255,0,.03));border:1px solid rgba(198,255,0,.22);border-radius:18px;padding:32px;text-align:center;margin-top:8px;}
+    .fc-title{font-family:var(--D);font-size:1.45rem;font-weight:800;letter-spacing:-.025em;margin-bottom:8px;}
+    .fc-title em{font-style:normal;color:var(--accent);}
+    .fc-desc{font-size:.9rem;color:var(--muted);line-height:1.65;margin-bottom:24px;max-width:440px;margin-left:auto;margin-right:auto;}
+    .fc-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .fc-note{font-size:.72rem;color:var(--dim);margin-top:14px;}
 
-    /* PAYWALL MODAL */
+    /* MODAL */
     .modal{position:fixed;inset:0;z-index:999;background:rgba(2,6,23,.9);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;padding:24px;}
     .modal.open{display:flex;}
     .mbox{background:var(--card2);border:1px solid rgba(198,255,0,.2);border-radius:22px;padding:44px 40px;max-width:480px;width:100%;text-align:center;position:relative;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both;}
-    @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
     .mclose{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);border:none;color:var(--muted);font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
     .mclose:hover{background:rgba(255,255,255,.12);}
     .mico{font-size:3rem;margin-bottom:16px;display:block;}
@@ -194,8 +207,8 @@
     @media(max-width:640px){
       header{padding:0 20px;}
       .page{padding:92px 16px 80px;}
-      .paths-wrap{grid-template-columns:1fr;}
-      .profile-bar{gap:12px;}
+      .paths-grid{grid-template-columns:1fr;}
+      .profile-bar{gap:14px;}
       .pb-sep{display:none;}
       .mbox{padding:32px 20px;}
     }
@@ -208,13 +221,13 @@
   <div class="mbox">
     <button class="mclose" onclick="closeModal()">✕</button>
     <span class="mico">🗺️</span>
-    <div class="mtitle" id="m-title">Полный план развития</div>
-    <p class="mdesc" id="m-desc">Разблокируй детальный roadmap с конкретными шагами, сроками и цифрами дохода на каждом этапе.</p>
+    <div class="mtitle">Полный план развития</div>
+    <p class="mdesc" id="mdesc">Разблокируй второй путь и детальный roadmap — конкретные шаги, сроки и цифры дохода на каждом этапе.</p>
     <div class="mfeats">
-      <div class="mfeat"><span class="mfi">→</span><span id="mf1">Пошаговый план на 3 года с контрольными точками</span></div>
+      <div class="mfeat"><span class="mfi">→</span><span id="mf1">Второй путь развития с полными деталями</span></div>
+      <div class="mfeat"><span class="mfi">→</span><span>Детальный roadmap — что делать каждые 90 дней</span></div>
       <div class="mfeat"><span class="mfi">→</span><span>Где ты потеряешь деньги и как этого избежать</span></div>
-      <div class="mfeat"><span class="mfi">→</span><span>Что делать в первые 90 дней — конкретно</span></div>
-      <div class="mfeat"><span class="mfi">→</span><span>График роста дохода по месяцам</span></div>
+      <div class="mfeat"><span class="mfi">→</span><span>График дохода по месяцам</span></div>
       <div class="mfeat"><span class="mfi">→</span><span>PDF-отчёт для скачивания</span></div>
     </div>
     <div class="mprice">
@@ -233,17 +246,14 @@
 <header>
   <a href="index.html" class="logo">Traject<span>a</span></a>
   <div class="hbtns">
-    <a href="result.html" class="btn btn-g" style="font-size:.82rem;padding:8px 16px">← Назад к результату</a>
+    <a href="result.html" class="btn btn-g" style="font-size:.82rem;padding:8px 16px">← К результату</a>
   </div>
 </header>
 <div class="prog"><div class="prog-f"></div></div>
 
 <div class="wrap">
-<div class="page" id="page">
-
-  <!-- Will be injected by JS -->
-  <div id="root"></div>
-
+<div class="page">
+  <div id="root"><div style="text-align:center;padding:80px 20px;color:var(--muted)">Загрузка...</div></div>
 </div>
 </div>
 
@@ -253,9 +263,6 @@
 
   const R    = load('result');
   const paid = load('paid')===true;
-
-  // Snapshot from result page (fallback)
-  const snap = load('result_snapshot') || {};
 
   if(!R){
     document.getElementById('root').innerHTML=`
@@ -269,285 +276,406 @@
     init();
   }
 
+  // ── MAIN ──
   function init(){
-    const prof = R.prof || 'other';
-    const sc   = R.sc   || 'switch';
-    const gt   = R.growthType || 'stable';
-    const inc  = R.income || {};
-    const prob = R.prob  || 72;
+    const prof = R.prof        || 'other';
+    const sc   = R.sc          || 'switch';
+    const gt   = R.growthType  || 'stable';
+    const dir  = R.direction   || null;
+    const inc  = R.income      || {};
+    const prob = R.prob        || 72;
 
     // Personalize modal
-    const md = document.getElementById('m-desc');
+    const md = document.getElementById('mdesc');
     const mf = document.getElementById('mf1');
-    if(md) md.textContent = `Твой прогноз: ${inc.y2||'—'} через 2 года с вероятностью ${prob}%. Вот конкретный план как туда попасть.`;
-    if(mf) mf.textContent = `Пошаговый план выхода на ${inc.y2||'целевой доход'}`;
+    if(md) md.textContent = `Твой прогноз: ${inc.y2||'—'} через 2 года. Второй путь может дать принципиально другие цифры — разблокируй и сравни.`;
+    if(mf) mf.textContent = `Второй путь — альтернативная стратегия с другими цифрами`;
 
-    // Scenario data
-    const pathsData = getPathsData(prof, sc, gt, inc);
-    const warningData = getWarning(sc, gt);
-    const roadmapData = getRoadmap(prof, sc, gt, inc);
+    const paths   = getPathsData(prof, sc, gt, dir);
+    const warning = getWarning(sc);
+    const roadmap = getRoadmap(sc, inc);
 
-    const GTLABEL = {fast:'Быстрый рост',stable:'Стабильный рост',new:'Новое направление'};
-    const SCLABEL = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск'};
-    const PROFMAP = {law:'Юрист',finance:'Финансист',it:'IT-специалист',marketing:'Маркетолог',design:'Дизайнер',medicine:'Медик',hr:'HR',education:'Педагог',sales:'Продажник',engineering:'Инженер',creative:'Творческая сфера',other:'Специалист'};
+    const SCLABEL = {switch:'Смена профессии', grow:'Рост дохода', restart:'Перезапуск'};
+    const GTLABEL = {fast:'Быстрый рост', stable:'Стабильный рост', new:'Новое направление'};
+    const PLABEL  = {
+      law:'Юрист', finance:'Финансист', it:'IT-специалист', marketing:'Маркетолог',
+      design:'Дизайнер', medicine:'Медик', hr:'HR', education:'Педагог',
+      sales:'Продажник', engineering:'Инженер', creative:'Творческая сфера', other:'Специалист'
+    };
 
     document.getElementById('root').innerHTML = `
 
       <!-- HEADER -->
-      <div class="ph-badge"><span class="bdot"></span>Стратегия развития</div>
-      <h1 class="ph-title">Твоя стратегия <em>развития</em></h1>
-      <p class="ph-sub">На основе <strong>8 параметров твоего профиля</strong> модель сценарного анализа рассчитала 2 стратегии. Они отличаются по скорости, риску и потенциалу дохода.</p>
+      <div class="badge"><span class="bdot"></span>Стратегия развития</div>
+      <h1 class="page-title">Твоя стратегия <em>развития</em></h1>
+      <p class="page-sub">Алгоритм проанализировал <strong>8 параметров твоего профиля</strong> и рассчитал 2 стратегии. Первая открыта — вторая доступна после разблокировки.</p>
 
       <!-- PROFILE BAR -->
       <div class="profile-bar">
-        <div>
-          <div class="pb-label">Профессия</div>
-          <div class="pb-val">${PROFMAP[prof]||'Специалист'}</div>
-        </div>
+        <div class="pb-item"><div class="pb-label">Профессия</div><div class="pb-val">${PLABEL[prof]||'Специалист'}</div></div>
         <div class="pb-sep"></div>
-        <div>
-          <div class="pb-label">Сценарий</div>
-          <div class="pb-val">${SCLABEL[sc]||'Смена профессии'}</div>
-        </div>
+        <div class="pb-item"><div class="pb-label">Сценарий</div><div class="pb-val">${SCLABEL[sc]}</div></div>
         <div class="pb-sep"></div>
-        <div>
-          <div class="pb-label">Тип роста</div>
-          <div class="pb-val">${GTLABEL[gt]||'Стабильный'}</div>
-        </div>
+        <div class="pb-item"><div class="pb-label">Тип роста</div><div class="pb-val">${GTLABEL[gt]}</div></div>
         <div class="pb-sep"></div>
-        <div>
-          <div class="pb-label">Целевой доход</div>
-          <div class="pb-val" style="color:var(--accent)">${inc.y2||'—'}</div>
-        </div>
+        <div class="pb-item"><div class="pb-label">Целевой доход</div><div class="pb-val" style="color:var(--accent)">${inc.y2||'—'}</div></div>
       </div>
 
       <!-- WARNING -->
-      <div class="warning-box">
-        <div class="wb-ico">⏳</div>
+      <div class="warning">
+        <div class="w-ico">⏳</div>
         <div>
-          <div class="wb-tag">Если не выбрать стратегию</div>
-          <div class="wb-title">${warningData.title}</div>
-          <div class="wb-desc">${warningData.desc}</div>
+          <div class="w-tag">Если не выбрать стратегию сейчас</div>
+          <div class="w-title">${warning.title}</div>
+          <div class="w-desc">${warning.desc}</div>
         </div>
       </div>
 
       <!-- PATHS -->
-      <div class="sec-label">Выбери стратегию</div>
-      <div class="paths-wrap" id="paths-wrap">
+      <div class="sec-lbl">Выбери стратегию</div>
+      <div class="paths-grid">
 
-        <!-- PATH A — Влияние -->
-        <div class="pcard pa" id="path-a" onclick="selectPath('a',this)">
+        <!-- PATH A — открыт -->
+        <div class="pcard pa" id="pa" onclick="selectPath('a', this)">
           <div class="pcheck" id="chk-a"></div>
-          <span class="pemoji">${pathsData.a.ico}</span>
-          <div class="ptype">Стратегия А · ${pathsData.a.type}</div>
-          <div class="pname">${pathsData.a.name}</div>
-          <p class="pdesc">${pathsData.a.desc}</p>
+          <span class="pemoji">${paths.a.ico}</span>
+          <div class="ptype-tag">Стратегия А · ${paths.a.type}</div>
+          <div class="pname">${paths.a.name}</div>
+          <p class="pdesc">${paths.a.desc}</p>
           <div class="pmetrics">
-            <div class="pmetric"><span class="pmetric-label">Доход через 2 года</span><span class="pmetric-val">${pathsData.a.income}</span></div>
-            <div class="pmetric"><span class="pmetric-label">Срок до результата</span><span class="pmetric-val">${pathsData.a.time}</span></div>
-            <div class="pmetric"><span class="pmetric-label">Вероятность успеха</span><span class="pmetric-val">${pathsData.a.prob}%</span></div>
+            <div class="pmetric"><span class="pm-lbl">Доход через 2 года</span><span class="pm-val">${paths.a.salary}</span></div>
+            <div class="pmetric"><span class="pm-lbl">Срок до результата</span><span class="pm-val">${paths.a.time}</span></div>
+            <div class="pmetric"><span class="pm-lbl">Вероятность успеха</span><span class="pm-val">${paths.a.prob}%</span></div>
           </div>
-          <div class="pbar">
-            <div class="pb-item"><span class="pb-name">Доход</span><div class="pb-track"><div class="pb-fill" style="width:0%" data-w="${pathsData.a.bars.income}"></div></div></div>
-            <div class="pb-item"><span class="pb-name">Скорость</span><div class="pb-track"><div class="pb-fill" style="width:0%" data-w="${pathsData.a.bars.speed}"></div></div></div>
-            <div class="pb-item"><span class="pb-name">Стабильность</span><div class="pb-track"><div class="pb-fill" style="width:0%" data-w="${pathsData.a.bars.stability}"></div></div></div>
-            <div class="pb-item"><span class="pb-name">Риск</span><div class="pb-track"><div class="pb-fill" style="width:0%" data-w="${pathsData.a.bars.risk}"></div></div></div>
+          <div class="pbars">
+            ${['Доход','Скорость','Стабильность','Риск'].map((n,i)=>{
+              const vals = [paths.a.bars.income, paths.a.bars.speed, paths.a.bars.stability, paths.a.bars.risk];
+              return `<div class="pbar-row"><span class="pbar-name">${n}</span><div class="pbar-track"><div class="pbar-fill" data-w="${vals[i]}"></div></div></div>`;
+            }).join('')}
           </div>
-          <div class="pcta">Выбрать эту стратегию <span class="pcta-arr">→</span></div>
+          <div class="pcta"><span class="pcta-txt">Выбрать эту стратегию</span><span class="pcta-arr">→</span></div>
         </div>
 
-        <!-- PATH B — Управление -->
-        <div class="pcard pb" id="path-b" onclick="selectPath('b',this)">
-          <div class="pcheck" id="chk-b"></div>
-          <span class="pemoji">${pathsData.b.ico}</span>
-          <div class="ptype">Стратегия Б · ${pathsData.b.type}</div>
-          <div class="pname">${pathsData.b.name}</div>
-          <p class="pdesc">${pathsData.b.desc}</p>
-          <div class="pmetrics">
-            <div class="pmetric"><span class="pmetric-label">Доход через 2 года</span><span class="pmetric-val">${pathsData.b.income}</span></div>
-            <div class="pmetric"><span class="pmetric-label">Срок до результата</span><span class="pmetric-val">${pathsData.b.time}</span></div>
-            <div class="pmetric"><span class="pmetric-label">Вероятность успеха</span><span class="pmetric-val">${pathsData.b.prob}%</span></div>
+        <!-- PATH B — заблюрен -->
+        <div class="blur-wrap">
+          <div class="pcard pb2" style="pointer-events:none;opacity:.7">
+            <div class="pcheck"></div>
+            <span class="pemoji">${paths.b.ico}</span>
+            <div class="ptype-tag">Стратегия Б · ${paths.b.type}</div>
+            <div class="pname">${paths.b.name}</div>
+            <p class="pdesc">${paths.b.desc}</p>
+            <div class="pmetrics">
+              <div class="pmetric"><span class="pm-lbl">Доход через 2 года</span><span class="pm-val">${paths.b.salary}</span></div>
+              <div class="pmetric"><span class="pm-lbl">Срок до результата</span><span class="pm-val">${paths.b.time}</span></div>
+              <div class="pmetric"><span class="pm-lbl">Вероятность успеха</span><span class="pm-val">${paths.b.prob}%</span></div>
+            </div>
+            <div class="pbars">
+              ${['Доход','Скорость','Стабильность','Риск'].map((n,i)=>{
+                const vals = [paths.b.bars.income, paths.b.bars.speed, paths.b.bars.stability, paths.b.bars.risk];
+                return `<div class="pbar-row"><span class="pbar-name">${n}</span><div class="pbar-track"><div class="pbar-fill" data-w="${vals[i]}" style="width:${vals[i]}%"></div></div></div>`;
+              }).join('')}
+            </div>
+            <div class="pcta"><span class="pcta-txt" style="color:var(--muted)">Заблокировано</span><span>🔒</span></div>
           </div>
-          <div class="pbar">
-            <div class="pb-item"><span class="pb-name">Доход</span><div class="pb-track"><div class="pb-fill" style="width:0%" data-w="${pathsData.b.bars.income}"></div></div></div>
-            <div class="pb-item"><span class="pb-name">Скорость</span><div class="pb-track"><div class="pb-fill" style="width:0%" data-w="${pathsData.b.bars.speed}"></div></div></div>
-            <div class="pb-item"><span class="pb-name">Стабильность</span><div class="pb-track"><div class="pb-fill" style="width:0%" data-w="${pathsData.b.bars.stability}"></div></div></div>
-            <div class="pb-item"><span class="pb-name">Риск</span><div class="pb-track"><div class="pb-fill" style="width:0%" data-w="${pathsData.b.bars.risk}"></div></div></div>
-          </div>
-          <div class="pcta">Выбрать эту стратегию <span class="pcta-arr">→</span></div>
+          ${!paid ? `
+          <div class="blur-ov">
+            <div class="bo-ico">🔒</div>
+            <div class="bo-title">Вторая стратегия закрыта</div>
+            <div class="bo-desc">Другой путь — другие цифры и другие сроки. Может подойти тебе больше.</div>
+            <div class="bo-feats">
+              <div class="bo-feat"><span class="bo-feat-ico">→</span>Альтернативный путь с деталями</div>
+              <div class="bo-feat"><span class="bo-feat-ico">→</span>Детальный roadmap на 3 года</div>
+              <div class="bo-feat"><span class="bo-feat-ico">→</span>Где потеряешь деньги — и как не потерять</div>
+            </div>
+            <div class="bo-price">🔓 Разблокировать за 4 900 ₸</div>
+            <button class="btn" style="font-size:.85rem;padding:11px 22px" onclick="openModal()">Открыть второй путь →</button>
+          </div>` : `
+          <div class="blur-ov" style="background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none">
+            <button class="btn" style="font-size:.85rem;padding:11px 22px" onclick="document.getElementById('pb2-card').style.pointerEvents='all';document.querySelector('.blur-ov.paid-open').remove()">Открыть →</button>
+          </div>`}
         </div>
 
       </div>
 
-      <!-- ROADMAP (BLURRED) -->
-      <div class="sec-label" style="margin-top:8px">Персональный roadmap</div>
-      <div class="roadmap-wrap">
-        <div class="roadmap-card">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)">
-            <span style="font-size:1rem">🗺️</span>
-            <span style="font-family:var(--D);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Дорожная карта · 3 года</span>
+      <!-- ROADMAP -->
+      <div class="sec-lbl">Дорожная карта</div>
+      <div class="rm-blur-wrap">
+        <div class="roadmap">
+          <div class="rm-head">
+            <span class="rm-ico">🗺️</span>
+            <span class="rm-title">Дорожная карта · 3 года</span>
           </div>
-          ${roadmapData.map((step,i)=>`
-          <div class="roadmap-item">
-            <div class="ri-num">${i+1}</div>
-            <div class="ri-body">
-              <div class="ri-period">${step.period}</div>
-              <div class="ri-title">${step.title}</div>
-              <div class="ri-desc">${step.desc}</div>
-              <div class="ri-income">${step.income}</div>
+          ${roadmap.map((s,i)=>`
+          <div class="rm-item">
+            <div class="rm-num">${i+1}</div>
+            <div>
+              <div class="rm-period">${s.period}</div>
+              <div class="rm-step-title">${s.title}</div>
+              <div class="rm-desc">${s.desc}</div>
+              <div class="rm-income">${s.income}</div>
             </div>
           </div>`).join('')}
         </div>
         ${!paid ? `
-        <div class="roadmap-blur">
-          <div class="rb-ico">🗺️</div>
-          <div class="rb-title">Детальный план развития</div>
-          <div class="rb-desc">Конкретные шаги, сроки, сколько зарабатывать на каждом этапе и где ты потеряешь деньги</div>
-          <div class="rb-feats">
-            <div class="rb-feat"><span class="rb-feat-ico">→</span>Что делать в первые 90 дней</div>
-            <div class="rb-feat"><span class="rb-feat-ico">→</span>Где ты потеряешь деньги — и как не потерять</div>
-            <div class="rb-feat"><span class="rb-feat-ico">→</span>График дохода по месяцам</div>
+        <div class="rm-blur-ov">
+          <div class="bo-ico">🗺️</div>
+          <div class="bo-title">Детальный roadmap закрыт</div>
+          <div class="bo-desc">Конкретные действия, сроки и доход на каждом этапе пути</div>
+          <div class="bo-feats">
+            <div class="bo-feat"><span class="bo-feat-ico">→</span>Что делать первые 90 дней</div>
+            <div class="bo-feat"><span class="bo-feat-ico">→</span>Где ты потеряешь деньги — и как не потерять</div>
+            <div class="bo-feat"><span class="bo-feat-ico">→</span>График дохода по месяцам</div>
           </div>
-          <div class="rb-price">🔓 Разблокировать за 4 900 ₸</div>
+          <div class="bo-price">🔓 4 900 ₸</div>
           <button class="btn" onclick="openModal()">Открыть полный план →</button>
         </div>` : ''}
       </div>
 
       <!-- FINAL CTA -->
-      <div style="background:linear-gradient(135deg,rgba(198,255,0,.08),rgba(198,255,0,.03));border:1px solid rgba(198,255,0,.25);border-radius:18px;padding:32px;text-align:center;margin-top:8px">
-        <div style="font-family:var(--D);font-size:1.5rem;font-weight:800;letter-spacing:-.025em;margin-bottom:8px">
-          Выбери стратегию — и разблокируй <span style="color:var(--accent)">план действий</span>
-        </div>
-        <p style="font-size:.9rem;color:var(--muted);line-height:1.65;margin-bottom:24px;max-width:440px;margin-left:auto;margin-right:auto">
-          С твоим профилем реально выйти на ${inc.y2||'целевой доход'} за 2 года. Вопрос только в том, выберешь ли ты правильный путь.
-        </p>
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <div class="final-cta">
+        <div class="fc-title">Выбери стратегию — получи <em>план действий</em></div>
+        <p class="fc-desc">С твоим профилем реально выйти на ${inc.y2||'целевой доход'} за 2 года. Нужен только правильный путь.</p>
+        <div class="fc-btns">
           <button class="btn btn-lg" onclick="openModal()">🔓 Полный план · 4 900 ₸</button>
           <a href="result.html" class="btn btn-g btn-lg">Вернуться к результату</a>
         </div>
-        <div style="font-size:.72rem;color:var(--dim);margin-top:14px">обычно 9 900 ₸ — скидка до конца месяца</div>
+        <div class="fc-note">обычно 9 900 ₸ — скидка действует до конца месяца</div>
       </div>
     `;
 
-    // Animate bars after render
+    // Animate bars for path A
     setTimeout(()=>{
-      document.querySelectorAll('.pb-fill').forEach(b=>{ b.style.width = b.dataset.w + '%'; });
+      document.querySelectorAll('.pbar-fill[data-w]').forEach(b=>{ b.style.width = b.dataset.w+'%'; });
     }, 300);
 
-    // Pre-select based on growthType
+    // Auto-select based on growthType
     if(gt === 'fast'){
-      const el = document.getElementById('path-a');
+      const el = document.getElementById('pa');
       if(el) selectPath('a', el, false);
-    } else if(gt === 'stable'){
-      const el = document.getElementById('path-b');
-      if(el) selectPath('b', el, false);
     }
   }
 
   // ── PATH SELECTION ──
-  let selectedPath = null;
-  function selectPath(p, el, openPay = true){
-    document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('selected'));
-    document.querySelectorAll('.pcheck').forEach(c=>c.textContent='');
-    el.classList.add('selected');
-    document.getElementById('chk-'+p).textContent = '✓';
-    selectedPath = p;
+  function selectPath(p, el, openPay=true){
+    document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('sel'));
+    document.querySelectorAll('[id^="chk-"]').forEach(c=>c.textContent='');
+    el.classList.add('sel');
+    const chk = document.getElementById('chk-'+p);
+    if(chk) chk.textContent = '✓';
     save('selected_path', p);
     if(openPay) setTimeout(()=>openModal(), 700);
   }
 
-  // ── DATA GENERATORS ──
-  function getPathsData(prof, sc, gt, inc){
-    // Base numbers adjusted by profession income range
-    const R2 = inc.y2 || '600 000 – 900 000 тг';
-    // Path A is always higher income / higher risk
-    // Path B is always stable / lower risk
-    const PROF_PATHS = {
-      it: {
-        a:{ico:'🚀',type:'Влияние',name:'Product / Growth / Стартап',desc:'Продуктовые роли, рост стартапа, собственный проект. Высокий потолок дохода при правильном выборе компании.',income:'700 000 – 1 400 000 тг',time:'6–10 мес.',prob:72,bars:{income:90,speed:85,stability:40,risk:75}},
-        b:{ico:'🏗️',type:'Управление',name:'Tech Lead / Engineering Manager',desc:'Технический лидер или управляющий инженерами. Предсказуемый рост, высокое уважение в индустрии.',income:'600 000 – 1 100 000 тг',time:'10–16 мес.',prob:82,bars:{income:75,speed:55,stability:80,risk:35}},
+  // ── DATA ──
+  function getPathsData(prof, sc, gt, dir){
+    const DATA = {
+      it:{
+        switch:[
+          {ico:'🚀',type:'Влияние',    name:'Product Manager / Growth Lead', desc:'Из разработки в управление продуктом. Огромный спрос в KZ fintech и e-commerce. Портфолио из 2–3 кейсов — и первый оффер.', salary:'600 000 – 1 200 000 тг',time:'6–10 мес.',prob:72,bars:{income:88,speed:82,stability:42,risk:72}},
+          {ico:'🏗️',type:'Управление', name:'Tech Lead / Engineering Manager',desc:'Углубление в архитектуру и техническое лидерство. Путь к CTO при долгосрочной стратегии.',                                  salary:'700 000 – 1 400 000 тг',time:'12–18 мес.',prob:80,bars:{income:80,speed:48,stability:82,risk:32}},
+        ],
+        grow:[
+          {ico:'📈',type:'Вертикальный', name:'Senior → Staff / Principal Engineer', desc:'Рост внутри специальности. Senior в Алматы в 2025 — 700–1 000к тг. Цель реальна за 8–14 месяцев.',               salary:'700 000 – 1 200 000 тг',time:'8–14 мес.',prob:78,bars:{income:82,speed:60,stability:75,risk:38}},
+          {ico:'💡',type:'Горизонтальный',name:'Data Scientist / ML Engineer',         desc:'Переход в AI/ML — самый быстрорастущий сегмент IT в КЗ. Спрос превышает предложение в 3× раза.',                  salary:'750 000 – 1 300 000 тг',time:'6–10 мес.',prob:70,bars:{income:86,speed:72,stability:55,risk:60}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Фриланс',     name:'Tech Consultant / International Freelance', desc:'Upwork и Toptal. Разработчик из КЗ с английским зарабатывает $2 000–4 000/мес. Быстрый вход.',              salary:'800 000 – 1 600 000 тг',time:'2–4 мес.',prob:68,bars:{income:90,speed:90,stability:38,risk:70}},
+          {ico:'🎓',type:'Переобучение', name:'Переход в смежный стек (AI/Cloud/Mobile)', desc:'3–4 месяца на смену специализации → вход в более высокооплачиваемый сегмент.',                                    salary:'450 000 – 800 000 тг',time:'4–8 мес.',prob:75,bars:{income:68,speed:65,stability:72,risk:42}},
+        ],
       },
-      law: {
-        a:{ico:'🚀',type:'Влияние',name:'Legal Advisor / LegalTech',desc:'Независимый консультант или сооснователь юртех-стартапа. Нестандартный, но высокодоходный путь.',income:'600 000 – 1 200 000 тг',time:'8–14 мес.',prob:65,bars:{income:85,speed:70,stability:38,risk:72}},
-        b:{ico:'🏢',type:'Управление',name:'In-house Counsel / Head of Legal',desc:'Руководитель юридического отдела в IT или финтех компании. Стабильный, хорошо оплачиваемый трек.',income:'550 000 – 950 000 тг',time:'6–12 мес.',prob:80,bars:{income:70,speed:50,stability:82,risk:30}},
+      law:{
+        switch:[
+          {ico:'🚀',type:'Влияние',    name:'LegalTech / Legal Advisor в стартапе', desc:'Юрист как основатель или советник юртех-проекта. Рынок LegalTech в КЗ практически пустой.',                     salary:'500 000 – 1 200 000 тг',time:'12–18 мес.',prob:62,bars:{income:85,speed:68,stability:38,risk:72}},
+          {ico:'🏢',type:'Корпоративный',name:'In-house Counsel в IT / Fintech',      desc:'Юристы в технологических компаниях КЗ зарабатывают в 1.5–2× больше, чем в госструктурах.',                   salary:'600 000 – 1 000 000 тг',time:'3–6 мес.',prob:78,bars:{income:72,speed:55,stability:80,risk:30}},
+        ],
+        grow:[
+          {ico:'📊',type:'Специализация', name:'M&A / Tax Law / Compliance эксперт',  desc:'Узкая специализация в корпоративном праве — самые высокооплачиваемые ниши юррынка КЗ.',                          salary:'700 000 – 1 400 000 тг',time:'12–24 мес.',prob:65,bars:{income:86,speed:40,stability:80,risk:28}},
+          {ico:'🎤',type:'Личный бренд',  name:'Юрист-эксперт / Консультант',          desc:'Публичная экспертиза через Instagram/LinkedIn + консалтинг. 50–150к тг за консультацию.',                       salary:'500 000 – 1 500 000 тг',time:'8–14 мес.',prob:58,bars:{income:88,speed:72,stability:40,risk:68}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Смена сферы', name:'HR Business Partner / Compliance в корп.',desc:'Юридическая база — ценный актив в HR и корпоративном управлении. Переход без потери статуса.',                  salary:'400 000 – 700 000 тг',time:'2–4 мес.',prob:75,bars:{income:65,speed:72,stability:80,risk:30}},
+          {ico:'🌐',type:'Международный',name:'Юрист для иностранных компаний',          desc:'Знание казахстанского права + английский = редкое сочетание. Иностранные компании платят в долларах.',        salary:'700 000 – 1 200 000 тг',time:'6–12 мес.',prob:62,bars:{income:82,speed:55,stability:60,risk:55}},
+        ],
       },
-      marketing: {
-        a:{ico:'🚀',type:'Влияние',name:'CMO / Агентство / Growth Hacker',desc:'Коммерческий директор или собственное агентство. Нелинейный рост через аудиторию и результаты.',income:'700 000 – 1 500 000 тг',time:'8–14 мес.',prob:68,bars:{income:88,speed:80,stability:42,risk:70}},
-        b:{ico:'📊',type:'Управление',name:'Head of Marketing / Product Marketing',desc:'Управление маркетинг-командой внутри компании. Понятный трек и бонусы за результат.',income:'550 000 – 950 000 тг',time:'6–12 мес.',prob:80,bars:{income:72,speed:55,stability:78,risk:32}},
+      marketing:{
+        switch:[
+          {ico:'🚀',type:'Влияние',    name:'CMO / Growth Hacker / Своё агентство', desc:'Агентство из 3–5 человек при чеке 200–400к тг/клиент приносит владельцу 1–3M тг/мес.',                           salary:'700 000 – 2 500 000 тг',time:'10–18 мес.',prob:62,bars:{income:90,speed:75,stability:35,risk:75}},
+          {ico:'📊',type:'Управление', name:'Head of Marketing / Product Marketing', desc:'Управленческий трек внутри компании. Понятный рост, бонусы за результат, меньше риска.',                         salary:'600 000 – 1 100 000 тг',time:'8–14 мес.',prob:75,bars:{income:74,speed:55,stability:78,risk:32}},
+        ],
+        grow:[
+          {ico:'📈',type:'Data + Performance',name:'Performance Marketing Lead',     desc:'Маркетологи с Google/Meta Ads + аналитикой зарабатывают в 1.5–2× больше. Дефицитный навык.',                      salary:'550 000 – 950 000 тг',time:'5–10 мес.',prob:74,bars:{income:78,speed:68,stability:68,risk:42}},
+          {ico:'🎯',type:'Продуктовый',       name:'Product Marketing Manager',       desc:'Пересечение маркетинга и продукта — самый высокооплачиваемый гибрид в КЗ IT-компаниях.',                          salary:'600 000 – 1 000 000 тг',time:'8–14 мес.',prob:70,bars:{income:80,speed:55,stability:72,risk:38}},
+        ],
+        restart:[
+          {ico:'✍️',type:'Контент',     name:'Контент-маркетолог / Копирайтер',      desc:'Удалённая работа с международными клиентами. Хороший копирайтер с английским: $30–60/час.',                      salary:'300 000 – 700 000 тг',time:'2–4 мес.',prob:72,bars:{income:68,speed:82,stability:55,risk:42}},
+          {ico:'📱',type:'Соцсети',     name:'SMM / Influence маркетинг',             desc:'Высокий спрос от малого бизнеса, быстрый вход. Старт за 1–2 месяца.',                                             salary:'250 000 – 500 000 тг',time:'1–3 мес.',prob:78,bars:{income:52,speed:90,stability:62,risk:32}},
+        ],
       },
-      finance: {
-        a:{ico:'💡',type:'Влияние',name:'Fintech / Инвест-аналитик',desc:'Переход в финтех или инвестиции. Высокий доход при наличии экспертизы и правильном нетворкинге.',income:'700 000 – 1 500 000 тг',time:'10–18 мес.',prob:66,bars:{income:88,speed:65,stability:44,risk:68}},
-        b:{ico:'📈',type:'Управление',name:'CFO / Финансовый директор',desc:'Путь к финансовому директору через специализацию. Высокий статус, стабильный рост дохода.',income:'800 000 – 2 000 000 тг',time:'18–36 мес.',prob:74,bars:{income:82,speed:40,stability:88,risk:28}},
+      finance:{
+        switch:[
+          {ico:'💡',type:'Fintech',    name:'Product Owner / Fintech Analyst',       desc:'Финансисты с пониманием IT-продукта — самый дефицитный профиль в КЗ fintech 2025–2026.',                           salary:'600 000 – 1 100 000 тг',time:'6–12 мес.',prob:72,bars:{income:82,speed:65,stability:62,risk:52}},
+          {ico:'📈',type:'Инвестиции', name:'Инвест-аналитик / Управляющий активами',desc:'Рынок капитала КЗ растёт. CFA + опыт открывают должности с бонусами, удваивающими базу.',                         salary:'700 000 – 1 500 000 тг',time:'12–24 мес.',prob:62,bars:{income:86,speed:40,stability:72,risk:48}},
+        ],
+        grow:[
+          {ico:'📊',type:'Рост вертикально',name:'CFO / Финансовый директор',         desc:'Путь к CFO в среднем бизнесе КЗ — 3–5 лет. Доход: 1 000 000 – 2 500 000 тг/мес.',                               salary:'1 000 000 – 2 500 000 тг',time:'3–5 лет',prob:65,bars:{income:90,speed:32,stability:88,risk:22}},
+          {ico:'🎓',type:'Специализация',    name:'МСФО-эксперт / ACCA',               desc:'Сертификация ACCA/CPA открывает Big 4 и международные компании. Разница в зп: +50–80%.',                         salary:'600 000 – 1 200 000 тг',time:'12–18 мес.',prob:72,bars:{income:80,speed:45,stability:82,risk:28}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Консалтинг',  name:'Независимый финансовый консультант',   desc:'МСБ острее всего нуждается в финансовом структурировании. Ставка: 50–150к тг/день.',                             salary:'500 000 – 1 500 000 тг',time:'3–6 мес.',prob:65,bars:{income:84,speed:68,stability:50,risk:62}},
+          {ico:'📱',type:'EdTech',       name:'Курсы по финансовой грамотности',       desc:'Один из самых продаваемых онлайн-форматов в КЗ. Курс за 20–50к тг × 200 студентов = реальная цифра.',             salary:'300 000 – 1 000 000 тг',time:'4–8 мес.',prob:62,bars:{income:72,speed:72,stability:45,risk:58}},
+        ],
       },
-      design: {
-        a:{ico:'✨',type:'Влияние',name:'Creative Director / Своя студия',desc:'Арт-директор или основатель дизайн-студии. Личный бренд открывает корпоративные контракты.',income:'600 000 – 1 300 000 тг',time:'8–16 мес.',prob:65,bars:{income:84,speed:72,stability:40,risk:68}},
-        b:{ico:'🎨',type:'Управление',name:'UX Lead / Design Manager',desc:'Руководство продуктовым дизайном в IT-компании. Стабильный рост с понятными шагами.',income:'500 000 – 950 000 тг',time:'8–14 мес.',prob:78,bars:{income:70,speed:55,stability:80,risk:32}},
+      design:{
+        switch:[
+          {ico:'✨',type:'Продуктовый',  name:'UX/UI Designer в IT-компанию',          desc:'Переход в продуктовый дизайн. 3–5 кейсов в портфолио = оффер в Kaspi или стартапе.',                             salary:'450 000 – 850 000 тг',time:'6–10 мес.',prob:70,bars:{income:72,speed:80,stability:68,risk:45}},
+          {ico:'🎨',type:'Creative',     name:'Creative / Art Director',               desc:'Управление визуальной идентичностью брендов. Арт-директора агентств в КЗ: 600–1 200к тг.',                       salary:'600 000 – 1 200 000 тг',time:'12–18 мес.',prob:62,bars:{income:82,speed:55,stability:55,risk:60}},
+        ],
+        grow:[
+          {ico:'📊',type:'Research',     name:'UX Researcher / Product Designer',      desc:'Дизайнеры с навыком user-исследований ценятся в 2× больше. Редкий навык на рынке КЗ.',                           salary:'550 000 – 1 000 000 тг',time:'6–12 мес.',prob:72,bars:{income:78,speed:58,stability:72,risk:38}},
+          {ico:'🚀',type:'Фриланс',      name:'International Freelancer / Upwork',     desc:'$30–80/час на Upwork. Своя студия из 3 человек при правильном позиционировании.',                                 salary:'600 000 – 2 000 000 тг',time:'6–14 мес.',prob:60,bars:{income:88,speed:72,stability:35,risk:72}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Быстрый старт',name:'Графический дизайнер / Соцсети',        desc:'Быстрый вход. Спрос огромный, конкуренция в основном — низкое качество. Вход за 1–2 мес.',                       salary:'200 000 – 450 000 тг',time:'1–3 мес.',prob:78,bars:{income:52,speed:90,stability:62,risk:30}},
+          {ico:'🎬',type:'Motion',       name:'Motion Designer / Video Editor',         desc:'Motion design — дефицитный навык в КЗ. After Effects за 2 месяца открывает сегмент 500к+.',                      salary:'400 000 – 800 000 тг',time:'3–6 мес.',prob:70,bars:{income:68,speed:72,stability:58,risk:42}},
+        ],
       },
-      hr: {
-        a:{ico:'🚀',type:'Влияние',name:'Executive Search / HR Consulting',desc:'Независимый рекрутинг топ-позиций. Комиссия 20–30% от годовой зарплаты кандидата.',income:'700 000 – 2 000 000 тг',time:'6–12 мес.',prob:64,bars:{income:90,speed:78,stability:38,risk:72}},
-        b:{ico:'👥',type:'Управление',name:'HR Director / VP People',desc:'Руководство HR-функцией в крупной компании. Стабильный, уважаемый трек.',income:'800 000 – 1 800 000 тг',time:'18–36 мес.',prob:78,bars:{income:80,speed:38,stability:86,risk:26}},
+      hr:{
+        switch:[
+          {ico:'🚀',type:'HR Tech',     name:'People Partner / HRBP в IT-компанию',   desc:'HRBP в технологических компаниях — самый быстрорастущий трек. Kaspi, Kolesa активно набирают.',                  salary:'500 000 – 900 000 тг',time:'4–8 мес.',prob:74,bars:{income:72,speed:72,stability:75,risk:38}},
+          {ico:'🔍',type:'Executive',   name:'Executive Search / Headhunting',         desc:'Независимый рекрутинг топ-позиций. 1 закрытый топ-менеджер = 1–3M тг комиссии.',                                 salary:'700 000 – 2 000 000 тг',time:'6–12 мес.',prob:62,bars:{income:90,speed:75,stability:38,risk:72}},
+        ],
+        grow:[
+          {ico:'📈',type:'Карьерный рост',name:'HR Director / VP People',              desc:'HR-директор в компании 500+ человек: 1 000 000 – 2 000 000 тг/мес. Путь: 3–5 лет.',                              salary:'1 000 000 – 2 000 000 тг',time:'3–5 лет',prob:70,bars:{income:88,speed:32,stability:88,risk:22}},
+          {ico:'🎯',type:'Консалтинг',   name:'HR-консультант / L&D специалист',       desc:'Корпоративные тренинги в КЗ: 150–400к тг/день. Спрос на системный L&D растёт.',                                  salary:'600 000 – 1 500 000 тг',time:'8–14 мес.',prob:65,bars:{income:80,speed:62,stability:58,risk:55}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Рекрутинг',   name:'IT-рекрутер / Talent Acquisition',       desc:'Дефицитная специализация. Входной порог низкий, доход сдельный. 1 вакансия = 100–300к тг.',                     salary:'300 000 – 700 000 тг',time:'1–3 мес.',prob:78,bars:{income:65,speed:90,stability:55,risk:38}},
+          {ico:'🎓',type:'Коучинг',     name:'Карьерный консультант / Коуч',            desc:'При 20 клиентах в мес по 15–50к тг — достойный доход. ICF-сертификация повышает ставку.',                        salary:'300 000 – 800 000 тг',time:'3–6 мес.',prob:65,bars:{income:68,speed:68,stability:58,risk:48}},
+        ],
       },
-      creative: {
-        a:{ico:'🎯',type:'Влияние',name:'Онлайн-школа / Личный бренд',desc:'Монетизация экспертизы через обучение и контент. Потолок дохода не ограничен при масштабировании.',income:'400 000 – 2 000 000 тг',time:'8–18 мес.',prob:60,bars:{income:88,speed:70,stability:35,risk:72}},
-        b:{ico:'🤝',type:'Управление',name:'Корпоративные заказы / Event',desc:'Работа с корпоративными клиентами на постоянной основе. Выше чек, стабильнее доход.',income:'400 000 – 800 000 тг',time:'4–10 мес.',prob:75,bars:{income:65,speed:60,stability:75,risk:35}},
+      medicine:{
+        switch:[
+          {ico:'🚀',type:'MedTech',     name:'Medical Advisor / HealthTech',           desc:'Врачи в фармкомпаниях и медтех-стартапах КЗ зарабатывают в 2–3× больше практикующих.',                           salary:'500 000 – 1 000 000 тг',time:'6–12 мес.',prob:68,bars:{income:80,speed:62,stability:65,risk:52}},
+          {ico:'📚',type:'Образование', name:'YouTube-врач / Медконтент',               desc:'Медконтент — один из самых дефицитных форматов в КЗ. Канал с 100к+ зарабатывает больше практика.',              salary:'400 000 – 1 500 000 тг',time:'10–20 мес.',prob:58,bars:{income:82,speed:65,stability:40,risk:68}},
+        ],
+        grow:[
+          {ico:'📈',type:'Специализация',name:'Узкий специалист / Платная практика',    desc:'Врачи узких специальностей в частных клиниках КЗ: 500 000 – 1 500 000 тг. Окупается за 2–3 года.',             salary:'500 000 – 1 500 000 тг',time:'1–3 года',prob:72,bars:{income:82,speed:38,stability:82,risk:28}},
+          {ico:'💼',type:'Свой бизнес',  name:'Собственная клиника / Кабинет',           desc:'Небольшой кабинет приносит 500к–1.5M тг при грамотном маркетинге.',                                              salary:'700 000 – 2 000 000 тг',time:'12–24 мес.',prob:60,bars:{income:86,speed:48,stability:52,risk:68}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Онлайн',      name:'Телемедицина / Онлайн-консультации',      desc:'Платформы DOC+ и Kaz-doctor. Быстрый старт за 2–4 недели без аренды кабинета.',                                  salary:'200 000 – 500 000 тг',time:'2–4 нед.',prob:80,bars:{income:52,speed:95,stability:62,risk:28}},
+          {ico:'🎓',type:'Переквалификация',name:'Медицинский переводчик / Консультант', desc:'Медицинский английский + знание индустрии = редкая компетенция. Фармкомпании: 50–100к тг/день.',               salary:'400 000 – 800 000 тг',time:'3–6 мес.',prob:68,bars:{income:68,speed:65,stability:65,risk:40}},
+        ],
       },
-      engineering: {
-        a:{ico:'⚙️',type:'Влияние',name:'Tech Consulting / IoT Стартап',desc:'Независимый консалтинг или технологический стартап. Высокие ставки при уникальной экспертизе.',income:'700 000 – 2 000 000 тг',time:'10–18 мес.',prob:62,bars:{income:88,speed:65,stability:38,risk:70}},
-        b:{ico:'🏗️',type:'Управление',name:'Project Manager / PMO Lead',desc:'Управление инженерными проектами. PMP открывает доход выше чем у большинства исполнителей.',income:'600 000 – 1 400 000 тг',time:'10–18 мес.',prob:78,bars:{income:75,speed:48,stability:82,risk:28}},
+      engineering:{
+        switch:[
+          {ico:'⚙️',type:'Консалтинг',  name:'Технический консультант / Эксперт',      desc:'Инженеры с опытом в горнодобыче, энергетике, нефтяной отрасли КЗ. Ставка: 50–200к тг/день.',                    salary:'700 000 – 2 000 000 тг',time:'4–8 мес.',prob:65,bars:{income:88,speed:68,stability:52,risk:65}},
+          {ico:'📊',type:'Управление',  name:'Project Manager / PMO',                   desc:'PMP-сертификация превращает инженерный опыт в управленческую карьеру. PM в крупных проектах КЗ: 700–1 400к тг.',  salary:'700 000 – 1 400 000 тг',time:'10–18 мес.',prob:75,bars:{income:78,speed:52,stability:80,risk:32}},
+        ],
+        grow:[
+          {ico:'🌍',type:'Международный',name:'International Engineer / Expat',          desc:'Инженеры КЗ на международных контрактах зарабатывают в 3–5× больше. Нефть, газ, горнодобыча.',                  salary:'1 000 000 – 3 000 000 тг',time:'6–12 мес.',prob:62,bars:{income:92,speed:60,stability:58,risk:55}},
+          {ico:'🏗️',type:'Лидерство',   name:'Chief Engineer / Technical Director',     desc:'Технический директор в промышленной компании КЗ. Высокий статус, стабильный высокий доход.',                    salary:'1 000 000 – 2 500 000 тг',time:'18–36 мес.',prob:68,bars:{income:88,speed:35,stability:88,risk:22}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Фриланс',     name:'Freelance Tech Expert / Консультант',     desc:'МСБ платит за техническое сопровождение. Один консультационный договор = 50–150к тг/мес.',                      salary:'300 000 – 700 000 тг',time:'2–4 мес.',prob:72,bars:{income:65,speed:80,stability:60,risk:42}},
+          {ico:'🎓',type:'Преподавание', name:'Преподаватель Autodesk / SolidWorks / PLC',desc:'Сертифицированные преподаватели технических инструментов берут 5–15к тг/час.',                                  salary:'250 000 – 600 000 тг',time:'2–5 мес.',prob:75,bars:{income:55,speed:78,stability:72,risk:28}},
+        ],
       },
-      other: {
-        a:{ico:'🚀',type:'Влияние',name:'Предпринимательство / Консалтинг',desc:'Собственный бизнес или независимый консультант. Нелинейный рост, максимальная свобода.',income:'500 000 – 2 000 000 тг',time:'12–24 мес.',prob:58,bars:{income:88,speed:72,stability:32,risk:76}},
-        b:{ico:'📊',type:'Управление',name:'Операционный менеджер / Project Manager',desc:'Управленческий трек в любой отрасли. Предсказуемый рост с PMP или MBA.',income:'500 000 – 1 200 000 тг',time:'10–18 мес.',prob:76,bars:{income:72,speed:48,stability:82,risk:30}},
+      sales:{
+        switch:[
+          {ico:'🚀',type:'B2B Enterprise',name:'Key Account Manager / BDM',            desc:'Корпоративные продажи в IT и fintech. KAM в Kaspi Бизнес: 700 000 – 1 500 000 тг с бонусами.',                   salary:'700 000 – 1 500 000 тг',time:'4–8 мес.',prob:72,bars:{income:86,speed:78,stability:60,risk:58}},
+          {ico:'💼',type:'Директор',     name:'Коммерческий директор / Head of Sales',  desc:'При наличии команды и трека — прямой путь к коммерческому директору. В среднем бизнесе КЗ: 1–2M тг/мес.',     salary:'1 000 000 – 2 000 000 тг',time:'18–36 мес.',prob:65,bars:{income:90,speed:38,stability:80,risk:38}},
+        ],
+        grow:[
+          {ico:'📈',type:'Личный бренд', name:'Sales Expert / Консультант по продажам', desc:'Продавцы с личным брендом в LinkedIn/Instagram закрывают сделки, которые не видит HR.',                           salary:'500 000 – 1 500 000 тг',time:'8–14 мес.',prob:65,bars:{income:84,speed:72,stability:45,risk:68}},
+          {ico:'🎯',type:'Technical Sales',name:'Sales Engineer / Technical Sales',     desc:'Гибрид продавца + технического специалиста. Зарплата выше на 50–80% стандартного продавца.',                   salary:'600 000 – 1 200 000 тг',time:'8–14 мес.',prob:70,bars:{income:80,speed:60,stability:68,risk:45}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Независимый', name:'Агент / Независимый брокер',              desc:'Страхование, недвижимость, финансовые продукты. Высокие комиссионные, низкий барьер входа.',                     salary:'200 000 – 700 000 тг',time:'1–3 мес.',prob:72,bars:{income:68,speed:90,stability:45,risk:55}},
+          {ico:'📱',type:'E-commerce',   name:'Kaspi Магазин / Marketplace продавец',    desc:'Kaspi Магазин и WB — доступные платформы. Оборот 5–10M тг/мес достижим за 6–12 месяцев.',                       salary:'400 000 – 2 000 000 тг',time:'4–10 мес.',prob:62,bars:{income:86,speed:75,stability:42,risk:70}},
+        ],
+      },
+      education:{
+        switch:[
+          {ico:'🚀',type:'EdTech',      name:'Методолог / Product Manager в EdTech',   desc:'Образовательный рынок КЗ растёт на 25%/год. Педагоги, умеющие строить онлайн-курсы — дефицит.',                  salary:'450 000 – 850 000 тг',time:'6–12 мес.',prob:68,bars:{income:72,speed:65,stability:70,risk:45}},
+          {ico:'🎓',type:'Онлайн-школа',name:'Автор курсов / Собственная школа',        desc:'100 студентов × 30к тг/мес = 3M тг оборот. Mastery-модель работает в КЗ.',                                        salary:'500 000 – 2 000 000 тг',time:'8–18 мес.',prob:60,bars:{income:88,speed:68,stability:38,risk:70}},
+        ],
+        grow:[
+          {ico:'📊',type:'Корпоративное',name:'L&D специалист / Бизнес-тренер',         desc:'Корпоративные тренинги: 150–400к тг/день. Компании активно инвестируют в обучение персонала.',                  salary:'600 000 – 1 500 000 тг',time:'8–14 мес.',prob:68,bars:{income:82,speed:60,stability:65,risk:48}},
+          {ico:'🎤',type:'Публичный',    name:'Спикер / Публичный эксперт',              desc:'Публичный педагог в Instagram/YouTube монетизирует аудиторию через рекламу и курсы.',                            salary:'400 000 – 1 500 000 тг',time:'10–20 мес.',prob:58,bars:{income:84,speed:65,stability:38,risk:68}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Репетиторство',name:'Онлайн-репетитор / Частные уроки',       desc:'Profi.ru и Preply — быстрый старт. Математика, English, IT-дисциплины — высокий спрос.',                         salary:'150 000 – 400 000 тг',time:'2–4 нед.',prob:82,bars:{income:48,speed:95,stability:65,risk:22}},
+          {ico:'🌐',type:'Языки',        name:'Преподаватель английского / Коуч',        desc:'Квалифицированный преподаватель с IELTS 7+ зарабатывает 400–700к тг/мес при 10–15 студентах.',                  salary:'350 000 – 700 000 тг',time:'1–3 мес.',prob:75,bars:{income:65,speed:88,stability:68,risk:28}},
+        ],
+      },
+      creative:{
+        switch:[
+          {ico:'🎯',type:'Бизнес',      name:'Онлайн-школа / Мастер-классы',            desc:'100 учеников × 15к тг = 1.5M тг/мес. Флористика, кулинария, фото — огромный спрос.',                            salary:'400 000 – 2 000 000 тг',time:'6–12 мес.',prob:62,bars:{income:88,speed:70,stability:38,risk:72}},
+          {ico:'🤝',type:'B2B',         name:'Event-дизайн / Корпоративные заказы',      desc:'Один event-контракт = 500к–2M тг. Корпоративные клиенты платят в 3–5× больше частных.',                         salary:'500 000 – 1 500 000 тг',time:'4–8 мес.',prob:68,bars:{income:82,speed:65,stability:58,risk:55}},
+        ],
+        grow:[
+          {ico:'📸',type:'Личный бренд', name:'Instagram / TikTok эксперт',              desc:'Аудитория 50к+ открывает партнёрства. Топ-флористы и фотографы КЗ: 500к–2M тг/мес.',                            salary:'500 000 – 2 000 000 тг',time:'8–18 мес.',prob:58,bars:{income:88,speed:68,stability:35,risk:72}},
+          {ico:'🏫',type:'Образование', name:'Преподаватель профессиональных курсов',    desc:'Авторские курсы приносят больше, чем практика. Подписная модель = предсказуемый доход.',                        salary:'350 000 – 900 000 тг',time:'5–10 мес.',prob:65,bars:{income:72,speed:65,stability:62,risk:48}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Быстрый старт',name:'Фриланс-заказы через соцсети',            desc:'10–15 постов с кейсами = первые заказы за 1–2 месяца. Прямой канал без посредников.',                          salary:'150 000 – 400 000 тг',time:'1–3 мес.',prob:78,bars:{income:52,speed:92,stability:55,risk:35}},
+          {ico:'🎂',type:'Партнёрство', name:'Шеф-партнёр ресторана / Арт-директор кафе',desc:'Творческая экспертиза + бизнес-партнёрство. Для тех, кто не хочет быть соло-предпринимателем.',                  salary:'300 000 – 700 000 тг',time:'3–6 мес.',prob:65,bars:{income:65,speed:62,stability:68,risk:45}},
+        ],
+      },
+      other:{
+        switch:[
+          {ico:'🚀',type:'Влияние',     name:'Предпринимательство / Стартап',           desc:'Твои навыки + решение реальной проблемы рынка КЗ. Astana Hub и MOST предлагают поддержку.',                      salary:'500 000 – 3 000 000 тг',time:'12–24 мес.',prob:55,bars:{income:90,speed:72,stability:30,risk:78}},
+          {ico:'📊',type:'Управление',  name:'Операционный менеджер / Project Manager',  desc:'Управленческие навыки — универсальный актив. PMP открывает позиции в любой отрасли.',                          salary:'500 000 – 1 200 000 тг',time:'8–16 мес.',prob:72,bars:{income:72,speed:52,stability:80,risk:32}},
+        ],
+        grow:[
+          {ico:'📈',type:'Экспертиза',  name:'Независимый консультант / Эксперт',       desc:'Эксперты в КЗ берут 30–100к тг/час консультации. При 10–15 клиентах доход кратно выше.',                        salary:'500 000 – 1 800 000 тг',time:'8–18 мес.',prob:60,bars:{income:86,speed:68,stability:42,risk:68}},
+          {ico:'🏆',type:'Лидерство',   name:'Менеджер по развитию / BDM',               desc:'Business development — одна из самых востребованных функций при росте бизнеса.',                                  salary:'500 000 – 1 100 000 тг',time:'4–8 мес.',prob:72,bars:{income:74,speed:68,stability:68,risk:45}},
+        ],
+        restart:[
+          {ico:'🔁',type:'Быстрый старт',name:'Фриланс / Удалённая работа',              desc:'Быстрый источник стабильного дохода по текущим навыкам. Upwork, hh.kz, LinkedIn.',                              salary:'200 000 – 600 000 тг',time:'1–4 мес.',prob:72,bars:{income:62,speed:88,stability:52,risk:42}},
+          {ico:'📚',type:'Переобучение', name:'Онлайн-курс → новая профессия',            desc:'3–6 месяцев на смену специальности. Лучший ROI: IT, маркетинг, дизайн.',                                        salary:'300 000 – 800 000 тг',time:'3–6 мес.',prob:68,bars:{income:68,speed:72,stability:62,risk:48}},
+        ],
       },
     };
-    // Apply scenario adjustment to income
-    const base = PROF_PATHS[prof] || PROF_PATHS.other;
-    // If growthType is 'new', swap path order slightly
-    return base;
+
+    const profData = DATA[prof] || DATA.other;
+    const paths = profData[sc] || profData.switch || DATA.other.switch;
+    return { a: paths[0], b: paths[1] };
   }
 
-  function getWarning(sc, gt){
-    const WARNINGS = {
-      switch: {
-        title:'Без стратегии ты потеряешь 8–12 месяцев прогресса',
-        desc:'Хаотичный поиск без выбранного направления — главная причина провала карьерного свитча. <strong>7 из 10 человек</strong> без чёткой стратегии возвращаются обратно через год.',
-      },
-      grow: {
-        title:'Без стратегии ты останешься на том же уровне дохода',
-        desc:'Ждать повышения без плана — наиболее распространённая ловушка. <strong>Медиана роста без смены стратегии — 8–12% в год</strong>, то есть ниже инфляции в реальном выражении.',
-      },
-      restart: {
-        title:'Без стратегии перезапуск может затянуться на 2+ года',
-        desc:'Перезапуск без фокуса превращается в бесконечный «поиск себя». <strong>Чёткая стратегия сокращает переходный период в 2–3 раза</strong> по данным карьерных исследований.',
-      },
-    };
-    return WARNINGS[sc] || WARNINGS.switch;
+  function getWarning(sc){
+    return {
+      switch:{title:'Без стратегии ты потеряешь 8–12 месяцев прогресса',    desc:'Хаотичный поиск без направления — причина провала большинства карьерных свитчей. <strong>7 из 10 человек</strong> без чёткой стратегии возвращаются обратно через год.'},
+      grow:  {title:'Без стратегии ты останешься на том же уровне дохода',   desc:'Ждать повышения без плана — самая распространённая ловушка. <strong>Медиана роста без действий — 8–12% в год</strong>, то есть ниже инфляции в реальном выражении.'},
+      restart:{title:'Без стратегии перезапуск может затянуться на 2+ года',  desc:'Перезапуск без фокуса превращается в бесконечный «поиск себя». <strong>Чёткая стратегия сокращает переходный период в 2–3 раза.</strong>'},
+    }[sc] || {title:'Без стратегии ты теряешь время',desc:'Каждый месяц без выбранного направления — это месяц потерянного прогресса и дохода.'};
   }
 
-  function getRoadmap(prof, sc, gt, inc){
-    const y2 = inc.y2 || '600 000 – 900 000 тг';
-    const now = inc.now || '300 000 – 500 000 тг';
-    const MAPS = {
+  function getRoadmap(sc, inc){
+    const y2  = inc.y2  || '—';
+    const now = inc.now || '—';
+    const y5  = inc.y5  || 'значительно выше';
+    return {
       switch:[
-        {period:'Месяцы 1–3',title:'Подготовка и первые шаги',desc:'Анализ целевого рынка, создание портфолио/резюме под новую нишу, первые 3–5 разговоров с людьми из новой сферы.',income:now},
-        {period:'Месяцы 4–8',title:'Первые результаты',desc:'Первый проект или позиция в новой сфере. Нетворкинг, менторы, обратная связь от рынка.',income:now},
-        {period:'Год 1–2',title:'Рост и закрепление',desc:'Наращивание экспертизы, повышение стоимости, переход на следующий уровень в новой профессии.',income:y2},
-        {period:'Год 2–3',title:'Экспертный уровень',desc:'Позиционирование как эксперта, консалтинг или лидерская роль. Доход выходит на плановый уровень.',income:inc.y5||'значительно выше'},
+        {period:'Месяцы 1–3',  title:'Подготовка и первые шаги',    desc:'Анализ целевого рынка. Портфолио или резюме под новую нишу. 3–5 разговоров с людьми из новой сферы.',       income:now},
+        {period:'Месяцы 4–8',  title:'Первые результаты',           desc:'Первый проект или позиция. Нетворкинг, менторы, обратная связь от рынка — скорректируй курс.',              income:now},
+        {period:'Год 1–2',     title:'Рост и закрепление',          desc:'Наращивание экспертизы, повышение стоимости, переход на следующий уровень в новой профессии.',               income:y2},
+        {period:'Год 2–3',     title:'Экспертный уровень',          desc:'Консалтинг, лидерская роль или собственный проект. Доход выходит на плановый уровень.',                      income:y5},
       ],
       grow:[
-        {period:'Месяцы 1–2',title:'Аудит текущей позиции',desc:'Рыночный анализ своей ценности, сравнение с рынком, определение целевой позиции.',income:now},
-        {period:'Месяцы 3–6',title:'Повышение ценности',desc:'Освоение недостающих навыков, публичная экспертиза, переговоры о повышении или поиск нового места.',income:now},
-        {period:'Год 1–2',title:'Новый уровень дохода',desc:'Смена работодателя или должности с целевым доходом. Рост через повышение роли, а не ожидание.',income:y2},
-        {period:'Год 2–3',title:'Стратегическое позиционирование',desc:'Управленческая роль или ключевая экспертная позиция. Бонусы и equity становятся реальными.',income:inc.y5||'значительно выше'},
+        {period:'Месяцы 1–2',  title:'Аудит рыночной ценности',     desc:'Сравнение с рынком, выявление недостающих навыков, определение целевой позиции и работодателей.',            income:now},
+        {period:'Месяцы 3–6',  title:'Рост ценности',               desc:'Освоение ключевых навыков, публичная экспертиза, переговоры о повышении или поиск нового места.',             income:now},
+        {period:'Год 1–2',     title:'Новый уровень дохода',        desc:'Смена работодателя или роли с целевым доходом. Рост через смену контекста, а не ожидание.',                  income:y2},
+        {period:'Год 2–3',     title:'Стратегическое позиционирование', desc:'Управленческая роль или ключевая экспертная позиция. Бонусы и equity становятся реальными.',             income:y5},
       ],
       restart:[
-        {period:'Месяцы 1–2',title:'Стабилизация',desc:'Финансовая подушка, психологическое восстановление, первая форма дохода (фриланс, временная занятость).',income:now},
-        {period:'Месяцы 3–6',title:'Выбор направления',desc:'Тестирование 2–3 направлений, первые результаты, фокусировка на наиболее перспективном.',income:now},
-        {period:'Год 1–2',title:'Новая траектория',desc:'Устойчивый рост в выбранном направлении, первые значимые результаты, формирование репутации.',income:y2},
-        {period:'Год 2–3',title:'Выход на целевой доход',desc:'Полноценный перезапуск завершён. Доход на целевом уровне, стратегия работает.',income:inc.y5||'значительно выше'},
+        {period:'Месяцы 1–2',  title:'Стабилизация',                desc:'Финансовая подушка, первая форма дохода (фриланс, временная занятость), восстановление ресурса.',            income:now},
+        {period:'Месяцы 3–6',  title:'Выбор направления',           desc:'Тестирование 2–3 направлений. Фокусировка на наиболее перспективном по итогам первых попыток.',               income:now},
+        {period:'Год 1–2',     title:'Новая траектория',            desc:'Устойчивый рост в выбранном направлении. Формирование репутации и первые значимые результаты.',               income:y2},
+        {period:'Год 2–3',     title:'Выход на целевой доход',      desc:'Перезапуск завершён. Доход на целевом уровне, стратегия работает, вектор понятен.',                           income:y5},
       ],
-    };
-    return MAPS[sc] || MAPS.switch;
+    }[sc] || [];
   }
 
   // ── MODAL ──
@@ -556,12 +684,16 @@
   document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
 
   function purchase(){
-    save('paid',true);
+    save('paid', true);
     closeModal();
-    document.querySelectorAll('.roadmap-blur').forEach(el=>{
+    // Remove all blur overlays
+    document.querySelectorAll('.blur-ov, .rm-blur-ov').forEach(el=>{
       el.style.opacity='0'; el.style.transition='opacity .4s';
-      setTimeout(()=>el.remove(),400);
+      setTimeout(()=>el.remove(), 400);
     });
+    // Enable path B card
+    const pb = document.querySelector('.pb2');
+    if(pb){ pb.style.pointerEvents='all'; pb.style.opacity='1'; pb.onclick=()=>selectPath('b',pb); }
   }
 </script>
 </body>
