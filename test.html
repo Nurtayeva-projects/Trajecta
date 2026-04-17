@@ -565,19 +565,20 @@
     const prof = ans.profession || 'other';
 
     // Base salaries по профессии (тысяч тенге/мес, КЗ рынок 2025-2026)
+    // Диапазон = типичная точка входа после перехода / для начинающих в сфере
     const PROF_BASE = {
-      law:        {min:200, max:350, growth:.18, risk:.7},
-      finance:    {min:280, max:450, growth:.16, risk:.78},
-      it:         {min:400, max:650, growth:.28, risk:.82},
-      marketing:  {min:240, max:400, growth:.20, risk:.75},
-      design:     {min:220, max:380, growth:.19, risk:.72},
-      medicine:   {min:170, max:300, growth:.14, risk:.80},
-      hr:         {min:190, max:320, growth:.15, risk:.76},
-      education:  {min:140, max:250, growth:.12, risk:.82},
-      sales:      {min:200, max:380, growth:.22, risk:.70},
-      engineering:{min:220, max:380, growth:.16, risk:.78},
-      creative:   {min:110, max:220, growth:.20, risk:.62},
-      other:      {min:200, max:350, growth:.16, risk:.72},
+      law:        {min:250, max:450, growth:.18, risk:.72},
+      finance:    {min:300, max:550, growth:.17, risk:.78},
+      it:         {min:450, max:750, growth:.28, risk:.82},
+      marketing:  {min:280, max:480, growth:.21, risk:.75},
+      design:     {min:260, max:450, growth:.20, risk:.72},
+      medicine:   {min:300, max:500, growth:.15, risk:.80},
+      hr:         {min:250, max:420, growth:.16, risk:.76},
+      education:  {min:200, max:380, growth:.14, risk:.82},
+      sales:      {min:280, max:500, growth:.23, risk:.70},
+      engineering:{min:280, max:480, growth:.17, risk:.78},
+      creative:   {min:250, max:450, growth:.22, risk:.65},
+      other:      {min:260, max:450, growth:.17, risk:.72},
     };
 
     // Scenario modifiers
