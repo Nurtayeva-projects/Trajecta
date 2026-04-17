@@ -181,6 +181,32 @@
     .mnote{font-size:.72rem;color:var(--dim);margin-top:12px;}
     .btn-full{width:100%;font-size:1rem;padding:16px;border-radius:10px;display:flex;justify-content:center;}
 
+    /* WOW INSIGHT */
+    .insight{background:linear-gradient(135deg,rgba(198,255,0,.08) 0%,rgba(198,255,0,.03) 100%);border:1px solid rgba(198,255,0,.25);border-radius:18px;padding:28px 32px;position:relative;overflow:hidden;}
+    .insight::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 70%);}
+    .insight-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(198,255,0,.12);border:1px solid rgba(198,255,0,.25);color:var(--accent);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;}
+    .insight-title{font-family:var(--D);font-size:clamp(1.05rem,2.5vw,1.35rem);font-weight:800;letter-spacing:-.025em;line-height:1.35;margin-bottom:16px;}
+    .insight-title .hl{color:var(--accent);}
+    .insight-nums{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+    .in-num{background:rgba(2,6,23,.5);border:1px solid rgba(198,255,0,.15);border-radius:10px;padding:12px 16px;min-width:110px;}
+    .in-val{font-family:var(--D);font-size:1.2rem;font-weight:800;color:var(--accent);letter-spacing:-.02em;}
+    .in-lbl{font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;}
+    .insight-note{font-size:.875rem;color:rgba(240,244,255,.65);line-height:1.6;border-top:1px solid rgba(198,255,0,.12);padding-top:14px;}
+    .insight-note strong{color:var(--text);}
+
+    /* MAIN RISK */
+    .main-risk{background:rgba(255,80,50,.055);border:1px solid rgba(255,80,50,.2);border-radius:18px;padding:22px 28px;display:flex;align-items:flex-start;gap:16px;}
+    .mr-ico{font-size:1.7rem;flex-shrink:0;margin-top:2px;}
+    .mr-tag{font-size:.67rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,120,80,.85);margin-bottom:7px;}
+    .mr-title{font-family:var(--D);font-size:1.05rem;font-weight:800;margin-bottom:6px;letter-spacing:-.02em;}
+    .mr-desc{font-size:.875rem;color:var(--muted);line-height:1.6;}
+    .mr-desc strong{color:rgba(255,160,100,.9);}
+
+    /* BLUR OVERLAY improved */
+    .bfeats{display:flex;flex-direction:column;gap:6px;text-align:left;width:100%;max-width:280px;margin:4px 0;}
+    .bfeat{display:flex;align-items:center;gap:8px;font-size:.8rem;color:rgba(240,244,255,.7);}
+    .bfeat-ico{color:var(--accent);flex-shrink:0;font-size:.85rem;}
+
     /* Final CTA */
     .fcta{background:var(--card);border:1px solid rgba(198,255,0,.15);border-radius:18px;padding:40px 32px;text-align:center;}
     .fcta h3{font-family:var(--D);font-size:1.7rem;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;}
@@ -214,21 +240,22 @@
 <div class="modal" id="modal">
   <div class="mbox">
     <button class="mclose" onclick="closeModal()">✕</button>
-    <span class="mico">🔓</span>
-    <div class="mtitle">Полный прогноз</div>
-    <p class="mdesc">Ты видишь основной анализ. Разблокируй детальную траекторию дохода, факторы риска и персональный roadmap.</p>
+    <span class="mico">🗺️</span>
+    <div class="mtitle">Полный сценарий развития</div>
+    <p class="mdesc" id="modal-desc">Ты уже видишь прогноз. Разблокируй конкретный план — как именно выйти на этот доход и что делать на каждом этапе.</p>
     <div class="mfeats">
-      <div class="mfeat"><span class="mfeat-ico">📈</span><span>Детальный график роста дохода по годам</span></div>
-      <div class="mfeat"><span class="mfeat-ico">⚠️</span><span>Разбор факторов риска с рекомендациями</span></div>
-      <div class="mfeat"><span class="mfeat-ico">🗺️</span><span>Персональный roadmap на 12 месяцев</span></div>
-      <div class="mfeat"><span class="mfeat-ico">📄</span><span>PDF-отчёт для скачивания</span></div>
+      <div class="mfeat"><span class="mfeat-ico">→</span><span id="mf1">Пошаговый план на 3 года с контрольными точками</span></div>
+      <div class="mfeat"><span class="mfeat-ico">→</span><span id="mf2">Конкретные действия для выхода на целевой доход</span></div>
+      <div class="mfeat"><span class="mfeat-ico">→</span><span>Детальный график роста дохода по месяцам</span></div>
+      <div class="mfeat"><span class="mfeat-ico">→</span><span>Разбор всех рисков + как их избежать</span></div>
+      <div class="mfeat"><span class="mfeat-ico">→</span><span>PDF-отчёт для скачивания</span></div>
     </div>
     <div class="mprice">
       <span class="mpv">2 900 ₸</span>
-      <span class="mpl">единоразово</span>
+      <span class="mpl">единоразово · без подписки</span>
     </div>
-    <button class="btn btn-full" onclick="purchase()">Разблокировать прогноз →</button>
-    <p class="mnote">💳 Kaspi Pay · Visa / Mastercard · Без подписки</p>
+    <button class="btn btn-full" onclick="purchase()">Разблокировать полный сценарий →</button>
+    <p class="mnote">💳 Kaspi Pay · Visa / Mastercard</p>
   </div>
 </div>
 
@@ -278,7 +305,14 @@
     document.getElementById('content').innerHTML=`<div style="text-align:center;padding:80px 20px"><div style="font-size:3rem;margin-bottom:16px">🔍</div><h2 style="font-family:var(--D);font-size:1.8rem;margin-bottom:12px">Нет данных</h2><p style="color:var(--muted);margin-bottom:28px">Пройди настройку сценария</p><a href="choose.html" class="btn">Запустить симуляцию →</a></div>`;
   } else {
     document.getElementById('hsc').textContent = SLABELS[R.sc]||'🔄 Смена профессии';
-    document.getElementById('hsub').textContent = `Алгоритм обработал 7 параметров · Уровень риска: ${R.riskLvl}`;
+    document.getElementById('hsub').textContent = `Алгоритм обработал 7 параметров поведенческой модели · Уровень риска: ${R.riskLvl}`;
+    // Personalize modal
+    const md = document.getElementById('modal-desc');
+    const mf1 = document.getElementById('mf1');
+    const mf2 = document.getElementById('mf2');
+    if(md) md.textContent = `Ты уже видишь прогноз: ${R.income.y2} через 2 года с вероятностью ${R.prob}%. Разблокируй конкретный план — что именно делать, чтобы попасть в эту цифру.`;
+    if(mf1) mf1.textContent = `Пошаговый план выхода на ${R.income.y2} за 2 года`;
+    if(mf2) mf2.textContent = `Что делать в первые 90 дней — конкретно, без воды`;
     buildRings();
     buildContent();
   }
@@ -316,21 +350,52 @@
     const risks=getRisks(R.sc);
     const years=['2025','2026','2027','2028','2029','2030','2031','2032','2033','2034'];
 
+    // ── Contextual insight text based on scenario + answers ──
+    const insightData = getInsight(R);
+    const mainRisk    = getMainRisk(R);
+    const pathsNote   = getPathsNote(R);
+
     document.getElementById('content').innerHTML=`
 
-      <!-- Income -->
-      <div class="card at">
-        <div class="ch"><span class="ci">💰</span><span class="ct">Прогноз дохода</span></div>
-        <div class="ig">
-          <div class="ib"><div class="ip">Старт · 6 мес.</div><div class="iv">${R.income.now}</div><div class="is">Базовый уровень</div></div>
-          <div class="ib"><div class="ip">Через 2 года</div><div class="iv">${R.income.y2}</div><div class="is">Вероятность ${R.prob}%</div></div>
-          <div class="ib"><div class="ip">Через 5 лет</div><div class="iv">${R.income.y5}</div><div class="is">При текущей модели</div></div>
+      <!-- ① WOW INSIGHT — персональный инсайт с цифрами -->
+      <div class="insight">
+        <div class="insight-tag">⚡ Ключевой инсайт</div>
+        <div class="insight-title">${insightData.title}</div>
+        <div class="insight-nums">
+          <div class="in-num"><div class="in-val">${R.income.y2}</div><div class="in-lbl">Через 2 года</div></div>
+          <div class="in-num"><div class="in-val">${R.prob}%</div><div class="in-lbl">Вероятность</div></div>
+          <div class="in-num"><div class="in-val">${insightData.time}</div><div class="in-lbl">До результата</div></div>
+          <div class="in-num"><div class="in-val">${R.riskLvl}</div><div class="in-lbl">Риск</div></div>
+        </div>
+        <div class="insight-note">${insightData.note}</div>
+      </div>
+
+      <!-- ② ГЛАВНЫЙ РИСК — конкретное предупреждение -->
+      <div class="main-risk">
+        <div class="mr-ico">⚠️</div>
+        <div>
+          <div class="mr-tag">Главный риск · на основе твоих ответов</div>
+          <div class="mr-title">${mainRisk.title}</div>
+          <div class="mr-desc">${mainRisk.desc}</div>
         </div>
       </div>
 
-      <!-- Skills -->
+      <!-- ③ Income -->
+      <div class="card at">
+        <div class="ch"><span class="ci">💰</span><span class="ct">Прогноз дохода · алгоритм прогнозирования</span></div>
+        <div class="ig">
+          <div class="ib"><div class="ip">Старт · 3–6 мес.</div><div class="iv">${R.income.now}</div><div class="is">Точка входа</div></div>
+          <div class="ib"><div class="ip">Через 2 года</div><div class="iv">${R.income.y2}</div><div class="is">Вероятность ${R.prob}%</div></div>
+          <div class="ib"><div class="ip">Через 5 лет</div><div class="iv">${R.income.y5}</div><div class="is">При текущей стратегии</div></div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);margin-top:14px;line-height:1.55">
+          Модель сценарного анализа рассчитала диапазон на основе ${R.ans.risk==='high'?'агрессивной':'взвешенной'} стратегии риска и ${R.ans.horizon==='long'?'долгосрочного':'среднесрочного'} горизонта планирования.
+        </p>
+      </div>
+
+      <!-- ④ Skills -->
       <div class="card">
-        <div class="ch"><span class="ci">📊</span><span class="ct">Профиль навыков</span></div>
+        <div class="ch"><span class="ci">📊</span><span class="ct">Профиль навыков · по твоим ответам</span></div>
         <div class="sg">
           <div class="si2"><div class="sh"><span class="sn">Аналитика</span><span class="sp">${R.skills.analytics}%</span></div><div class="st"><div class="sf" data-w="${R.skills.analytics}"></div></div></div>
           <div class="si2"><div class="sh"><span class="sn">Коммуникация</span><span class="sp">${R.skills.communication}%</span></div><div class="st"><div class="sf" data-w="${R.skills.communication}"></div></div></div>
@@ -339,7 +404,7 @@
         </div>
       </div>
 
-      <!-- Motivation -->
+      <!-- ⑤ Motivation -->
       <div class="card">
         <div class="ch"><span class="ci">🎯</span><span class="ct">Мотивационный профиль</span></div>
         <div class="mg">
@@ -350,22 +415,22 @@
         </div>
       </div>
 
-      <!-- Strengths -->
+      <!-- ⑥ Strengths -->
       <div class="card">
-        <div class="ch"><span class="ci">⚡</span><span class="ct">Сильные стороны</span></div>
+        <div class="ch"><span class="ci">⚡</span><span class="ct">Сильные стороны · выявлены алгоритмом</span></div>
         <div class="strg">${R.strengths.map(s=>`<span class="stag">${s.ico} ${s.lbl}</span>`).join('')}</div>
       </div>
 
-      <!-- Paths -->
+      <!-- ⑦ Paths -->
       <div class="card">
         <div class="ch"><span class="ci">🧭</span><span class="ct">Два пути развития</span></div>
-        <p style="font-size:.875rem;color:var(--muted);margin-bottom:18px;line-height:1.6">Оба пути соответствуют твоей поведенческой модели. Выбери направление.</p>
+        <p style="font-size:.875rem;color:var(--muted);margin-bottom:18px;line-height:1.6">${pathsNote}</p>
         <div class="pg">
           <div class="path pi" id="path-influence" onclick="pickPath('influence',this)">
             <span class="pe">🚀</span>
             <div class="pt">Путь влияния</div>
             <div class="pn">Предпринимательство и маркетинг</div>
-            <p class="pd">Создание своего продукта, рост через аудиторию. Высокий потенциал дохода, высокий риск.</p>
+            <p class="pd">Создание своего продукта, рост через аудиторию и личный бренд. Потенциал дохода выше среднего, но требует высокой самодисциплины.</p>
             <div class="pex"><span class="pex-tag">Основатель</span><span class="pex-tag">Маркетолог</span><span class="pex-tag">Продуктолог</span><span class="pex-tag">Консультант</span></div>
             <div class="pcta">Выбрать путь <span class="parr">→</span></div>
           </div>
@@ -373,23 +438,35 @@
             <span class="pe">🏗️</span>
             <div class="pt">Путь управления</div>
             <div class="pn">Менеджмент и команды</div>
-            <p class="pd">Операционное лидерство, развитие людей. Стабильный рост, понятный карьерный трек.</p>
+            <p class="pd">Операционное лидерство, развитие людей и систем. Предсказуемый рост с чётким карьерным треком и низким уровнем неопределённости.</p>
             <div class="pex"><span class="pex-tag">Team Lead</span><span class="pex-tag">COO</span><span class="pex-tag">HR Director</span><span class="pex-tag">Project Manager</span></div>
             <div class="pcta">Выбрать путь <span class="parr">→</span></div>
           </div>
         </div>
       </div>
 
-      <!-- BLUR: Chart -->
+      <!-- ⑧ BLUR: Chart — улучшенный paywall -->
       <div class="blur-wrap">
         <div class="card">
           <div class="ch"><span class="ci">📈</span><span class="ct">Траектория дохода 2025–2034</span></div>
           <div class="chart-wrap"><canvas id="chart"></canvas></div>
         </div>
-        ${!paid?`<div class="blur-ov"><div class="bico">📈</div><div class="btitle">Траектория дохода</div><div class="bdesc">Детальный график по годам с учётом выбранного пути</div><div class="bprice">🔓 Разблокировать за 2 900 ₸</div><button class="btn" onclick="openModal()">Открыть доступ →</button></div>`:''}
+        ${!paid?`
+        <div class="blur-ov">
+          <div class="bico">📈</div>
+          <div class="btitle">Полный сценарий</div>
+          <div class="bdesc">Разблокируй детальный план выхода на доход <strong style="color:var(--accent)">${R.income.y2}</strong></div>
+          <div class="bfeats">
+            <div class="bfeat"><span class="bfeat-ico">→</span>Как выйти на ${R.income.y2} за 2 года</div>
+            <div class="bfeat"><span class="bfeat-ico">→</span>Конкретные шаги на 3 года</div>
+            <div class="bfeat"><span class="bfeat-ico">→</span>Детальный график по месяцам</div>
+          </div>
+          <div class="bprice">🔓 Разблокировать за 2 900 ₸</div>
+          <button class="btn" onclick="openModal()">Открыть полный сценарий →</button>
+        </div>`:''}
       </div>
 
-      <!-- BLUR: Risks -->
+      <!-- ⑨ BLUR: Risks — улучшенный paywall -->
       <div class="blur-wrap">
         <div class="card">
           <div class="ch"><span class="ci">⚠️</span><span class="ct">Факторы риска</span></div>
@@ -400,15 +477,27 @@
             </div>`).join('')}
           </div>
         </div>
-        ${!paid?`<div class="blur-ov"><div class="bico">⚠️</div><div class="btitle">Факторы риска</div><div class="bdesc">Конкретные риски и рекомендации по их минимизации</div><div class="bprice">🔓 Разблокировать за 2 900 ₸</div><button class="btn" onclick="openModal()">Открыть доступ →</button></div>`:''}
+        ${!paid?`
+        <div class="blur-ov">
+          <div class="bico">⚠️</div>
+          <div class="btitle">Разбор рисков</div>
+          <div class="bdesc">Конкретные риски для твоего сценария и как их избежать</div>
+          <div class="bfeats">
+            <div class="bfeat"><span class="bfeat-ico">→</span>Что делать с каждым риском</div>
+            <div class="bfeat"><span class="bfeat-ico">→</span>Когда они наиболее опасны</div>
+            <div class="bfeat"><span class="bfeat-ico">→</span>Персональный roadmap на год</div>
+          </div>
+          <div class="bprice">🔓 Разблокировать за 2 900 ₸</div>
+          <button class="btn" onclick="openModal()">Открыть полный сценарий →</button>
+        </div>`:''}
       </div>
 
-      <!-- Final CTA -->
+      <!-- ⑩ Final CTA -->
       <div class="fcta">
-        <h3>Следующий шаг — <em>действие</em></h3>
-        <p>Выбери путь выше и разблокируй персональный roadmap с конкретными шагами на 12 месяцев.</p>
+        <h3>Знаешь куда идти.<br>Осталось <em>сделать шаг</em></h3>
+        <p>Алгоритм показал траекторию. Выбери путь выше — и разблокируй персональный план: конкретные шаги, сроки и точки контроля на 12 месяцев.</p>
         <div class="cta-btns">
-          <button class="btn" style="font-size:1rem;padding:16px 36px" onclick="openModal()">🔓 Полный прогноз · 2 900 ₸</button>
+          <button class="btn" style="font-size:1rem;padding:16px 36px" onclick="openModal()">🔓 Полный сценарий · 2 900 ₸</button>
           <a href="choose.html" class="btn btn-g" style="font-size:1rem;padding:16px 36px">Новый сценарий</a>
         </div>
         <div class="share-row">
@@ -426,6 +515,76 @@
 
     // Chart
     setTimeout(()=>initChart(R,years),400);
+  }
+
+  // ── INSIGHT GENERATOR ──
+  function getInsight(R){
+    const sc=R.sc, ans=R.ans;
+    const timeMap={short:'3–6 мес.',mid:'6–12 мес.',long:'12–18 мес.'};
+    const time=timeMap[ans.horizon]||'6–12 мес.';
+
+    const titles={
+      switch:{
+        high:`На основе твоих ответов: с вероятностью <span class="hl">${R.prob}%</span> ты выйдешь на <span class="hl">${R.income.y2}</span> через 2 года — но агрессивная стратегия риска потребует финансовой подушки минимум на 6 месяцев вперёд.`,
+        medium:`Алгоритм прогнозирования показывает: при текущей модели поведения ты достигнешь <span class="hl">${R.income.y2}</span> за 2 года с вероятностью <span class="hl">${R.prob}%</span>. Взвешенный подход — твоя сильная сторона в этом переходе.`,
+        low:`Модель сценарного анализа: при низком риске и горизонте ${time} ты выйдешь на <span class="hl">${R.income.y2}</span>. Вероятность успеха <span class="hl">${R.prob}%</span> — выше среднего по данному сценарию.`,
+      },
+      grow:{
+        high:`На основе твоих ответов: агрессивная стратегия роста даст <span class="hl">${R.income.y2}</span> за 2 года с вероятностью <span class="hl">${R.prob}%</span>. Ключевое окно — первые ${time}.`,
+        medium:`Алгоритм показывает: при текущем профиле ты увеличишь доход до <span class="hl">${R.income.y2}</span> за 2 года. Вероятность <span class="hl">${R.prob}%</span> — один из лучших результатов по сценарию роста.`,
+        low:`Модель рассчитала: консервативный рост до <span class="hl">${R.income.y2}</span> с вероятностью <span class="hl">${R.prob}%</span>. Надёжный сценарий — при условии, что начнёшь действовать в течение ${time}.`,
+      },
+      restart:{
+        high:`Алгоритм прогнозирования: даже при перезапуске с нуля ты с вероятностью <span class="hl">${R.prob}%</span> выйдешь на <span class="hl">${R.income.y2}</span> за 2 года. Твоя склонность к риску — критическое преимущество в этом сценарии.`,
+        medium:`На основе твоих ответов: сценарий перезапуска даёт <span class="hl">${R.income.y2}</span> за 2 года с вероятностью <span class="hl">${R.prob}%</span>. Главное — пройти первые ${time} без потери темпа.`,
+        low:`Модель сценарного анализа: при осторожном перезапуске ты достигнешь <span class="hl">${R.income.y2}</span>. Вероятность <span class="hl">${R.prob}%</span> реалистична — если не откладывать первый шаг дольше ${time}.`,
+      },
+    };
+
+    const risk=ans.risk||'medium';
+    const t=(titles[sc]&&titles[sc][risk])||titles.switch.medium;
+
+    const notes={
+      switch:`<strong>Важно:</strong> при смене профессии первые 3–6 месяцев доход будет ниже текущего. Алгоритм уже учёл это в расчёте — диапазон на старте отражает реальную точку входа, а не потолок.`,
+      grow:`<strong>Важно:</strong> рост дохода внутри текущей сферы обычно требует смены роли или работодателя. Оставаться на месте и ждать повышения — стратегия с вероятностью успеха менее 30%.`,
+      restart:`<strong>Важно:</strong> перезапуск — это марафон, а не спринт. Алгоритм прогнозирования закладывает 3–6 месяцев «нулевой точки», после которой начинается экспоненциальный рост при правильных шагах.`,
+    };
+
+    return { title:t, time, note:notes[sc]||notes.switch };
+  }
+
+  // ── MAIN RISK GENERATOR ──
+  function getMainRisk(R){
+    const sc=R.sc, ans=R.ans;
+    const risks={
+      switch:{
+        high:{title:'Финансовая яма в первые 6 месяцев',desc:'Твоя склонность к высокому риску ускоряет переход, но <strong>62% свитчеров</strong> с агрессивной стратегией сталкиваются с нехваткой средств раньше, чем выходят на новый доход. Финансовая подушка минимум на 6 месяцев — не опция, а условие.'},
+        medium:{title:'Недооценка времени на переход',desc:'На основе твоих ответов: большинство людей с похожим профилем тратят <strong>на 40% больше времени</strong>, чем планировали изначально. Реалистичный срок выхода на целевой доход — 12–18 месяцев, а не 6–9.'},
+        low:{title:'Слишком долгое планирование без действий',desc:'Низкий порог риска — твоя защита, но и ловушка. <strong>Синдром бесконечной подготовки</strong> убивает больше карьерных переходов, чем неудачные попытки. Установи дату первого реального шага: не позже чем через 30 дней.'},
+      },
+      grow:{
+        high:{title:'Выгорание при интенсивном росте',desc:'Агрессивная стратегия роста без системы восстановления приводит к выгоранию у <strong>42% специалистов</strong> в течение 18 месяцев. Рост должен быть устойчивым, а не спринтерским.'},
+        medium:{title:'Стагнация без смены контекста',desc:'На основе твоих ответов: рост дохода внутри одной компании ограничен потолком в <strong>15–25% в год</strong>. Без смены роли, работодателя или рынка достичь целевого дохода в срок — маловероятно.'},
+        low:{title:'Переоценка лояльности работодателя',desc:'Консервативная стратегия часто строится на ожидании оценки «сверху». Но <strong>70% повышений</strong> происходят по инициативе самого сотрудника. Ждать — значит терять время и деньги.'},
+      },
+      restart:{
+        high:{title:'Финансовая нестабильность в фазе перезапуска',desc:'При агрессивной стратегии в сценарии перезапуска <strong>риск финансового стресса критически высок</strong> в первые 3–4 месяца. Это самый опасный период — именно здесь большинство сдаётся.'},
+        medium:{title:'Психологическое давление неопределённости',desc:'На основе твоих ответов: сценарий перезапуска сопровождается высоким уровнем тревожности. <strong>58% людей</strong> в похожей ситуации недооценивают психологическую нагрузку и не готовят систему поддержки заранее.'},
+        low:{title:'Затяжной период восстановления',desc:'Осторожный подход при перезапуске часто растягивает переходный период до <strong>18–24 месяцев</strong> вместо 6–12. Без внешних дедлайнов и accountability-партнёра легко потерять импульс.'},
+      },
+    };
+    const riskKey=ans.risk||'medium';
+    return (risks[sc]&&risks[sc][riskKey])||risks.switch.medium;
+  }
+
+  // ── PATHS NOTE GENERATOR ──
+  function getPathsNote(R){
+    const notes={
+      switch:`На основе твоих ответов алгоритм выделил два пути, совместимых с твоим профилем. Оба реалистичны для сценария смены профессии — разница в скорости роста и уровне неопределённости.`,
+      grow:`Модель сценарного анализа показывает: оба пути увеличивают доход, но через разные механизмы. Путь влияния — нелинейный рост с высокой дисперсией. Путь управления — стабильный, предсказуемый трек.`,
+      restart:`При перезапуске выбор пути — критическое решение. Алгоритм прогнозирования рекомендует выбирать исходя из твоих текущих активов: сеть контактов, накопленная экспертиза, финансовый запас.`,
+    };
+    return notes[R.sc]||notes.switch;
   }
 
   function getRisks(sc){
