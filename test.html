@@ -228,7 +228,7 @@
         {val:'education',lbl:'Педагог / Тренер / Коуч'},
         {val:'sales',   lbl:'Продажи / Менеджер по работе с клиентами'},
         {val:'engineering',lbl:'Инженер / Технолог / Производство'},
-        {val:'creative',lbl:'Творческая сфера (флорист, повар, фотограф)'},
+        {val:'creative',lbl:'Творческая сфера (флорист, повар, фото)'},
         {val:'other',   lbl:'Другая сфера'},
       ]
     },
@@ -262,11 +262,11 @@
       b:{val:'interest', lbl:'Самореализация',     txt:'Хочу наконец заниматься тем, что действительно моё — применять свои сильные стороны.'},
       c:{val:'stability',lbl:'Уверенность',        txt:'Хочу стабильности и уверенности в завтрашнем дне. Предсказуемость важнее скачков.'},
       key:'motivation' },
-    { tag:'🚀 Путь', text:'Какой путь развития тебе ближе?',
-      a:{val:'influence', lbl:'Путь влияния',    txt:'Предпринимательство, продукт, маркетинг — хочу влиять на рынок и строить что-то своё.'},
-      b:{val:'management',lbl:'Путь управления', txt:'Менеджмент, развитие команд, лидерство — хочу строить системы и управлять людьми.'},
-      c:{val:'expert',    lbl:'Путь эксперта',   txt:'Глубокая экспертиза, консалтинг — хочу быть лучшим в своём деле и продавать знания.'},
-      key:'path' },
+    { tag:'🚀 Тип роста', text:'Какой тип роста тебе ближе всего прямо сейчас?',
+      a:{val:'fast',    lbl:'Быстрый рост и свобода',     txt:'Хочу расти быстро, даже если это риск. Свобода принятия решений и высокий потолок дохода важнее стабильности.'},
+      b:{val:'stable',  lbl:'Стабильность и управление',  txt:'Хочу предсказуемый, системный рост. Управление людьми и процессами — моя сильная сторона.'},
+      c:{val:'new',     lbl:'Новое направление',          txt:'Хочу сменить вектор — войти в новую нишу, освоить другую роль или кардинально изменить траекторию.'},
+      key:'growthType' },
   ];
 
   let cur = 0;
@@ -477,15 +477,18 @@
     const prM={money:{im:1.18,pm:.9},stability:{im:.88,pm:1.1},interest:{im:1.04,pm:1}};
     const hM={short:{im:.72,gm:.8},mid:{im:1,gm:1},long:{im:1.32,gm:1.25}};
     const skM={low:{im:.75,pm:.84},medium:{im:1,pm:1},high:{im:1.32,pm:1.15}};
+    // growthType modifier
+    const gtM={fast:{im:1.18,pm:.88,timeLoss:0},stable:{im:.95,pm:1.08,timeLoss:0},new:{im:1.05,pm:.9,timeLoss:8}};
 
     const r=rM[ans.risk]||rM.medium;
     const sp=spM[ans.speed]||spM.medium;
     const pr=prM[ans.priority]||prM.interest;
     const h=hM[ans.horizon]||hM.mid;
     const sk=skM[ans.skills]||skM.medium;
+    const gt=gtM[ans.growthType]||gtM.stable;
 
-    const im = r.im*sp.im*pr.im*h.im*sk.im*sm.incomeMul;
-    const pm = r.pm*sp.pm*sk.pm*sm.riskMul;
+    const im = r.im*sp.im*pr.im*h.im*sk.im*sm.incomeMul*gt.im;
+    const pm = r.pm*sp.pm*sk.pm*sm.riskMul*gt.pm;
     const tm = r.tm*sp.tm;
     const gm = b.growth*h.gm*sm.growthMul;
 
@@ -568,6 +571,8 @@
 
     return {
       sc, ans, prof, prob, riskLvl, riskCls,
+      growthType: ans.growthType || 'stable',
+      timeLoss: gt.timeLoss,
       income:{
         now:`${fmt(n0)} – ${fmt(n0x)} тг`,
         y2:`${fmt(n2)} – ${fmt(n2x)} тг`,
