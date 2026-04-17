@@ -251,16 +251,36 @@
       <div class="mfeat"><span class="mfeat-ico">→</span><span>PDF-отчёт для скачивания</span></div>
     </div>
     <div class="mprice">
-      <span class="mpv">2 900 ₸</span>
-      <span class="mpl">единоразово · без подписки</span>
+      <div style="font-size:.78rem;color:var(--muted);text-decoration:line-through;margin-bottom:4px">обычно 9 900 ₸</div>
+      <span class="mpv">4 900 ₸</span>
+      <span class="mpl">до конца месяца</span>
     </div>
     <button class="btn btn-full" onclick="purchase()">Разблокировать полный сценарий →</button>
-    <p class="mnote">💳 Kaspi Pay · Visa / Mastercard</p>
+    <p class="mnote">💳 Kaspi Pay · Visa / Mastercard · Без подписки</p>
   </div>
 </div>
 
-<div class="bg-g"></div>
-<div class="bg-gr"></div>
+<!-- B2B modal -->
+<div class="modal" id="b2bModal">
+  <div class="mbox">
+    <button class="mclose" onclick="document.getElementById('b2bModal').classList.remove('open')">✕</button>
+    <span class="mico">🏢</span>
+    <div class="mtitle">Корпоративный доступ</div>
+    <p class="mdesc">Используйте Trajecta для оценки потенциала команды и построения карьерных треков сотрудников.</p>
+    <div class="mfeats">
+      <div class="mfeat"><span class="mfeat-ico">→</span><span>Неограниченные прохождения для команды</span></div>
+      <div class="mfeat"><span class="mfeat-ico">→</span><span>Агрегированный дашборд по всей команде</span></div>
+      <div class="mfeat"><span class="mfeat-ico">→</span><span>Выгрузка отчётов в Excel/PDF</span></div>
+      <div class="mfeat"><span class="mfeat-ico">→</span><span>Онбординг и обучение HR-команды</span></div>
+    </div>
+    <div class="mprice">
+      <span class="mpv" style="font-size:2rem">39 900 ₸</span>
+      <span class="mpl">пакет на 10 человек</span>
+    </div>
+    <button class="btn btn-full" style="background:rgba(96,165,250,.9)" onclick="submitB2B()">Запросить демо →</button>
+    <p class="mnote">Ответим в течение 24 часов · trajecta.kz</p>
+  </div>
+</div>
 
 <header>
   <a href="index.html" class="logo">Traject<span>a</span></a>
@@ -315,6 +335,7 @@
     if(mf2) mf2.textContent = `Что делать в первые 90 дней — конкретно, без воды`;
     buildRings();
     buildContent();
+    setTimeout(()=>renderPaths(), 50);
   }
 
   function buildRings(){
@@ -353,7 +374,6 @@
     // ── Contextual insight text based on scenario + answers ──
     const insightData = getInsight(R);
     const mainRisk    = getMainRisk(R);
-    const pathsNote   = getPathsNote(R);
 
     document.getElementById('content').innerHTML=`
 
@@ -421,28 +441,11 @@
         <div class="strg">${R.strengths.map(s=>`<span class="stag">${s.ico} ${s.lbl}</span>`).join('')}</div>
       </div>
 
-      <!-- ⑦ Paths -->
+      <!-- ⑦ Paths — персональные по профессии -->
       <div class="card">
-        <div class="ch"><span class="ci">🧭</span><span class="ct">Два пути развития</span></div>
-        <p style="font-size:.875rem;color:var(--muted);margin-bottom:18px;line-height:1.6">${pathsNote}</p>
-        <div class="pg">
-          <div class="path pi" id="path-influence" onclick="pickPath('influence',this)">
-            <span class="pe">🚀</span>
-            <div class="pt">Путь влияния</div>
-            <div class="pn">Предпринимательство и маркетинг</div>
-            <p class="pd">Создание своего продукта, рост через аудиторию и личный бренд. Потенциал дохода выше среднего, но требует высокой самодисциплины.</p>
-            <div class="pex"><span class="pex-tag">Основатель</span><span class="pex-tag">Маркетолог</span><span class="pex-tag">Продуктолог</span><span class="pex-tag">Консультант</span></div>
-            <div class="pcta">Выбрать путь <span class="parr">→</span></div>
-          </div>
-          <div class="path pm2" id="path-management" onclick="pickPath('management',this)">
-            <span class="pe">🏗️</span>
-            <div class="pt">Путь управления</div>
-            <div class="pn">Менеджмент и команды</div>
-            <p class="pd">Операционное лидерство, развитие людей и систем. Предсказуемый рост с чётким карьерным треком и низким уровнем неопределённости.</p>
-            <div class="pex"><span class="pex-tag">Team Lead</span><span class="pex-tag">COO</span><span class="pex-tag">HR Director</span><span class="pex-tag">Project Manager</span></div>
-            <div class="pcta">Выбрать путь <span class="parr">→</span></div>
-          </div>
-        </div>
+        <div class="ch"><span class="ci">🧭</span><span class="ct">Два пути развития — под твою профессию</span></div>
+        <p style="font-size:.875rem;color:var(--muted);margin-bottom:18px;line-height:1.6">На основе твоих ответов алгоритм подобрал пути, которые реалистичны именно для твоей профессии и выбранного сценария на рынке Казахстана.</p>
+        <div class="pg" id="paths-grid"></div>
       </div>
 
       <!-- ⑧ BLUR: Chart — улучшенный paywall -->
@@ -461,7 +464,7 @@
             <div class="bfeat"><span class="bfeat-ico">→</span>Конкретные шаги на 3 года</div>
             <div class="bfeat"><span class="bfeat-ico">→</span>Детальный график по месяцам</div>
           </div>
-          <div class="bprice">🔓 Разблокировать за 2 900 ₸</div>
+          <div class="bprice">🔓 Разблокировать за 4 900 ₸</div>
           <button class="btn" onclick="openModal()">Открыть полный сценарий →</button>
         </div>`:''}
       </div>
@@ -487,21 +490,37 @@
             <div class="bfeat"><span class="bfeat-ico">→</span>Когда они наиболее опасны</div>
             <div class="bfeat"><span class="bfeat-ico">→</span>Персональный roadmap на год</div>
           </div>
-          <div class="bprice">🔓 Разблокировать за 2 900 ₸</div>
+          <div class="bprice">🔓 Разблокировать за 4 900 ₸</div>
           <button class="btn" onclick="openModal()">Открыть полный сценарий →</button>
         </div>`:''}
       </div>
 
-      <!-- ⑩ Final CTA -->
+      <!-- ⑩ B2B БЛОК -->
+      <div style="background:rgba(96,165,250,.05);border:1px solid rgba(96,165,250,.2);border-radius:18px;padding:24px 28px;">
+        <div class="ch" style="margin-bottom:14px"><span class="ci">🏢</span><span class="ct" style="color:rgba(96,165,250,.8)">Для HR и руководителей</span></div>
+        <p style="font-size:.9rem;color:var(--muted);line-height:1.65;margin-bottom:16px">Используйте Trajecta для оценки потенциала команды: кто готов к росту, кто в риске выгорания, каким сотрудникам нужна смена роли.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px">
+          <span style="background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);color:rgba(96,165,250,.85);font-size:.75rem;font-weight:600;padding:5px 12px;border-radius:100px">👥 Оценка команды</span>
+          <span style="background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);color:rgba(96,165,250,.85);font-size:.75rem;font-weight:600;padding:5px 12px;border-radius:100px">📊 Карьерные треки</span>
+          <span style="background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);color:rgba(96,165,250,.85);font-size:.75rem;font-weight:600;padding:5px 12px;border-radius:100px">🔁 L&D планирование</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div style="font-size:.82rem;color:var(--muted)">Пакет на 10 человек — <strong style="color:rgba(96,165,250,.9)">39 900 ₸</strong> · В 5× дешевле HR-консультанта</div>
+          <button class="btn" onclick="openB2BModal()" style="background:rgba(96,165,250,.9);font-size:.85rem;padding:10px 20px">Запросить демо →</button>
+        </div>
+      </div>
+
+      <!-- ⑪ Final CTA -->
       <div class="fcta">
         <h3>Знаешь куда идти.<br>Осталось <em>сделать шаг</em></h3>
         <p>Алгоритм показал траекторию. Выбери путь выше — и разблокируй персональный план: конкретные шаги, сроки и точки контроля на 12 месяцев.</p>
         <div class="cta-btns">
-          <button class="btn" style="font-size:1rem;padding:16px 36px" onclick="openModal()">🔓 Полный сценарий · 2 900 ₸</button>
+          <button class="btn" style="font-size:1rem;padding:16px 36px" onclick="openModal()">🔓 Полный сценарий · 4 900 ₸</button>
           <a href="choose.html" class="btn btn-g" style="font-size:1rem;padding:16px 36px">Новый сценарий</a>
         </div>
         <div class="share-row">
           <button class="share-btn" onclick="share()">🔗 Поделиться результатом</button>
+          <button class="share-btn" onclick="openB2BModal()">🏢 Отправить в HR</button>
         </div>
       </div>
     `;
@@ -577,14 +596,186 @@
     return (risks[sc]&&risks[sc][riskKey])||risks.switch.medium;
   }
 
-  // ── PATHS NOTE GENERATOR ──
-  function getPathsNote(R){
-    const notes={
-      switch:`На основе твоих ответов алгоритм выделил два пути, совместимых с твоим профилем. Оба реалистичны для сценария смены профессии — разница в скорости роста и уровне неопределённости.`,
-      grow:`Модель сценарного анализа показывает: оба пути увеличивают доход, но через разные механизмы. Путь влияния — нелинейный рост с высокой дисперсией. Путь управления — стабильный, предсказуемый трек.`,
-      restart:`При перезапуске выбор пути — критическое решение. Алгоритм прогнозирования рекомендует выбирать исходя из твоих текущих активов: сеть контактов, накопленная экспертиза, финансовый запас.`,
+  // ── PATHS GENERATOR — персональные пути по профессии × сценарию ──
+  function getPaths(R){
+    const prof = R.prof || R.ans.profession || 'other';
+    const sc   = R.sc;
+
+    const DATA = {
+      it: {
+        switch:  [
+          {ico:'🚀',type:'Путь влияния',name:'Product Manager / CPO',desc:'Переход из разработки в управление продуктом. Высокий спрос на KZ-рынке, особенно в fintech и e-commerce.',tags:['Kaspi','Kolesa','Choco'],salary:'600–1 200к тг',time:'6–12 мес.'},
+          {ico:'🏗️',type:'Путь эксперта',name:'Lead Engineer / CTO стартапа',desc:'Углубление в архитектуру и лидерство. Путь к техническому директору с equity в растущих компаниях.',tags:['Kolesa','Doodocs','Фрилансинг'],salary:'800–1 500к тг',time:'12–18 мес.'},
+        ],
+        grow:    [
+          {ico:'📈',type:'Вертикальный рост',name:'Senior → Staff / Principal Engineer',desc:'Рост внутри текущей сферы через экспертизу. Senior в Алматы зарабатывает 700–1 000к тг — цель реальна за 12 месяцев.',tags:['Kaspi','Epam','Beeline'],salary:'700–1 200к тг',time:'8–14 мес.'},
+          {ico:'💼',type:'Горизонтальный рост',name:'Data Scientist / ML Engineer',desc:'Переход в AI/ML — самый быстрорастущий сегмент IT-рынка КЗ. Спрос превышает предложение в 3× раза.',tags:['Jusan Bank','Halyk','стартапы'],salary:'650–1 100к тг',time:'6–10 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Перезапуск через фриланс',name:'Tech Consultant / Freelance Dev',desc:'Международный фриланс на Upwork и Toptal. Разработчик из КЗ с хорошим английским зарабатывает $2 000–4 000/мес.',tags:['Upwork','Toptal','Fiverr'],salary:'800к – 1.6M тг',time:'3–6 мес.'},
+          {ico:'🎓',type:'Перезапуск через обучение',name:'Bootcamp → Junior в новой нише',desc:'3 месяца на смену стека (Python/AI, iOS, Blockchain) — и вход в более высокооплачиваемый сегмент рынка.',tags:['Koleso','Orda','стартапы'],salary:'400–700к тг',time:'4–8 мес.'},
+        ],
+      },
+      law: {
+        switch:  [
+          {ico:'🚀',type:'Путь влияния',name:'Legal Tech / Стартап-юрист',desc:'Юридический сервис как продукт: онлайн-конструкторы договоров, подписные модели. Рынок LegalTech в КЗ практически пустой.',tags:['DocHub','своё дело'],salary:'500к – 1.2M тг',time:'12–18 мес.'},
+          {ico:'🏢',type:'Корпоративный трек',name:'In-house Counsel в IT/Fintech',desc:'Юристы в технологических компаниях КЗ зарабатывают в 1.5–2× больше, чем в госструктурах и традиционных фирмах.',tags:['Kaspi','Jusan','Kolesa'],salary:'600–1 000к тг',time:'3–6 мес.'},
+        ],
+        grow:    [
+          {ico:'📊',type:'Специализация',name:'M&A / Tax Law / Compliance',desc:'Узкая специализация в корпоративном праве, налогах или комплаенсе — самые высокооплачиваемые ниши юридического рынка КЗ.',tags:['Big 4','международные фирмы'],salary:'700–1 400к тг',time:'12–24 мес.'},
+          {ico:'🎤',type:'Личный бренд',name:'Юрист-эксперт / Консультант',desc:'Публичная экспертиза + консалтинг. Юрист с личным брендом в Instagram/LinkedIn берёт 50–150к тг за консультацию.',tags:['Instagram','LinkedIn','подкасты'],salary:'500к – 1.5M тг',time:'6–12 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Перезапуск в смежную сферу',name:'HR Business Partner / Compliance',desc:'Юридическая база — ценный актив в HR и корпоративном управлении. Переход без потери статуса за 2–3 месяца.',tags:['корпорации','банки','HR-агентства'],salary:'400–700к тг',time:'2–4 мес.'},
+          {ico:'🌐',type:'Международный трек',name:'Юрист для зарубежных компаний',desc:'Знание казахстанского права + английский = редкое сочетание. Иностранные компании платят в долларах.',tags:['международные фирмы'],salary:'700к – 1.2M тг',time:'6–12 мес.'},
+        ],
+      },
+      marketing: {
+        switch:  [
+          {ico:'🚀',type:'Путь влияния',name:'Growth Marketing Lead / CMO стартапа',desc:'Переход от исполнителя к стратегу — самый ценный шаг. CMO в среднем стартапе КЗ зарабатывает 600–1 000к тг.',tags:['стартапы','fintech','e-commerce'],salary:'600–1 000к тг',time:'8–14 мес.'},
+          {ico:'💼',type:'Собственное агентство',name:'Digital-агентство / Performance-маркетинг',desc:'Агентство из 3–5 человек при среднем чеке 300–500к тг/клиент может приносить 1.5–3M тг в месяц владельцу.',tags:['B2B клиенты','e-commerce бренды'],salary:'800к – 2.5M тг',time:'12–24 мес.'},
+        ],
+        grow:    [
+          {ico:'📈',type:'Специализация в data',name:'Performance Marketing / Аналитик роста',desc:'Маркетологи с навыком аналитики зарабатывают в 1.5–2× больше. Google Analytics + SQL открывают новый уровень.',tags:['Kaspi','Kolesa','e-commerce'],salary:'500–900к тг',time:'6–10 мес.'},
+          {ico:'🎯',type:'Продуктовый маркетинг',name:'Product Marketing Manager',desc:'Пересечение маркетинга и продукта — один из самых высокооплачиваемых гибридных треков в КЗ IT-компаниях.',tags:['Kaspi','Magnum Tech','стартапы'],salary:'550–950к тг',time:'6–12 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Перезапуск через обучение',name:'SMM + Influence Marketing',desc:'Быстрый вход через Instagram/TikTok маркетинг — высокий спрос, низкий порог, старт за 1–2 месяца.',tags:['малый бизнес','бренды КЗ'],salary:'250–500к тг',time:'1–3 мес.'},
+          {ico:'✍️',type:'Контент и личный бренд',name:'Контент-маркетолог / Копирайтер',desc:'Удалённая работа с международными клиентами. Хороший копирайтер с английским берёт $30–80/час.',tags:['Upwork','международные бренды'],salary:'400–800к тг',time:'2–5 мес.'},
+        ],
+      },
+      finance: {
+        switch:  [
+          {ico:'🚀',type:'Fintech трек',name:'Product Owner в финтех / Fintech Analyst',desc:'Финансисты с навыком SQL и пониманием продукта — самый востребованный гибрид в Kaspi, Jusan, Halyk Tech.',tags:['Kaspi','Jusan Bank','Freedom'],salary:'600–1 100к тг',time:'6–12 мес.'},
+          {ico:'📊',type:'Инвестиционный трек',name:'Инвест-аналитик / Управляющий активами',desc:'Рынок капитала КЗ растёт. CFA + опыт открывают должности с бонусами, которые удваивают базовую зарплату.',tags:['AIX','Freedom Finance','KASE'],salary:'700–1 500к тг',time:'12–24 мес.'},
+        ],
+        grow:    [
+          {ico:'📈',type:'Вертикальный рост',name:'CFO / Финансовый директор',desc:'Путь к CFO в среднем бизнесе КЗ занимает 3–5 лет. CFO в компании 500+ чел зарабатывает 1–2.5M тг/мес.',tags:['холдинги','торговые сети'],salary:'1 000–2 500к тг',time:'3–5 лет'},
+          {ico:'🎓',type:'Специализация',name:'МСФО-эксперт / Налоговый консультант',desc:'ACCA/CPA сертификация открывает Big 4 и международные компании. Разница в зарплате — 50–80% к текущей.',tags:['Big 4','KPMG','Deloitte'],salary:'600–1 200к тг',time:'12–18 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Консалтинг',name:'Независимый финансовый консультант',desc:'Малый и средний бизнес в КЗ остро нуждается в финансовом структурировании. Ставка консультанта: 50–150к тг/день.',tags:['МСБ','стартапы','ИП'],salary:'500к – 1.5M тг',time:'3–6 мес.'},
+          {ico:'📱',type:'EdTech',name:'Автор курсов по финансовой грамотности',desc:'Финансовая грамотность — один из самых продаваемых онлайн-курсов в КЗ. Курс за 20–50к тг × 200 студентов = реальная цифра.',tags:['Skillbox KZ','Stepik','Instagram'],salary:'300к – 1M тг',time:'4–8 мес.'},
+        ],
+      },
+      design: {
+        switch:  [
+          {ico:'🚀',type:'Продуктовый дизайн',name:'UX/UI Designer в IT-компанию',desc:'Переход в продуктовый дизайн — самый высокооплачиваемый трек. Портфолио из 3–5 кейсов = оффер в Kaspi или стартапе.',tags:['Kaspi','Kolesa','стартапы'],salary:'450–850к тг',time:'6–10 мес.'},
+          {ico:'✨',type:'Арт-директор',name:'Creative Director / Brand Strategist',desc:'Управление визуальной идентичностью крупных брендов. Арт-директора агентств в КЗ зарабатывают 600–1 200к тг.',tags:['Grey Kazakhstan','BBDO','агентства'],salary:'600–1 200к тг',time:'12–18 мес.'},
+        ],
+        grow:    [
+          {ico:'📊',type:'Data + Design',name:'UX Researcher / Product Designer',desc:'Дизайнеры с навыком исследований ценятся в 2× больше. User interviews, usability-тесты — редкий навык на рынке КЗ.',tags:['IT-компании','банки'],salary:'550–1 000к тг',time:'6–12 мес.'},
+          {ico:'🎯',type:'Личный бренд',name:'Фрилансер / Founder дизайн-студии',desc:'Международный фриланс для дизайнеров — $30–80/час на Upwork. Своя студия из 3 человек при правильном позиционировании.',tags:['Upwork','Behance','Dribbble'],salary:'600к – 2M тг',time:'6–18 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Быстрый старт',name:'Графический дизайнер / Соцсети',desc:'Социальные медиа, баннеры, SMM-визуал — быстрый вход. Спрос огромный, конкуренция — в основном низкое качество.',tags:['малый бизнес','Instagram-бизнесы'],salary:'200–450к тг',time:'1–3 мес.'},
+          {ico:'🎨',type:'Творческий перезапуск',name:'Иллюстратор / Motion Designer',desc:'Motion design и иллюстрация — дефицитные навыки в КЗ. После-эффектс за 2 месяца открывает сегмент 500к+.',tags:['рекламные агентства','медиа'],salary:'400–800к тг',time:'3–6 мес.'},
+        ],
+      },
+      creative: {
+        switch:  [
+          {ico:'🚀',type:'Бизнес на экспертизе',name:'Онлайн-школа / Мастер-классы',desc:'Флористика, кулинария, фотография — навыки, за которыми охотятся тысячи. Онлайн-школа из 100 учеников × 15к тг = 1.5M тг/мес.',tags:['Instagram','Zoom','Stepik'],salary:'400к – 2M тг',time:'6–12 мес.'},
+          {ico:'🎯',type:'Корпоративный B2B',name:'Event-дизайн / Корпоративные заказы',desc:'Корпоративные клиенты платят в 3–5× больше частных. Один event-контракт на оформление = 500к–2M тг.',tags:['Astana Hub','корпорации','MICE'],salary:'500к – 1.5M тг',time:'4–8 мес.'},
+        ],
+        grow:    [
+          {ico:'📸',type:'Личный бренд',name:'Instagram / TikTok Expert',desc:'Аудитория 50к+ в нише открывает партнёрства и рекламу. Топ-флористы и фотографы КЗ зарабатывают 500к–2M тг/мес.',tags:['Instagram','TikTok','бренды'],salary:'500к – 2M тг',time:'6–18 мес.'},
+          {ico:'🏫',type:'Образование',name:'Преподаватель профессиональных курсов',desc:'Авторские курсы при правильном маркетинге приносят больше, чем практика. Запись одного курса × подписная модель.',tags:['Udemy','свой сайт','Stepik'],salary:'350–900к тг',time:'4–8 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Быстрый перезапуск',name:'Фриланс-заказы через социальные сети',desc:'Instagram и TikTok — прямой канал к клиентам без посредников. 10–15 постов кейсов = первые заказы за 1–2 месяца.',tags:['Instagram','TikTok','сарафан'],salary:'150–400к тг',time:'1–3 мес.'},
+          {ico:'🤝',type:'Партнёрство',name:'Шеф-партнёр ресторана / Арт-директор кафе',desc:'Творческая экспертиза + бизнес-партнёрство. Удачный шаг для тех, кто не хочет быть соло-предпринимателем.',tags:['рестораны','кафе','отели'],salary:'300–700к тг',time:'3–6 мес.'},
+        ],
+      },
+      hr: {
+        switch:  [
+          {ico:'🚀',type:'HR Tech',name:'People Partner в IT-компанию',desc:'HRBP в технологических компаниях — один из самых быстрорастущих треков. Kaspi, Kolesa активно набирают HR с IT-пониманием.',tags:['Kaspi','Kolesa','стартапы'],salary:'500–900к тг',time:'4–8 мес.'},
+          {ico:'📊',type:'L&D / Talent Management',name:'L&D Manager / Talent Partner',desc:'Корпоративное обучение и развитие — дефицитная специализация. Крупные холдинги КЗ платят за системный L&D.',tags:['Samruk-Kazyna','холдинги','банки'],salary:'450–800к тг',time:'6–12 мес.'},
+        ],
+        grow:    [
+          {ico:'📈',type:'Карьерный рост',name:'HR Director / VP People',desc:'Путь к HR-директору в среднем занимает 3–5 лет. HR-директор в компании 500+ человек: 1–2M тг/мес.',tags:['холдинги','банки','ритейл'],salary:'900–2 000к тг',time:'3–5 лет'},
+          {ico:'🎯',type:'Консалтинг',name:'HR-консультант / Executive Search',desc:'Независимый HR-консультант берёт 20–30% от годовой зарплаты кандидата. Один закрытый топ-менеджер = 1–3M тг комиссии.',tags:['headhunting','кадровые агентства'],salary:'700к – 2M тг',time:'6–12 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Рекрутинговое агентство',name:'IT-рекрутер / Talent Acquisition',desc:'IT-рекрутинг — самая дефицитная HR-специализация. Входной порог низкий, доход сдельный: 1 закрытая вакансия = 100–300к тг.',tags:['IT-компании','стартапы'],salary:'300–700к тг',time:'1–3 мес.'},
+          {ico:'🎓',type:'HR-коучинг',name:'Карьерный консультант / Коуч',desc:'Платёжеспособная аудитория готова платить 15–50к тг за сессию. При 20 клиентах в месяц — достойный доход.',tags:['самозанятость','LinkedIn'],salary:'300–800к тг',time:'3–6 мес.'},
+        ],
+      },
+      medicine: {
+        switch:  [
+          {ico:'🚀',type:'Медтех',name:'Medical Advisor / HealthTech',desc:'Врачи в фармкомпаниях и медтех-стартапах КЗ зарабатывают в 2–3× больше практикующих. Бурно растущий сектор.',tags:['Santo','фарм.компании','стартапы'],salary:'500–1 000к тг',time:'6–12 мес.'},
+          {ico:'📚',type:'Медицинское образование',name:'Преподаватель / Автор контента',desc:'Медицинский контент — один из самых дефицитных и высокооплачиваемых форматов в КЗ. YouTube-врач с 100к+ подписчиков зарабатывает больше практика.',tags:['YouTube','Instagram','онлайн-школы'],salary:'400к – 1.5M тг',time:'8–18 мес.'},
+        ],
+        grow:    [
+          {ico:'📈',type:'Специализация',name:'Узкий специалист / Платная практика',desc:'Врачи узких специальностей в частных клиниках КЗ зарабатывают 500к–1.5M тг. Инвестиция в специализацию окупается за 2–3 года.',tags:['частные клиники','Алматы','Астана'],salary:'500к – 1.5M тг',time:'1–3 года'},
+          {ico:'💼',type:'Медицинский бизнес',name:'Собственная клиника / Кабинет',desc:'Небольшой кабинет приносит 500к–1.5M тг при грамотном маркетинге. Входной барьер снизился с развитием аренды оборудования.',tags:['частная практика','franchise'],salary:'700к – 2M тг',time:'12–24 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Онлайн-консультации',name:'Телемедицина / Онлайн-врач',desc:'Онлайн-платформы (DOC+, Medics) позволяют вести практику без аренды кабинета. Быстрый старт за 2–4 недели.',tags:['DOC+','Kaz-дoctor','Doctis'],salary:'200–500к тг',time:'2–4 нед.'},
+          {ico:'🎓',type:'Переквалификация',name:'Медицинский переводчик / Консультант',desc:'Медицинский английский + знание индустрии = редкая компетенция. Фармкомпании платят 50–100к тг/день за медицинских консультантов.',tags:['фармкомпании','CRO'],salary:'400–800к тг',time:'3–6 мес.'},
+        ],
+      },
+      engineering: {
+        switch:  [
+          {ico:'🚀',type:'Промышленный консалтинг',name:'Технический консультант / Эксперт',desc:'Инженеры с опытом в горнодобыче, энергетике, нефтяной отрасли КЗ востребованы как консультанты. Ставка 50–200к тг/день.',tags:['Самрук','Shell','KAZ Minerals'],salary:'700к – 2M тг',time:'4–8 мес.'},
+          {ico:'⚙️',type:'Tech-предпринимательство',name:'B2B-сервис для индустрии',desc:'Автоматизация, IoT, промышленный мониторинг — ниши, где инженерная экспертиза + предпринимательство = уникальное преимущество.',tags:['промышленность','IoT','стартапы'],salary:'600к – 3M тг',time:'12–24 мес.'},
+        ],
+        grow:    [
+          {ico:'📊',type:'Управление проектами',name:'Project Manager / PMO',desc:'PMP-сертификация превращает инженерный опыт в управленческую карьеру. PM в крупных проектах КЗ: 700–1 400к тг/мес.',tags:['инфраструктурные проекты','строительство'],salary:'700–1 400к тг',time:'8–14 мес.'},
+          {ico:'🌍',type:'Международные проекты',name:'Expat-инженер / Международные контракты',desc:'Инженеры из КЗ на международных контрактах зарабатывают в 3–5× больше. Нефть, газ, горнодобыча — глобальный спрос.',tags:['международные компании','Gulf','EU'],salary:'1 000–3 000к тг',time:'6–12 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Технический консалтинг',name:'Freelance Tech Expert',desc:'Малый и средний бизнес КЗ платит за техническое сопровождение. Один консультационный договор = 50–150к тг/мес.',tags:['МСБ','строительные компании'],salary:'300–700к тг',time:'2–4 мес.'},
+          {ico:'🎓',type:'Преподавание',name:'Преподаватель технических дисциплин',desc:'Сертифицированные преподаватели Autodesk, SolidWorks, PLC берут 5–15к тг/час. Онлайн-курс по специализации окупается быстро.',tags:['учебные центры','Coursera','онлайн'],salary:'250–600к тг',time:'2–5 мес.'},
+        ],
+      },
+      sales: {
+        switch:  [
+          {ico:'🚀',type:'B2B Enterprise',name:'Key Account Manager / BDM',desc:'Корпоративные продажи в IT и fintech — лучшая конверсия навыков продавца. KAM в Kaspi Бизнес зарабатывает 700к–1.5M тг с бонусами.',tags:['Kaspi','1C','SAP КЗ'],salary:'700–1 500к тг',time:'4–8 мес.'},
+          {ico:'💼',type:'Коммерческий директор',name:'Head of Sales / Директор по продажам',desc:'При наличии команды и трека продаж — прямой путь к коммерческому директору. В среднем бизнесе КЗ: 1–2M тг/мес.',tags:['ритейл','дистрибуция','IT'],salary:'1 000–2 000к тг',time:'12–24 мес.'},
+        ],
+        grow:    [
+          {ico:'📈',type:'Продажи через личный бренд',name:'Эксперт-продавец / Консультант',desc:'Продавцы с личным брендом в LinkedIn/Instagram закрывают сделки, которые не видит HR. Консалтинг по продажам — смежная возможность.',tags:['LinkedIn','Instagram','тренинги'],salary:'500к – 1.5M тг',time:'6–12 мес.'},
+          {ico:'🎯',type:'Product Sales',name:'Sales Engineer / Technical Sales',desc:'Гибрид продавца + технического специалиста — один из самых редких профилей на KZ-рынке. Зарплата выше на 50–80%.',tags:['IT','промышленность','оборудование'],salary:'600–1 200к тг',time:'6–12 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Независимые продажи',name:'Агент / Независимый брокер',desc:'Страхование, недвижимость, финансовые продукты — рынки с высокими комиссионными и низким входным барьером.',tags:['страхование','недвижимость','Freedom'],salary:'200–700к тг',time:'1–3 мес.'},
+          {ico:'📱',type:'Онлайн-бизнес',name:'E-commerce / Marketplace-продавец',desc:'Kaspi Магазин и WildBerries — самые доступные платформы для старта. Оборот 5–10M тг/мес достижим за 6–12 месяцев.',tags:['Kaspi Магазин','WB','OZON'],salary:'400к – 2M тг',time:'4–10 мес.'},
+        ],
+      },
+      education: {
+        switch:  [
+          {ico:'🚀',type:'EdTech',name:'Методолог / Product Manager в EdTech',desc:'Образовательный рынок КЗ растёт на 25%/год. Учителя, умеющие строить онлайн-курсы, — дефицитный ресурс.',tags:['Bilim Media','Atameken','стартапы'],salary:'450–850к тг',time:'6–12 мес.'},
+          {ico:'🎓',type:'Авторские программы',name:'Автор курсов / Онлайн-школа',desc:'Популярный педагог с авторской программой: 100 студентов × 30к тг/мес = 3M тг оборот. Mastery-модель работает в КЗ.',tags:['Stepik','Skillbox KZ','Telegram'],salary:'500к – 2M тг',time:'6–12 мес.'},
+        ],
+        grow:    [
+          {ico:'📊',type:'Корпоративное обучение',name:'L&D специалист / Бизнес-тренер',desc:'Корпоративные тренинги в КЗ: 150–400к тг/день. Компании активно инвестируют в обучение персонала после пандемии.',tags:['корпорации','банки','холдинги'],salary:'600–1 500к тг',time:'6–12 мес.'},
+          {ico:'🎤',type:'Публичная экспертиза',name:'Спикер / Эксперт рынка образования',desc:'Публичный педагог в Instagram/YouTube монетизирует аудиторию через рекламу, курсы и консультации.',tags:['Instagram','YouTube','конференции'],salary:'400к – 1.5M тг',time:'8–18 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Быстрый старт',name:'Репетитор / Частные уроки онлайн',desc:'Онлайн-репетиторство через Profi.ru и Preply — быстрый старт. Востребованные предметы: математика, English, IT-дисциплины.',tags:['Profi.ru','Preply','ВКонтакте'],salary:'150–400к тг',time:'2–4 нед.'},
+          {ico:'🌐',type:'Языковое образование',name:'Преподаватель английского / Языковой коуч',desc:'Квалифицированный преподаватель с IELTS 7+ зарабатывает 400–700к тг/мес при 10–15 студентах.',tags:['Cambly','iTalki','свой бренд'],salary:'350–700к тг',time:'1–3 мес.'},
+        ],
+      },
+      other: {
+        switch:  [
+          {ico:'🚀',type:'Путь влияния',name:'Предприниматель / Основатель',desc:'Твои навыки + решение реальной проблемы рынка КЗ = потенциал предпринимательства. Astana Hub и MOST предлагают поддержку стартапов.',tags:['Astana Hub','MOST','инвесторы'],salary:'500к – 3M тг',time:'12–24 мес.'},
+          {ico:'📊',type:'Путь управления',name:'Операционный менеджер / Project Manager',desc:'Управленческие навыки — универсальный актив. PMP-сертификация открывает позиции в любой отрасли с зарплатой от 500к тг.',tags:['любая отрасль','проекты КЗ'],salary:'500–1 200к тг',time:'8–16 мес.'},
+        ],
+        grow:    [
+          {ico:'📈',type:'Специализация',name:'Эксперт в своей нише',desc:'Глубокая экспертиза + личный бренд = консалтинг. Независимые эксперты в КЗ берут 30–100к тг/час консультации.',tags:['LinkedIn','YouTube','конференции'],salary:'500к – 1.5M тг',time:'6–18 мес.'},
+          {ico:'🎯',type:'Гибридный трек',name:'Менеджер по развитию / BDM',desc:'Business development — одна из самых востребованных функций при росте бизнеса. Высокий доход = оклад + бонус от результата.',tags:['компании роста','стартапы'],salary:'500–1 100к тг',time:'4–8 мес.'},
+        ],
+        restart: [
+          {ico:'🔁',type:'Быстрый старт',name:'Фриланс / Удалённая работа',desc:'Удалённая работа по твоим текущим навыкам — быстрый источник стабильного дохода. Upwork, hh.kz, LinkedIn.',tags:['Upwork','hh.kz','LinkedIn'],salary:'200–600к тг',time:'1–4 мес.'},
+          {ico:'📚',type:'Переобучение',name:'Онлайн-курс → новая профессия',desc:'3–6 месяцев на смену специальности через онлайн-курс. Наиболее быстрый ROI: IT, маркетинг, дизайн.',tags:['Coursera','Skillbox','Stepik'],salary:'300–800к тг',time:'3–6 мес.'},
+        ],
+      },
     };
-    return notes[R.sc]||notes.switch;
+
+    // Fallback
+    const profData = DATA[prof] || DATA.other;
+    const paths = profData[sc] || profData.switch || DATA.other.switch;
+    return paths;
   }
 
   function getRisks(sc){
@@ -649,6 +840,34 @@
   function openModal(){ document.getElementById('modal').classList.add('open'); }
   function closeModal(){ document.getElementById('modal').classList.remove('open'); }
   document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+  document.getElementById('b2bModal').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
+
+  function openB2BModal(){ document.getElementById('b2bModal').classList.add('open'); }
+  function submitB2B(){
+    alert('Спасибо! Мы свяжемся с вами в течение 24 часов.');
+    document.getElementById('b2bModal').classList.remove('open');
+  }
+
+  // ── RENDER PATHS ──
+  function renderPaths(){
+    const paths = getPaths(R);
+    const grid  = document.getElementById('paths-grid');
+    if(!grid) return;
+    const cls = ['pi','pm2'];
+    grid.innerHTML = paths.map((p,i)=>`
+      <div class="path ${cls[i]||'pi'}" id="path-${i}" onclick="pickPath('path${i}',this)">
+        <span class="pe">${p.ico}</span>
+        <div class="pt">${p.type}</div>
+        <div class="pn">${p.name}</div>
+        <p class="pd">${p.desc}</p>
+        <div class="pex">${p.tags.map(t=>`<span class="pex-tag">${t}</span>`).join('')}</div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:12px 0;display:flex;gap:16px;flex-wrap:wrap;">
+          <div><div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Зарплата КЗ</div><div style="font-family:var(--D);font-size:.95rem;font-weight:800;color:var(--accent)">${p.salary}</div></div>
+          <div><div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Срок входа</div><div style="font-family:var(--D);font-size:.95rem;font-weight:800;color:rgba(96,165,250,.9)">${p.time}</div></div>
+        </div>
+        <div class="pcta">Выбрать этот путь <span class="parr">→</span></div>
+      </div>`).join('');
+  }
 
   function purchase(){
     save('paid',true);
