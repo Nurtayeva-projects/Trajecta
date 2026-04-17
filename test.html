@@ -206,9 +206,7 @@
   function save(k,v){try{localStorage.setItem('tr_'+k,JSON.stringify(v));}catch(e){}}
   function load(k){try{return JSON.parse(localStorage.getItem('tr_'+k));}catch(e){return null;}}
 
-  // Redirect if no scenario
-  const scenario = load('scenario');
-  if(!scenario){ window.location.href='choose.html'; }
+  const scenario = load('scenario') || 'switch';  // fallback to 'switch' if no scenario
 
   const LABELS = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск'};
   const scLabel = document.getElementById('sc-label');
@@ -358,8 +356,6 @@
     el.classList.add('picked');
     document.getElementById('hint').classList.remove('show');
     setTimeout(()=>next(), 380);
-  }
-    </div>`;
   }
 
   function pick(key,val,letter){
