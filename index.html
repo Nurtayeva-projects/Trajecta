@@ -145,6 +145,20 @@
     nav a:hover { color: var(--text); }
     nav a:hover::after { width: 100%; }
     nav a.hide-mob { }
+    .btn-b2b {
+      background: transparent;
+      color: var(--blue);
+      border: 1.5px solid rgba(96,165,250,.35);
+      font-size: 0.85rem;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+    .btn-b2b:hover {
+      background: rgba(96,165,250,.1);
+      border-color: var(--blue);
+      box-shadow: 0 6px 20px rgba(96,165,250,.2);
+      transform: translateY(-2px);
+    }
 
     /* ══ BUTTONS ══ */
     .btn {
@@ -670,6 +684,7 @@
     <a href="#how" class="hide-mob">Как работает</a>
     <a href="#scenarios" class="hide-mob">Сценарии</a>
     <a href="#b2b" class="hide-mob">B2B</a>
+    <a href="b2b.html" class="btn btn-b2b hide-mob">Для работодателей</a>
     <a href="choose.html" class="btn btn-sm">Смоделировать →</a>
   </nav>
 </header>
@@ -728,7 +743,7 @@
         <div class="sim-card">
           <div class="sim-top">
             <div class="sim-status"><span class="sim-dot"></span>Симуляция</div>
-            <div class="sim-title">Прогноз · 2026–2031</div>
+            <div class="sim-title">Прогноз · 2025–2030</div>
           </div>
 
           <div class="sim-tag">🔄 Смена профессии</div>
@@ -783,7 +798,7 @@
       <span class="stat-l">Настройка</span>
     </div>
     <div class="stat reveal d3">
-      <span class="stat-n">5 лет</span>
+      <span class="stat-n">10 лет</span>
       <span class="stat-l">Горизонт прогноза</span>
     </div>
   </div>
@@ -815,30 +830,31 @@
       <h2 class="section-title">Алгоритм за <em>4 шага</em></h2>
       <p class="section-sub">От выбора сценария до персонального прогноза — без шаблонов и обобщений.</p>
     </div>
-    <div class="steps reveal d1">
+    <div class="steps reveal d1" style="grid-template-columns:repeat(5,1fr)">
       <div class="step">
-        <div class="step-n">01</div>
-        <div class="step-ico">🎯</div>
+        <div class="step-n">01</div><div class="step-ico">🎯</div>
         <h3>Выбор сценария</h3>
-        <p>Три сценария под разные жизненные состояния. Каждый имеет свою базовую прогностическую модель.</p>
+        <p>Смена профессии, рост дохода или перезапуск. Каждый запускает свою прогностическую модель.</p>
       </div>
       <div class="step">
-        <div class="step-n">02</div>
-        <div class="step-ico">🧠</div>
+        <div class="step-n">02</div><div class="step-ico">👤</div>
+        <h3>Профиль и направление</h3>
+        <p>Текущая профессия и желаемое направление. Вопросы адаптируются под твой контекст.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div><div class="step-ico">🧠</div>
         <h3>Настройка модели</h3>
-        <p>7 параметров поведенческой модели: риск, скорость решений, горизонт планирования, приоритеты.</p>
+        <p>6–7 параметров: риск, горизонт, приоритеты, тип роста. Каждый влияет на расчёт дохода.</p>
       </div>
       <div class="step">
-        <div class="step-n">03</div>
-        <div class="step-ico">⚙️</div>
-        <h3>Расчёт алгоритма</h3>
-        <p>Система обрабатывает комбинацию параметров и строит персональную траекторию с вероятностями.</p>
+        <div class="step-n">04</div><div class="step-ico">📊</div>
+        <h3>Прогноз и профиль</h3>
+        <p>Доход на 2 и 5 лет, вероятность успеха, навыки, главный риск и рекомендованные профессии.</p>
       </div>
       <div class="step">
-        <div class="step-n">04</div>
-        <div class="step-ico">📊</div>
-        <h3>Прогноз и пути</h3>
-        <p>Прогноз дохода на 2-5 лет, уровень риска, профиль навыков и два пути дальнейшего развития.</p>
+        <div class="step-n">05</div><div class="step-ico">🗺️</div>
+        <h3>Стратегия развития</h3>
+        <p>Два персональных пути с зарплатами КЗ, сроками входа и дорожной картой на 3 года.</p>
       </div>
     </div>
   </section>
