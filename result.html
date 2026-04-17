@@ -207,6 +207,27 @@
     .bfeat{display:flex;align-items:center;gap:8px;font-size:.8rem;color:rgba(240,244,255,.7);}
     .bfeat-ico{color:var(--accent);flex-shrink:0;font-size:.85rem;}
 
+    /* Path blur overlay */
+    .path-blur-wrap{position:relative;border-radius:16px;overflow:hidden;}
+    .path-blur-ov{position:absolute;inset:0;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);background:rgba(2,6,23,.75);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:10;padding:20px;text-align:center;}
+    .pbo-ico{font-size:1.6rem;}
+    .pbo-title{font-family:var(--D);font-size:1rem;font-weight:800;}
+    .pbo-desc{font-size:.8rem;color:var(--muted);line-height:1.55;max-width:260px;}
+    .pbo-price{display:inline-flex;align-items:center;gap:6px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:100px;}
+
+    /* Recommended professions */
+    .rec-list{display:flex;flex-direction:column;gap:10px;}
+    .rec-item{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;transition:border-color .2s;}
+    .rec-item:hover{border-color:var(--border2);}
+    .rec-num{width:26px;height:26px;border-radius:50%;background:var(--ad);border:1px solid var(--am);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-size:.72rem;font-weight:800;color:var(--accent);flex-shrink:0;margin-top:2px;}
+    .rec-body{flex:1;}
+    .rec-name{font-family:var(--D);font-size:.95rem;font-weight:800;margin-bottom:4px;letter-spacing:-.015em;}
+    .rec-why{font-size:.8rem;color:var(--muted);line-height:1.55;margin-bottom:8px;}
+    .rec-meta{display:flex;gap:8px;flex-wrap:wrap;}
+    .rec-tag{font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);}
+    .rec-tag.salary{background:var(--ad);border-color:var(--am);color:var(--accent);}
+    .rec-tag.time{background:var(--bd);border-color:rgba(96,165,250,.25);color:var(--blue);}
+
     /* Final CTA */
     .fcta{background:var(--card);border:1px solid rgba(198,255,0,.15);border-radius:18px;padding:40px 32px;text-align:center;}
     .fcta h3{font-family:var(--D);font-size:1.7rem;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;}
@@ -335,7 +356,10 @@
     if(mf2) mf2.textContent = `Что делать в первые 90 дней — конкретно, без воды`;
     buildRings();
     buildContent();
-    setTimeout(()=>renderPaths(), 50);
+    setTimeout(()=>{
+      renderPaths();
+      renderRecommendedProfs();
+    }, 50);
   }
 
   function buildRings(){
@@ -465,12 +489,28 @@
         <div class="strg">${R.strengths.map(s=>`<span class="stag">${s.ico} ${s.lbl}</span>`).join('')}</div>
       </div>
 
-      <!-- ⑦ Paths — персональные по профессии -->
+      <!-- ⑦ Paths — первый открыт, второй заблюрен -->
       <div class="card">
         <div class="ch"><span class="ci">🧭</span><span class="ct">Два пути развития — под твою профессию</span></div>
-        <p style="font-size:.875rem;color:var(--muted);margin-bottom:18px;line-height:1.6">На основе твоих ответов алгоритм подобрал пути, которые реалистичны именно для твоей профессии и выбранного сценария на рынке Казахстана.</p>
+        <p style="font-size:.875rem;color:var(--muted);margin-bottom:18px;line-height:1.6">На основе твоих ответов алгоритм подобрал пути, которые реалистичны именно для твоей профессии на рынке Казахстана.</p>
         <div class="pg" id="paths-grid"></div>
+        <div style="margin-top:12px;background:rgba(198,255,0,.06);border:1px solid rgba(198,255,0,.2);border-radius:10px;padding:12px 16px;font-size:.82rem;color:var(--muted);line-height:1.55">
+          💡 <strong style="color:var(--text)">Первый путь открыт.</strong> Второй путь доступен после разблокировки полного сценария — он рассчитан под другой тип роста и даёт другие цифры.
+        </div>
       </div>
+
+      <!-- ⑧ Рекомендованные профессии (для switch и restart) -->
+      ${(R.sc==='switch'||R.sc==='restart') ? `
+      <div class="card" id="rec-profs-card">
+        <div class="ch"><span class="ci">🎯</span><span class="ct">Рекомендованные профессии · на основе твоего профиля</span></div>
+        <p style="font-size:.875rem;color:var(--muted);margin-bottom:18px;line-height:1.6">Алгоритм проанализировал твои навыки, мотивацию и направление — и выбрал 3 профессии с лучшим соотношением входа, дохода и вероятности успеха.</p>
+        <div id="rec-profs-list"></div>
+      </div>` : `
+      <div class="card" id="rec-profs-card">
+        <div class="ch"><span class="ci">📈</span><span class="ct">Стратегии роста дохода · под твой профиль</span></div>
+        <p style="font-size:.875rem;color:var(--muted);margin-bottom:18px;line-height:1.6">На основе твоих ответов алгоритм выбрал 3 наиболее реалистичных пути к росту дохода в твоей текущей сфере.</p>
+        <div id="rec-profs-list"></div>
+      </div>`}
 
       <!-- ⑧ BLUR: Chart — улучшенный paywall -->
       <div class="blur-wrap">
@@ -884,26 +924,150 @@
     document.getElementById('b2bModal').classList.remove('open');
   }
 
-  // ── RENDER PATHS ──
+  // ── RENDER PATHS — первый открыт, второй заблюрен ──
   function renderPaths(){
     const paths = getPaths(R);
     const grid  = document.getElementById('paths-grid');
-    if(!grid) return;
+    if(!grid || paths.length < 1) return;
     const cls = ['pi','pm2'];
-    grid.innerHTML = paths.map((p,i)=>`
-      <div class="path ${cls[i]||'pi'}" id="path-${i}" onclick="pickPath('path${i}',this)">
-        <span class="pe">${p.ico}</span>
-        <div class="pt">${p.type}</div>
-        <div class="pn">${p.name}</div>
-        <p class="pd">${p.desc}</p>
-        <div class="pex">${p.tags.map(t=>`<span class="pex-tag">${t}</span>`).join('')}</div>
-        <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:12px 0;display:flex;gap:16px;flex-wrap:wrap;">
-          <div><div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Зарплата КЗ</div><div style="font-family:var(--D);font-size:.95rem;font-weight:800;color:var(--accent)">${p.salary}</div></div>
-          <div><div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Срок входа</div><div style="font-family:var(--D);font-size:.95rem;font-weight:800;color:rgba(96,165,250,.9)">${p.time}</div></div>
+
+    const buildPathCard = (p, i, blurred) => `
+      <div class="${blurred ? 'path-blur-wrap' : ''}">
+        <div class="path ${cls[i]||'pi'}${blurred ? '' : ''}" id="path-${i}" ${blurred ? '' : `onclick="pickPath('path${i}',this)"`} style="${blurred?'pointer-events:none':''}"}>
+          <span class="pe">${p.ico}</span>
+          <div class="pt">${p.type}</div>
+          <div class="pn">${p.name}</div>
+          <p class="pd">${p.desc}</p>
+          <div class="pex">${p.tags.map(t=>`<span class="pex-tag">${t}</span>`).join('')}</div>
+          <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:12px 0;display:flex;gap:16px;flex-wrap:wrap;">
+            <div><div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Зарплата КЗ</div><div style="font-family:var(--D);font-size:.95rem;font-weight:800;color:var(--accent)">${p.salary}</div></div>
+            <div><div style="font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Срок входа</div><div style="font-family:var(--D);font-size:.95rem;font-weight:800;color:rgba(96,165,250,.9)">${p.time}</div></div>
+          </div>
+          <div class="pcta">${blurred ? 'Заблокировано' : 'Выбрать этот путь'} <span class="parr">${blurred ? '🔒' : '→'}</span></div>
         </div>
-        <div class="pcta">Выбрать этот путь <span class="parr">→</span></div>
-      </div>`).join('');
+        ${blurred && !paid ? `
+        <div class="path-blur-ov">
+          <div class="pbo-ico">🔒</div>
+          <div class="pbo-title">Второй путь закрыт</div>
+          <div class="pbo-desc">Этот сценарий рассчитан для другой стратегии роста — с другими цифрами и сроками</div>
+          <div class="pbo-price">🔓 Разблокировать за 4 900 ₸</div>
+          <button class="btn" style="font-size:.82rem;padding:9px 18px" onclick="openModal()">Открыть второй путь →</button>
+        </div>` : ''}
+      </div>`;
+
+    grid.innerHTML = `
+      ${buildPathCard(paths[0], 0, false)}
+      ${paths[1] ? buildPathCard(paths[1], 1, !paid) : ''}
+    `;
   }
+
+  // ── RECOMMENDED PROFESSIONS / GROWTH STRATEGIES ──
+  function renderRecommendedProfs(){
+    const el = document.getElementById('rec-profs-list');
+    if(!el) return;
+    const recs = getRecommendations(R);
+    el.innerHTML = `<div class="rec-list">${recs.map((r,i)=>`
+      <div class="rec-item">
+        <div class="rec-num">${i+1}</div>
+        <div class="rec-body">
+          <div class="rec-name">${r.name}</div>
+          <div class="rec-why">${r.why}</div>
+          <div class="rec-meta">
+            <span class="rec-tag salary">💰 ${r.salary}</span>
+            <span class="rec-tag time">⏱ ${r.time}</span>
+            <span class="rec-tag">📊 вероятность ${r.prob}%</span>
+          </div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  // ── RECOMMENDATIONS ENGINE ──
+  function getRecommendations(R){
+    const prof = R.prof||'other';
+    const sc   = R.sc||'switch';
+    const dir  = R.direction||null;
+    const gt   = R.growthType||'stable';
+    const pr   = R.ans.priority||'interest';
+    const sk   = R.ans.skills||'medium';
+
+    // Для сценария РОСТ ДОХОДА
+    if(sc === 'grow'){
+      const GROW_STRATS = {
+        it:[
+          {name:'Переход в Senior / Lead',     why:`Вырасти внутри профессии — самый быстрый путь. Разница в зарплате между Middle и Senior в IT — от ${fmt(200)}к до ${fmt(400)}к тг.`,salary:'700 000 – 1 200 000 тг',time:'6–10 мес.',prob:78},
+          {name:'Data Science / ML Engineer',  why:'AI-специализация — самый высокооплачиваемый сегмент IT в 2025–2026. Спрос превышает предложение в 4×.',salary:'750 000 – 1 300 000 тг',time:'8–14 мес.',prob:70},
+          {name:'Product Manager',             why:'Переход из разработки в продукт увеличивает доход на 30–50%. Высокий спрос в fintech и e-commerce КЗ.',salary:'650 000 – 1 100 000 тг',time:'6–12 мес.',prob:72},
+        ],
+        law:[
+          {name:'In-house Counsel в IT/Fintech',why:'Юристы в технологических компаниях зарабатывают в 1.5–2× больше традиционного рынка.',salary:'600 000 – 1 000 000 тг',time:'3–6 мес.',prob:76},
+          {name:'M&A / Tax Law специалист',    why:'Узкая специализация в корпоративном праве — самая высокооплачиваемая ниша юридического рынка КЗ.',salary:'700 000 – 1 400 000 тг',time:'12–24 мес.',prob:65},
+          {name:'Legal Tech консультант',       why:'Редкое пересечение права и технологий. Рынок практически пустой, спрос от крупных компаний высокий.',salary:'600 000 – 1 200 000 тг',time:'8–14 мес.',prob:60},
+        ],
+        marketing:[
+          {name:'Performance Marketing Lead',  why:'Маркетологи с аналитикой зарабатывают в 1.5–2× больше. Google/Meta Ads + аналитика — редкое сочетание.',salary:'550 000 – 950 000 тг',time:'6–10 мес.',prob:75},
+          {name:'Head of Marketing / CMO',     why:'Управленческий трек — рост дохода + бонусы за результат. Спрос на стратегических маркетологов в КЗ растёт.',salary:'700 000 – 1 300 000 тг',time:'12–20 мес.',prob:68},
+          {name:'Собственное агентство',       why:'При 3–5 клиентах по 200–400к тг/мес доход владельца агентства превышает любую наёмную позицию.',salary:'800 000 – 2 500 000 тг',time:'12–24 мес.',prob:55},
+        ],
+        finance:[
+          {name:'CFO / Финансовый директор',   why:'Путь к финдиректору — самый высокий доход в финансах. В компании 200+ человек: 1–2.5M тг/мес.',salary:'1 000 000 – 2 500 000 тг',time:'18–36 мес.',prob:65},
+          {name:'Fintech аналитик / продукт',  why:'Финансисты с пониманием IT-продукта — самый дефицитный профиль в КЗ fintech. Доход выше в 1.5×.',salary:'600 000 – 1 100 000 тг',time:'6–12 мес.',prob:72},
+          {name:'Инвестиционный аналитик',     why:'Рынок капитала КЗ растёт. CFA + опыт открывают позиции с бонусами, удваивающими базовую зарплату.',salary:'700 000 – 1 500 000 тг',time:'12–24 мес.',prob:62},
+        ],
+        other:[
+          {name:'Управленческая роль (Team Lead / Head of)',why:'Переход в менеджмент при текущей экспертизе — быстрый путь к доходу выше рынка.',salary:'600 000 – 1 200 000 тг',time:'8–16 мес.',prob:68},
+          {name:'Независимый консультант',     why:'Монетизация экспертизы без потолка наёмной зарплаты. При 5–10 клиентах доход кратно выше.',salary:'500 000 – 1 500 000 тг',time:'6–12 мес.',prob:62},
+          {name:'Специализация + личный бренд',why:'Узкая экспертиза + публичность = консалтинговые ставки. Эксперты в КЗ берут 30–100к тг/час.',salary:'500 000 – 1 800 000 тг',time:'8–18 мес.',prob:58},
+        ],
+      };
+      return (GROW_STRATS[prof]||GROW_STRATS.other);
+    }
+
+    // Для switch и restart — рекомендации по направлению
+    const RECS = {
+      tech:[
+        {name:'IT / Разработчик',        why:`Самое высокооплачиваемое направление с низким порогом входа через онлайн-обучение. Джун-оффер реален за 4–6 месяцев при правильной подготовке.`,salary:'400 000 – 700 000 тг',time:'4–6 мес.',prob:72},
+        {name:'Data Analyst',            why:'SQL + Python + BI-инструмент открывают рынок с высоким спросом и дефицитом специалистов в КЗ.',salary:'350 000 – 650 000 тг',time:'4–8 мес.',prob:70},
+        {name:'Product Manager',         why:'Особенно ценится переход из смежных сфер — юридической, финансовой, маркетинговой. Портфолио + нетворкинг.',salary:'500 000 – 950 000 тг',time:'8–14 мес.',prob:65},
+      ],
+      business:[
+        {name:'Операционный менеджер',   why:'Универсальный трек: PMP-сертификация открывает должности в любой отрасли. Переход быстрый при наличии опыта управления.',salary:'500 000 – 900 000 тг',time:'4–8 мес.',prob:74},
+        {name:'Бизнес-аналитик',         why:'Пересечение аналитики и бизнес-процессов — дефицитный профиль. Особенно ценны переходящие из профессий с регуляторикой (юристы, финансисты).',salary:'450 000 – 850 000 тг',time:'6–12 мес.',prob:70},
+        {name:'Предприниматель / Founder',why:'При наличии экспертизы и ресурса — собственный бизнес даёт нелинейный рост без потолка. Astana Hub, Qazinnovations поддерживают стартапы.',salary:'300 000 – 3 000 000 тг',time:'12–24 мес.',prob:48},
+      ],
+      creative:[
+        {name:'UX/UI Дизайнер',          why:'Переход в продуктовый дизайн при наличии визуального мышления. 3–5 кейсов в портфолио = оффер.',salary:'350 000 – 700 000 тг',time:'6–10 мес.',prob:68},
+        {name:'Контент-маркетолог / Копирайтер',why:'Высокий спрос, низкий порог. Международный рынок через Upwork. Хороший копирайтер с английским: $30–60/час.',salary:'300 000 – 700 000 тг',time:'2–6 мес.',prob:72},
+        {name:'Коуч / Карьерный консультант',why:'При наличии экспертизы и жизненного опыта — быстрый вход. ICF-сертификация повышает ставку в 2×.',salary:'300 000 – 900 000 тг',time:'4–8 мес.',prob:65},
+      ],
+      // Default if no direction or 'other'
+      null:[
+        {name:'Менеджер проектов',       why:'Переносимый навык из любой сферы. PMP или PSM открывают должности во всех индустриях Казахстана.',salary:'450 000 – 850 000 тг',time:'4–8 мес.',prob:72},
+        {name:'Бизнес-девелопмент (BDM)',why:'Развитие бизнеса востребовано в любой растущей компании. Высокий доход за счёт бонусов от результата.',salary:'400 000 – 1 000 000 тг',time:'3–6 мес.',prob:70},
+        {name:'HR Business Partner',     why:'Спрос на системных HR — в росте. Ценятся люди с опытом из бизнеса, а не только из HR-отдела.',salary:'400 000 – 750 000 тг',time:'3–6 мес.',prob:68},
+      ],
+    };
+
+    // Filter by direction, then by profession relevance
+    let recs = RECS[dir] || RECS[null];
+
+    // Additional prof-based rec if profession matches
+    const PROF_TOP = {
+      law:        {name:'Legal Tech / LegalOps',        why:'Юристы с пониманием технологий — самый дефицитный профиль на рынке КЗ и СНГ.',salary:'600 000 – 1 200 000 тг',time:'6–12 мес.',prob:65},
+      finance:    {name:'Fintech Product / Compliance', why:'Финансовая экспертиза + IT-продукт = редкое и высокооплачиваемое сочетание.',salary:'650 000 – 1 100 000 тг',time:'6–12 мес.',prob:68},
+      medicine:   {name:'HealthTech / Medical Advisor',  why:'Медики в фармацевтике и медтех-стартапах зарабатывают в 2–3× больше практикующих врачей.',salary:'500 000 – 1 000 000 тг',time:'6–12 мес.',prob:68},
+      engineering:{name:'Tech Consulting / IoT',        why:'Инженерная экспертиза + технологии = востребованный трек в промышленности КЗ.',salary:'600 000 – 1 400 000 тг',time:'8–14 мес.',prob:65},
+      education:  {name:'EdTech / L&D Manager',         why:'Педагоги в корпоративном обучении зарабатывают в 2–3× больше школьного учителя.',salary:'400 000 – 850 000 тг',time:'4–8 мес.',prob:72},
+    };
+
+    // Add profession-specific rec if available and not duplicate
+    if(PROF_TOP[prof] && !recs.find(r=>r.name===PROF_TOP[prof].name)){
+      recs = [PROF_TOP[prof], ...recs.slice(0,2)];
+    }
+
+    return recs.slice(0,3);
+  }
+
+  function fmt(v){ return (v*1000).toLocaleString('ru-RU'); }
 
   function purchase(){
     save('paid',true);
