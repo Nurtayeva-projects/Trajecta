@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trajecta для бизнеса — Оценка и развитие команды</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(107245981,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMXPMT81Y5"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BMXPMT81Y5');</script>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#020617;--card:#0d1b35;--card2:#111f3a;
+      --accent:#C6FF00;--ag:rgba(198,255,0,.45);--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);
+      --blue:rgba(96,165,250,.9);--bd:rgba(96,165,250,.12);--bm:rgba(96,165,250,.22);
+      --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+      --text:#f0f4ff;--muted:rgba(240,244,255,.48);--dim:rgba(240,244,255,.22);
+      --D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;
+    }
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:rgba(96,165,250,.2);border-radius:3px}
+
+    /* BG — синий вместо зелёного для B2B */
+    .bg-g{position:fixed;inset:0;pointer-events:none;z-index:0;
+      background:radial-gradient(ellipse 80% 60% at 65% 5%,rgba(96,165,250,.07) 0%,transparent 55%),
+                 radial-gradient(ellipse 50% 40% at 10% 80%,rgba(198,255,0,.04) 0%,transparent 55%);}
+    .bg-gr{position:fixed;inset:0;pointer-events:none;z-index:0;
+      background-image:linear-gradient(rgba(96,165,250,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(96,165,250,.02) 1px,transparent 1px);
+      background-size:64px 64px;
+      mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,black 20%,transparent 100%);
+      -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,black 20%,transparent 100%);}
+
+    /* HEADER */
+    header{display:flex;align-items:center;padding:0 48px;height:72px;border-bottom:1px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(2,6,23,.88);backdrop-filter:blur(20px);}
+    .logo{font-family:var(--D);font-size:1.55rem;font-weight:800;color:var(--text);letter-spacing:-.02em;}
+    .logo span{color:var(--accent);text-shadow:0 0 16px var(--ag);}
+    .logo-tag{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);background:var(--bd);border:1px solid var(--bm);padding:3px 9px;border-radius:100px;margin-left:10px;vertical-align:middle;}
+    .hnav{margin-left:auto;display:flex;gap:28px;align-items:center;}
+    .hnav a{font-size:.875rem;color:var(--muted);font-weight:500;transition:color .2s;}
+    .hnav a:hover{color:var(--text);}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#020617;font-family:var(--B);font-weight:700;font-size:.9rem;padding:11px 24px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;white-space:nowrap;text-decoration:none;}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(96,165,250,.4);}
+    .btn-lg{font-size:1.05rem;padding:17px 44px;border-radius:10px;}
+    .btn-accent{background:var(--accent);color:#020617;}
+    .btn-accent:hover{box-shadow:0 8px 28px rgba(198,255,0,.4);}
+    .btn-g{background:transparent;color:var(--muted);border:1px solid var(--border2);}
+    .btn-g:hover{color:var(--text);border-color:rgba(255,255,255,.22);box-shadow:none;}
+
+    /* WRAP */
+    .wrap{position:relative;z-index:1;}
+    .sw{max-width:1200px;margin:0 auto;padding:100px 48px;}
+    .sw-sm{max-width:1200px;margin:0 auto;padding:0 48px 80px;}
+
+    /* ANIMATIONS */
+    @keyframes fup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+    /* HERO */
+    .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:72px;max-width:1280px;margin:0 auto;padding:140px 48px 80px;}
+
+    .badge{display:inline-flex;align-items:center;gap:8px;background:var(--bd);border:1px solid var(--bm);color:var(--blue);font-size:.72rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:24px;animation:fup .5s ease both;}
+    .bdot{width:5px;height:5px;border-radius:50%;background:var(--blue);animation:blink 2s infinite;}
+
+    .hero-h1{font-family:var(--D);font-size:clamp(2.6rem,5vw,5rem);font-weight:800;line-height:.94;letter-spacing:-.04em;margin-bottom:24px;animation:fup .6s .1s ease both;}
+    .hero-h1 em{font-style:normal;color:var(--blue);text-shadow:0 0 30px rgba(96,165,250,.3);}
+    .hero-h1 .dim{color:var(--dim);}
+
+    .hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.72;max-width:460px;margin-bottom:36px;animation:fup .6s .2s ease both;}
+    .hero-sub strong{color:rgba(240,244,255,.82);}
+
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;animation:fup .6s .3s ease both;}
+
+    .hero-stats{display:flex;gap:28px;margin-top:28px;flex-wrap:wrap;animation:fup .6s .4s ease both;}
+    .hs{text-align:center;}
+    .hs-n{font-family:var(--D);font-size:1.8rem;font-weight:800;color:var(--blue);letter-spacing:-.03em;}
+    .hs-l{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;}
+
+    /* DASHBOARD PREVIEW */
+    .hero-right{animation:fup .7s .25s ease both;}
+    .dashboard{background:var(--card);border:1px solid rgba(96,165,250,.15);border-radius:20px;padding:24px;box-shadow:0 40px 80px rgba(0,0,0,.6);position:relative;overflow:hidden;}
+    .dashboard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),transparent 65%);}
+    .db-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+    .db-title{font-family:var(--D);font-size:.88rem;font-weight:700;color:var(--muted);}
+    .db-badge{display:flex;align-items:center;gap:6px;background:var(--bd);border:1px solid var(--bm);color:var(--blue);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;}
+    .db-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);animation:blink 1.5s infinite;}
+
+    .team-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+    .team-item{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
+    .ti-av{width:32px;height:32px;border-radius:8px;background:var(--bd);border:1px solid var(--bm);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .ti-info{flex:1;}
+    .ti-name{font-size:.82rem;font-weight:600;margin-bottom:2px;}
+    .ti-role{font-size:.7rem;color:var(--muted);}
+    .ti-status{font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:100px;}
+    .s-grow{background:rgba(198,255,0,.1);color:var(--accent);border:1px solid rgba(198,255,0,.2);}
+    .s-risk{background:rgba(255,80,50,.1);color:#ff8060;border:1px solid rgba(255,80,50,.2);}
+    .s-ok{background:rgba(96,165,250,.1);color:var(--blue);border:1px solid rgba(96,165,250,.2);}
+
+    .db-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    .dm{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+    .dm-v{font-family:var(--D);font-size:1rem;font-weight:800;color:var(--blue);}
+    .dm-l{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;}
+
+    /* HOW */
+    .section-label{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;}
+    .section-label::before{content:'';width:18px;height:1px;background:var(--blue);opacity:.5;}
+    .section-title{font-family:var(--D);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-bottom:14px;}
+    .section-title em{font-style:normal;color:var(--blue);}
+    .section-sub{font-size:1rem;color:var(--muted);line-height:1.72;max-width:500px;}
+
+    /* USE CASES */
+    .use-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;}
+    .use-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;transition:border-color .2s,transform .2s;position:relative;overflow:hidden;}
+    .use-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),transparent 70%);opacity:0;transition:opacity .3s;}
+    .use-card:hover{border-color:rgba(96,165,250,.3);transform:translateY(-3px);}
+    .use-card:hover::before{opacity:1;}
+    .use-ico{font-size:2rem;margin-bottom:14px;}
+    .use-card h3{font-family:var(--D);font-size:1rem;font-weight:700;margin-bottom:8px;}
+    .use-card p{font-size:.86rem;color:var(--muted);line-height:1.65;}
+    .use-tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--bd);border:1px solid var(--bm);color:var(--blue);padding:3px 10px;border-radius:100px;margin-bottom:10px;}
+
+    /* HOW IT WORKS FOR B2B */
+    .steps-b2b{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border-radius:20px;overflow:hidden;margin-top:44px;}
+    .step-b{background:var(--card);padding:32px 24px;transition:background .2s;}
+    .step-b:hover{background:var(--card2);}
+    .sb-n{font-family:var(--D);font-size:2.2rem;font-weight:800;color:rgba(96,165,250,.08);line-height:1;margin-bottom:16px;}
+    .sb-ico{width:40px;height:40px;background:var(--bd);border:1px solid var(--bm);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:14px;}
+    .step-b h3{font-family:var(--D);font-size:.95rem;font-weight:700;margin-bottom:8px;}
+    .step-b p{font-size:.84rem;color:var(--muted);line-height:1.65;}
+
+    /* PRICING */
+    .pricing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:44px;}
+    .price-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:32px 28px;position:relative;transition:border-color .2s;}
+    .price-card.featured{border-color:rgba(96,165,250,.4);background:linear-gradient(135deg,rgba(96,165,250,.06),var(--card));}
+    .price-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),transparent 70%);border-radius:18px 18px 0 0;}
+    .p-badge{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--bd);border:1px solid var(--bm);color:var(--blue);padding:3px 10px;border-radius:100px;margin-bottom:14px;display:inline-block;}
+    .p-badge.popular{background:var(--am);border-color:rgba(198,255,0,.3);color:var(--accent);}
+    .p-name{font-family:var(--D);font-size:1.15rem;font-weight:800;margin-bottom:8px;}
+    .p-desc{font-size:.84rem;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+    .p-price{font-family:var(--D);font-size:2.2rem;font-weight:800;color:var(--blue);letter-spacing:-.04em;margin-bottom:4px;}
+    .p-price-note{font-size:.78rem;color:var(--muted);margin-bottom:20px;}
+    .p-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+    .p-feat{display:flex;align-items:center;gap:8px;font-size:.84rem;color:var(--muted);}
+    .p-feat-ico{color:var(--blue);flex-shrink:0;}
+    .p-feat-ico.acc{color:var(--accent);}
+
+    /* TESTIMONIALS */
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;}
+    .testi{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px 22px;}
+    .testi-text{font-size:.9rem;color:rgba(240,244,255,.8);line-height:1.7;margin-bottom:18px;font-style:italic;}
+    .testi-author{display:flex;align-items:center;gap:12px;}
+    .testi-av{width:36px;height:36px;border-radius:50%;background:var(--bd);border:1px solid var(--bm);display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .testi-name{font-size:.84rem;font-weight:600;}
+    .testi-role{font-size:.75rem;color:var(--muted);margin-top:2px;}
+
+    /* CTA */
+    .cta-section{padding:0 48px 80px;}
+    .cta-inner{max-width:1200px;margin:0 auto;background:var(--card);border:1px solid rgba(96,165,250,.2);border-radius:28px;padding:72px 60px;display:flex;align-items:center;gap:60px;position:relative;overflow:hidden;}
+    .cta-inner::before{content:'';position:absolute;inset:-1px;background:linear-gradient(135deg,rgba(96,165,250,.12),transparent 55%);border-radius:29px;z-index:0;pointer-events:none;}
+    .cta-inner::after{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.06),transparent 70%);pointer-events:none;}
+    .cta-l{flex:1;position:relative;z-index:1;}
+    .cta-l h2{font-family:var(--D);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-bottom:12px;}
+    .cta-l p{font-size:1rem;color:var(--muted);line-height:1.7;}
+    .cta-r{flex-shrink:0;text-align:center;position:relative;z-index:1;}
+    .cta-r .btn-lg{display:block;margin-bottom:12px;}
+    .cta-meta{font-size:.76rem;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;}
+
+    /* MODAL */
+    .modal{position:fixed;inset:0;z-index:999;background:rgba(2,6,23,.9);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;padding:24px;}
+    .modal.open{display:flex;}
+    .mbox{background:var(--card2);border:1px solid rgba(96,165,250,.25);border-radius:22px;padding:44px 40px;max-width:520px;width:100%;position:relative;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both;}
+    @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+    .mclose{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.07);border:none;color:var(--muted);font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .mclose:hover{background:rgba(255,255,255,.12);}
+    .m-title{font-family:var(--D);font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:8px;}
+    .m-sub{font-size:.9rem;color:var(--muted);line-height:1.6;margin-bottom:24px;}
+    .form-row{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+    .form-field{display:flex;flex-direction:column;gap:6px;}
+    .field-label{font-size:.75rem;font-weight:600;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;}
+    .field-input{background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--B);font-size:.95rem;padding:12px 16px;outline:none;transition:border-color .2s;}
+    .field-input:focus{border-color:rgba(96,165,250,.5);box-shadow:0 0 0 3px rgba(96,165,250,.07);}
+    .field-input::placeholder{color:var(--dim);}
+    select.field-input option{background:#1a1a2e;}
+    .btn-full{width:100%;font-size:1rem;padding:15px;border-radius:10px;display:flex;justify-content:center;margin-top:4px;}
+    .m-note{font-size:.72rem;color:var(--dim);text-align:center;margin-top:10px;}
+
+    /* FOOTER */
+    footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;align-items:center;gap:28px;flex-wrap:wrap;}
+    .f-logo{font-family:var(--D);font-size:1.15rem;font-weight:800;}
+    .f-logo span{color:var(--accent);}
+    .f-copy{font-size:.76rem;color:var(--muted);margin-left:auto;}
+    .f-back{font-size:.82rem;color:var(--muted);transition:color .2s;}
+    .f-back:hover{color:var(--text);}
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){
+      header{padding:0 32px;}
+      .hero{grid-template-columns:1fr;gap:40px;padding:130px 32px 60px;}
+      .hero-right{display:none;}
+      .steps-b2b{grid-template-columns:repeat(2,1fr);}
+      .use-grid,.pricing-grid,.testi-grid{grid-template-columns:1fr 1fr;}
+      .cta-inner{flex-direction:column;gap:28px;padding:48px 36px;text-align:center;}
+      .sw,.sw-sm{padding:72px 32px;}
+      .sw-sm{padding-top:0;}
+    }
+    @media(max-width:640px){
+      header{padding:0 20px;}
+      .hero{padding:110px 20px 52px;}
+      .use-grid,.pricing-grid,.testi-grid{grid-template-columns:1fr;}
+      .steps-b2b{grid-template-columns:1fr;background:transparent;gap:10px;border-radius:0;}
+      .step-b{border-radius:14px;border:1px solid var(--border);}
+      .cta-section{padding:0 20px 60px;}
+      .cta-inner{padding:40px 24px;}
+      footer{padding:24px 20px;}
+      .f-copy{margin-left:0;width:100%;}
+      .sw,.sw-sm{padding:56px 20px;}
+      .sw-sm{padding-top:0;}
+      .mbox{padding:32px 20px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- DEMO REQUEST MODAL -->
+<div class="modal" id="demoModal">
+  <div class="mbox">
+    <button class="mclose" onclick="closeModal()">✕</button>
+    <div class="m-title">Запросить демо</div>
+    <p class="m-sub">Покажем платформу на вашей команде — 30 минут, без продажного давления.</p>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="field-label">Ваше имя</label>
+        <input class="field-input" type="text" id="f-name" placeholder="Алибек Сейткали">
+      </div>
+      <div class="form-field">
+        <label class="field-label">Компания</label>
+        <input class="field-input" type="text" id="f-company" placeholder="Название компании">
+      </div>
+      <div class="form-field">
+        <label class="field-label">Email или WhatsApp</label>
+        <input class="field-input" type="text" id="f-contact" placeholder="email или +7...">
+      </div>
+      <div class="form-field">
+        <label class="field-label">Размер команды</label>
+        <select class="field-input" id="f-size">
+          <option value="" disabled selected>Выберите размер</option>
+          <option value="small">до 10 человек</option>
+          <option value="mid">10–50 человек</option>
+          <option value="large">50–200 человек</option>
+          <option value="enterprise">200+ человек</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-full" onclick="submitDemo()">Отправить запрос →</button>
+    <p class="m-note">Ответим в течение 24 часов. Без спама.</p>
+  </div>
+</div>
+
+<div class="bg-g"></div>
+<div class="bg-gr"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">Traject<span>a</span> <span class="logo-tag">B2B</span></a>
+  <nav class="hnav">
+    <a href="#usecases">Применение</a>
+    <a href="#how">Как работает</a>
+    <a href="#pricing">Цены</a>
+    <a href="index.html" style="color:var(--muted)">← Для частных лиц</a>
+    <button class="btn" onclick="openModal()">Запросить демо</button>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <div>
+      <div class="badge"><span class="bdot"></span>Платформа для HR и руководителей</div>
+      <h1 class="hero-h1">
+        Оцени потенциал<br>
+        команды на <em>основе</em><br>
+        <span class="dim">данных, не интуиции</span>
+      </h1>
+      <p class="hero-sub">
+        <strong>Trajecta B2B</strong> — инструмент для HR и руководителей. Выявляет сотрудников, готовых к росту, тех, кто в риске выгорания, и строит персональные карьерные треки для каждого.
+      </p>
+      <div class="hero-actions">
+        <button class="btn btn-lg" onclick="openModal()">Запросить демо →</button>
+        <a href="#usecases" class="btn btn-g btn-lg">Как это работает</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><div class="hs-n">3x</div><div class="hs-l">точнее оценки</div></div>
+        <div class="hs"><div class="hs-n">40%</div><div class="hs-l">меньше текучки</div></div>
+        <div class="hs"><div class="hs-n">5×</div><div class="hs-l">дешевле консультанта</div></div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PREVIEW -->
+    <div class="hero-right">
+      <div class="dashboard">
+        <div class="db-head">
+          <div class="db-title">Команда · Обзор потенциала</div>
+          <div class="db-badge"><span class="db-dot"></span>Live анализ</div>
+        </div>
+        <div class="team-list">
+          <div class="team-item">
+            <div class="ti-av">👨‍💼</div>
+            <div class="ti-info">
+              <div class="ti-name">Асель М.</div>
+              <div class="ti-role">Маркетолог · 3 года</div>
+            </div>
+            <div class="ti-status s-grow">Готова к росту</div>
+          </div>
+          <div class="team-item">
+            <div class="ti-av">👩‍💻</div>
+            <div class="ti-info">
+              <div class="ti-name">Данияр К.</div>
+              <div class="ti-role">Разработчик · 1.5 года</div>
+            </div>
+            <div class="ti-status s-risk">Риск выгорания</div>
+          </div>
+          <div class="team-item">
+            <div class="ti-av">👨‍🔬</div>
+            <div class="ti-info">
+              <div class="ti-name">Мадина Т.</div>
+              <div class="ti-role">Аналитик · 2 года</div>
+            </div>
+            <div class="ti-status s-ok">Стабильный рост</div>
+          </div>
+        </div>
+        <div class="db-metrics">
+          <div class="dm"><div class="dm-v">67%</div><div class="dm-l">Потенциал роста</div></div>
+          <div class="dm"><div class="dm-v">2</div><div class="dm-l">Риск ухода</div></div>
+          <div class="dm"><div class="dm-v">4</div><div class="dm-l">Готовы к L&D</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ USE CASES ══ -->
+  <section class="sw" id="usecases">
+    <div class="reveal">
+      <span class="section-label">Применение</span>
+      <h2 class="section-title">Три задачи, которые решает <em>Trajecta B2B</em></h2>
+      <p class="section-sub">Платформа заменяет дорогостоящие HR-консалтинги и ежегодные оценки — даёт данные в режиме реального времени.</p>
+    </div>
+    <div class="use-grid">
+      <div class="use-card">
+        <div class="use-tag">HR и подбор</div>
+        <div class="use-ico">🔍</div>
+        <h3>Оценка кандидатов</h3>
+        <p>Алгоритм анализирует поведенческую модель кандидата и прогнозирует его потенциал роста в конкретной роли в вашей компании за 1–3 года.</p>
+      </div>
+      <div class="use-card">
+        <div class="use-tag">Развитие команды</div>
+        <div class="use-ico">📈</div>
+        <h3>Карьерные треки</h3>
+        <p>Персональные траектории развития для каждого сотрудника. Алгоритм показывает кто готов к повышению, а кому нужна поддержка или смена роли.</p>
+      </div>
+      <div class="use-card">
+        <div class="use-tag">Удержание</div>
+        <div class="use-ico">🛡️</div>
+        <h3>Риск выгорания</h3>
+        <p>Выявляет сотрудников, находящихся в зоне риска, до того как они подадут заявление об уходе. Снижает текучку на 30–40%.</p>
+      </div>
+      <div class="use-card">
+        <div class="use-tag">L&D</div>
+        <div class="use-ico">🎓</div>
+        <h3>Обучение и развитие</h3>
+        <p>Персональные программы обучения на основе профиля сотрудника. Не шаблонные тренинги, а целевые инвестиции в конкретные компетенции.</p>
+      </div>
+      <div class="use-card">
+        <div class="use-tag">Планирование</div>
+        <div class="use-ico">🗺️</div>
+        <h3>Succession Planning</h3>
+        <p>Выявляет преемников для ключевых позиций заблаговременно. Снижает риски при уходе ключевых сотрудников.</p>
+      </div>
+      <div class="use-card">
+        <div class="use-tag">Аналитика</div>
+        <div class="use-ico">📊</div>
+        <h3>Командный дашборд</h3>
+        <p>Агрегированные данные по команде или отделу: потенциал роста, зоны риска, рекомендации по развитию — всё в одном месте.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ HOW IT WORKS ══ -->
+  <section class="sw-sm" id="how">
+    <div>
+      <span class="section-label">Как работает</span>
+      <h2 class="section-title">Запуск за <em>4 шага</em></h2>
+      <p class="section-sub">От подключения до первых инсайтов по команде — один рабочий день.</p>
+    </div>
+    <div class="steps-b2b">
+      <div class="step-b">
+        <div class="sb-n">01</div>
+        <div class="sb-ico">🔗</div>
+        <h3>Подключение</h3>
+        <p>Создаём корпоративный аккаунт, настраиваем брендинг и генерируем уникальные ссылки для сотрудников или кандидатов.</p>
+      </div>
+      <div class="step-b">
+        <div class="sb-n">02</div>
+        <div class="sb-ico">📋</div>
+        <h3>Прохождение теста</h3>
+        <p>Сотрудник или кандидат проходит 8-параметрическую поведенческую модель. Занимает 5–7 минут. Никакой регистрации.</p>
+      </div>
+      <div class="step-b">
+        <div class="sb-n">03</div>
+        <div class="sb-ico">⚙️</div>
+        <h3>Анализ алгоритма</h3>
+        <p>Система рассчитывает персональный профиль, потенциал роста, риски и рекомендации. Результат — мгновенно.</p>
+      </div>
+      <div class="step-b">
+        <div class="sb-n">04</div>
+        <div class="sb-ico">📊</div>
+        <h3>Дашборд HR</h3>
+        <p>Вы получаете агрегированные данные по всей команде, сравнение сотрудников и экспорт отчётов в Excel/PDF.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PRICING ══ -->
+  <section class="sw-sm" id="pricing">
+    <div>
+      <span class="section-label">Тарифы</span>
+      <h2 class="section-title">Прозрачное <em>ценообразование</em></h2>
+      <p class="section-sub">Платите за результат, а не за процесс. Никаких скрытых платежей.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <!-- STARTER -->
+      <div class="price-card">
+        <div class="p-badge">Старт</div>
+        <div class="p-name">Команда</div>
+        <p class="p-desc">Для небольших команд и первого знакомства с платформой.</p>
+        <div class="p-price">39 900 ₸</div>
+        <div class="p-price-note">10 прохождений · единоразово</div>
+        <div class="p-feats">
+          <div class="p-feat"><span class="p-feat-ico">✓</span>10 профилей сотрудников</div>
+          <div class="p-feat"><span class="p-feat-ico">✓</span>Базовый командный дашборд</div>
+          <div class="p-feat"><span class="p-feat-ico">✓</span>Экспорт в PDF</div>
+          <div class="p-feat"><span class="p-feat-ico">✓</span>Email поддержка</div>
+        </div>
+        <button class="btn btn-g" style="width:100%;justify-content:center" onclick="openModal()">Начать →</button>
+      </div>
+
+      <!-- PRO — featured -->
+      <div class="price-card featured">
+        <div class="p-badge popular">Популярный</div>
+        <div class="p-name">Бизнес</div>
+        <p class="p-desc">Для HR-отдела и регулярной оценки команды.</p>
+        <div class="p-price">149 900 ₸</div>
+        <div class="p-price-note">50 прохождений · 3 месяца</div>
+        <div class="p-feats">
+          <div class="p-feat"><span class="p-feat-ico acc">✓</span>50 профилей сотрудников</div>
+          <div class="p-feat"><span class="p-feat-ico acc">✓</span>Расширенный дашборд с аналитикой</div>
+          <div class="p-feat"><span class="p-feat-ico acc">✓</span>Сравнение сотрудников</div>
+          <div class="p-feat"><span class="p-feat-ico acc">✓</span>Экспорт Excel + PDF</div>
+          <div class="p-feat"><span class="p-feat-ico acc">✓</span>Приоритетная поддержка</div>
+          <div class="p-feat"><span class="p-feat-ico acc">✓</span>Онбординг HR-команды</div>
+        </div>
+        <button class="btn" style="width:100%;justify-content:center" onclick="openModal()">Запросить демо →</button>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="price-card">
+        <div class="p-badge">Enterprise</div>
+        <div class="p-name">Корпоративный</div>
+        <p class="p-desc">Для крупных компаний с индивидуальными требованиями.</p>
+        <div class="p-price">По запросу</div>
+        <div class="p-price-note">Неограниченные прохождения</div>
+        <div class="p-feats">
+          <div class="p-feat"><span class="p-feat-ico">✓</span>Неограниченные профили</div>
+          <div class="p-feat"><span class="p-feat-ico">✓</span>White-label решение</div>
+          <div class="p-feat"><span class="p-feat-ico">✓</span>API-интеграция с HR-системой</div>
+          <div class="p-feat"><span class="p-feat-ico">✓</span>Кастомный брендинг</div>
+          <div class="p-feat"><span class="p-feat-ico">✓</span>Выделенный менеджер</div>
+          <div class="p-feat"><span class="p-feat-ico">✓</span>SLA и приоритет</div>
+        </div>
+        <button class="btn btn-g" style="width:100%;justify-content:center" onclick="openModal()">Связаться →</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ TESTIMONIALS ══ -->
+  <section class="sw-sm">
+    <div>
+      <span class="section-label">Отзывы</span>
+      <h2 class="section-title">Что говорят <em>HR-директора</em></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi">
+        <div class="testi-text">«Раньше оценка 10 сотрудников занимала у нас неделю и стоила 500к тг консультантам. С Trajecta — 2 часа и в разы дешевле. А качество инсайтов выше.»</div>
+        <div class="testi-author">
+          <div class="testi-av">👩‍💼</div>
+          <div>
+            <div class="testi-name">Гульнара А.</div>
+            <div class="testi-role">HR Director, IT-компания, Алматы</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi">
+        <div class="testi-text">«Алгоритм выявил двух сотрудников в риске выгорания за 2 месяца до того, как они сами это осознали. Успели принять меры и удержали ключевых людей.»</div>
+        <div class="testi-author">
+          <div class="testi-av">👨‍💼</div>
+          <div>
+            <div class="testi-name">Ерлан С.</div>
+            <div class="testi-role">CEO, Производственная компания, Астана</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi">
+        <div class="testi-text">«Используем на onboarding'е всех новых сотрудников. Дашборд позволяет сразу понять потенциал человека и правильно его развивать с первого дня.»</div>
+        <div class="testi-author">
+          <div class="testi-av">👩‍🔬</div>
+          <div>
+            <div class="testi-name">Айгерим М.</div>
+            <div class="testi-role">Head of Talent, Финтех, Алматы</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA ══ -->
+  <div class="cta-section">
+    <div class="cta-inner">
+      <div class="cta-l">
+        <h2>Готовы увидеть потенциал<br><span style="color:var(--blue)">своей команды?</span></h2>
+        <p>30-минутное демо на вашей команде. Никакого давления, никаких обязательств. Просто покажем, как это работает.</p>
+      </div>
+      <div class="cta-r">
+        <button class="btn btn-lg" onclick="openModal()">Запросить демо →</button>
+        <div class="cta-meta">
+          <span>⏱ 30 минут</span>
+          <span>🔒 Без обязательств</span>
+          <span>📊 На вашей команде</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <div class="f-logo">Traject<span>a</span></div>
+    <a href="index.html" class="f-back">← Для частных лиц</a>
+    <span class="f-copy">© 2025 Trajecta B2B · Оценка и развитие команды</span>
+  </footer>
+
+</div>
+
+<script>
+  // SCROLL REVEAL
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // MODAL
+  function openModal(){ document.getElementById('demoModal').classList.add('open'); }
+  function closeModal(){ document.getElementById('demoModal').classList.remove('open'); }
+  document.getElementById('demoModal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+
+  function submitDemo(){
+    const name    = document.getElementById('f-name').value.trim();
+    const company = document.getElementById('f-company').value.trim();
+    const contact = document.getElementById('f-contact').value.trim();
+    const size    = document.getElementById('f-size').value;
+    if(!name||!company||!contact||!size){
+      alert('Пожалуйста, заполните все поля');
+      return;
+    }
+    closeModal();
+    // Show success
+    const box = document.createElement('div');
+    box.style.cssText='position:fixed;bottom:32px;right:32px;background:#0d1b35;border:1px solid rgba(198,255,0,.3);border-radius:14px;padding:20px 24px;z-index:9999;font-family:Space Grotesk,sans-serif;max-width:320px;animation:slideUp .4s ease';
+    box.innerHTML=`<div style="font-weight:700;color:#f0f4ff;margin-bottom:6px">✅ Заявка отправлена!</div><div style="font-size:.85rem;color:rgba(240,244,255,.6);line-height:1.5">Свяжемся с вами в течение 24 часов. Спасибо, ${name}!</div>`;
+    document.body.appendChild(box);
+    setTimeout(()=>box.remove(), 5000);
+  }
+</script>
+</body>
+</html>
