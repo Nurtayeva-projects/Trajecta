@@ -251,8 +251,8 @@
       <div class="mfeat"><span class="mfeat-ico">→</span><span>PDF-отчёт для скачивания</span></div>
     </div>
     <div class="mprice">
-      <div style="font-size:.78rem;color:var(--muted);text-decoration:line-through;margin-bottom:4px">обычно 15 900 ₸</div>
-      <span class="mpv">9 900 ₸</span>
+      <div style="font-size:.78rem;color:var(--muted);text-decoration:line-through;margin-bottom:4px">обычно 9 900 ₸</div>
+      <span class="mpv">4 900 ₸</span>
       <span class="mpl">до конца месяца</span>
     </div>
     <button class="btn btn-full" onclick="purchase()">Разблокировать полный сценарий →</button>
@@ -274,7 +274,7 @@
       <div class="mfeat"><span class="mfeat-ico">→</span><span>Онбординг и обучение HR-команды</span></div>
     </div>
     <div class="mprice">
-      <span class="mpv" style="font-size:2rem">59 900 ₸</span>
+      <span class="mpv" style="font-size:2rem">39 900 ₸</span>
       <span class="mpl">пакет на 10 человек</span>
     </div>
     <button class="btn btn-full" style="background:rgba(96,165,250,.9)" onclick="submitB2B()">Запросить демо →</button>
@@ -377,7 +377,7 @@
 
     document.getElementById('content').innerHTML=`
 
-      <!-- ① WOW INSIGHT — персональный инсайт с цифрами -->
+      <!-- ① WOW INSIGHT -->
       <div class="insight">
         <div class="insight-tag">⚡ Ключевой инсайт</div>
         <div class="insight-title">${insightData.title}</div>
@@ -385,12 +385,36 @@
           <div class="in-num"><div class="in-val">${R.income.y2}</div><div class="in-lbl">Через 2 года</div></div>
           <div class="in-num"><div class="in-val">${R.prob}%</div><div class="in-lbl">Вероятность</div></div>
           <div class="in-num"><div class="in-val">${insightData.time}</div><div class="in-lbl">До результата</div></div>
-          <div class="in-num"><div class="in-val">${R.riskLvl}</div><div class="in-lbl">Риск</div></div>
+          <div class="in-num" style="${R.timeLoss?'border-color:rgba(255,80,50,.25);background:rgba(255,80,50,.06)':''}">
+            <div class="in-val" style="${R.timeLoss?'color:#ff6060':''}">
+              ${R.timeLoss ? R.timeLoss+' мес.' : R.riskLvl}
+            </div>
+            <div class="in-lbl">${R.timeLoss ? 'Потеря времени' : 'Риск'}</div>
+          </div>
         </div>
         <div class="insight-note">${insightData.note}</div>
       </div>
 
-      <!-- ② ГЛАВНЫЙ РИСК — конкретное предупреждение -->
+      <!-- ② ПРИЧИННО-СЛЕДСТВЕННАЯ ЛОГИКА -->
+      <div class="card" style="padding:20px 28px">
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Модель учитывает твои параметры</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:.8rem;color:var(--muted)">
+            ⚡ Риск — <strong style="color:var(--text)">${R.riskLvl}</strong>
+          </span>
+          <span style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:.8rem;color:var(--muted)">
+            🎯 Приоритет — <strong style="color:var(--text)">${{money:'Доход',stability:'Стабильность',interest:'Интерес'}[R.ans.priority]||'Интерес'}</strong>
+          </span>
+          <span style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:.8rem;color:var(--muted)">
+            📅 Горизонт — <strong style="color:var(--text)">${{short:'до 1 года',mid:'1–3 года',long:'3–5 лет'}[R.ans.horizon]||'1–3 года'}</strong>
+          </span>
+          <span style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:.8rem;color:var(--muted)">
+            🚀 Тип роста — <strong style="color:var(--text)">${{fast:'Быстрый',stable:'Стабильный',new:'Новое направление'}[R.growthType]||'Стабильный'}</strong>
+          </span>
+        </div>
+      </div>
+
+      <!-- ③ ГЛАВНЫЙ РИСК -->
       <div class="main-risk">
         <div class="mr-ico">⚠️</div>
         <div>
@@ -464,7 +488,7 @@
             <div class="bfeat"><span class="bfeat-ico">→</span>Конкретные шаги на 3 года</div>
             <div class="bfeat"><span class="bfeat-ico">→</span>Детальный график по месяцам</div>
           </div>
-          <div class="bprice">🔓 Разблокировать за 9 900 ₸</div>
+          <div class="bprice">🔓 Разблокировать за 4 900 ₸</div>
           <button class="btn" onclick="openModal()">Открыть полный сценарий →</button>
         </div>`:''}
       </div>
@@ -490,9 +514,21 @@
             <div class="bfeat"><span class="bfeat-ico">→</span>Когда они наиболее опасны</div>
             <div class="bfeat"><span class="bfeat-ico">→</span>Персональный roadmap на год</div>
           </div>
-          <div class="bprice">🔓 Разблокировать за 15 900 ₸</div>
+          <div class="bprice">🔓 Разблокировать за 4 900 ₸</div>
           <button class="btn" onclick="openModal()">Открыть полный сценарий →</button>
         </div>`:''}
+      </div>
+
+      <!-- PATHS CTA — переход к стратегии -->
+      <div style="background:linear-gradient(135deg,rgba(198,255,0,.09),rgba(198,255,0,.03));border:1px solid rgba(198,255,0,.3);border-radius:18px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">Следующий шаг</div>
+          <div style="font-family:var(--D);font-size:1.2rem;font-weight:800;letter-spacing:-.02em;margin-bottom:6px">Твоя стратегия развития</div>
+          <div style="font-size:.875rem;color:var(--muted);line-height:1.6">Алгоритм рассчитал 2 сценария конкретно под твой профиль — с цифрами, сроками и точками входа.</div>
+        </div>
+        <a href="paths.html" class="btn" style="flex-shrink:0;font-size:1rem;padding:15px 32px" onclick="save('result_snapshot',JSON.stringify({inc:R.income.y2,prob:R.prob,sc:R.sc,gt:R.growthType,prof:R.prof}))">
+          Смотреть стратегию →
+        </a>
       </div>
 
       <!-- ⑩ B2B БЛОК -->
@@ -505,7 +541,7 @@
           <span style="background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.2);color:rgba(96,165,250,.85);font-size:.75rem;font-weight:600;padding:5px 12px;border-radius:100px">🔁 L&D планирование</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-          <div style="font-size:.82rem;color:var(--muted)">Пакет на 10 человек — <strong style="color:rgba(96,165,250,.9)">59 900 ₸</strong> · В 5× дешевле HR-консультанта</div>
+          <div style="font-size:.82rem;color:var(--muted)">Пакет на 10 человек — <strong style="color:rgba(96,165,250,.9)">39 900 ₸</strong> · В 5× дешевле HR-консультанта</div>
           <button class="btn" onclick="openB2BModal()" style="background:rgba(96,165,250,.9);font-size:.85rem;padding:10px 20px">Запросить демо →</button>
         </div>
       </div>
@@ -515,7 +551,7 @@
         <h3>Знаешь куда идти.<br>Осталось <em>сделать шаг</em></h3>
         <p>Алгоритм показал траекторию. Выбери путь выше — и разблокируй персональный план: конкретные шаги, сроки и точки контроля на 12 месяцев.</p>
         <div class="cta-btns">
-          <button class="btn" style="font-size:1rem;padding:16px 36px" onclick="openModal()">🔓 Полный сценарий · 9 900 ₸</button>
+          <button class="btn" style="font-size:1rem;padding:16px 36px" onclick="openModal()">🔓 Полный сценарий · 4 900 ₸</button>
           <a href="choose.html" class="btn btn-g" style="font-size:1rem;padding:16px 36px">Новый сценарий</a>
         </div>
         <div class="share-row">
