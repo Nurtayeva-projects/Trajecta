@@ -135,7 +135,14 @@
       .qcard{padding:28px 20px 24px;}
       .qtext{font-size:1.2rem;padding-right:40px;}
       .qnum-bg{font-size:3rem;}
+      .prof-grid{grid-template-columns:1fr;}
     }
+
+    /* Profession grid */
+    .prof-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+    .prof-chip{background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--B);font-size:.9rem;color:var(--muted);}
+    .prof-chip:hover{border-color:rgba(255,255,255,.2);color:var(--text);background:rgba(255,255,255,.05);}
+    .prof-chip.picked{border-color:rgba(198,255,0,.5);background:var(--ad);color:var(--accent);}
   </style>
 </head>
 <body>
@@ -181,7 +188,7 @@
   </div>
 
   <div class="q-top" style="width:100%;max-width:680px">
-    <div class="q-counter">Параметр <span id="qnum">1</span> из 7</div>
+    <div class="q-counter">Параметр <span id="qnum">1</span> из 8</div>
     <div class="qdots" id="qdots"></div>
   </div>
 
@@ -207,8 +214,26 @@
   const scLabel = document.getElementById('sc-label');
   if(scLabel) scLabel.textContent = LABELS[scenario]||'Смена профессии';
 
-  // 7 questions
+  // 8 questions (profession first, then 7 behavioral)
   const QS = [
+    { tag:'👤 Профессия', text:'Кем ты работаешь сейчас или кем работал последний раз?',
+      isSelect: true,
+      key:'profession',
+      options:[
+        {val:'law',     lbl:'Юрист / Нотариус'},
+        {val:'finance', lbl:'Финансист / Бухгалтер / Банкир'},
+        {val:'it',      lbl:'IT / Разработчик / Аналитик данных'},
+        {val:'marketing',lbl:'Маркетолог / SMM / PR'},
+        {val:'design',  lbl:'Дизайнер / Иллюстратор'},
+        {val:'medicine',lbl:'Медик / Фармацевт'},
+        {val:'hr',      lbl:'HR / Рекрутер / L&D'},
+        {val:'education',lbl:'Педагог / Тренер / Коуч'},
+        {val:'sales',   lbl:'Продажи / Менеджер по работе с клиентами'},
+        {val:'engineering',lbl:'Инженер / Технолог / Производство'},
+        {val:'creative',lbl:'Творческая сфера (флорист, повар, фото)'},
+        {val:'other',   lbl:'Другая сфера'},
+      ]
+    },
     { tag:'⚡ Риск', text:'Как ты относишься к риску при принятии важных решений?',
       a:{val:'low',   lbl:'Осторожный',   txt:'Предпочитаю минимизировать риски. Надёжность и предсказуемость важнее потенциально высокого результата.'},
       b:{val:'medium',lbl:'Взвешенный',   txt:'Готов на обдуманный риск, если вижу реальный потенциал. Анализирую прежде чем действовать.'},
@@ -257,9 +282,9 @@
     if(el) el.textContent = Math.floor(timerSec/60)+':'+(timerSec%60<10?'0':'')+timerSec%60;
   },1000);
 
-  // Init Q dots
+  // Init Q dots (8)
   const dotsEl = document.getElementById('qdots');
-  for(let i=0;i<7;i++){
+  for(let i=0;i<8;i++){
     const d=document.createElement('div');
     d.className='qd';d.id='qd'+i;
     dotsEl.appendChild(d);
@@ -275,29 +300,33 @@
     } else {
       wrap.innerHTML = build();
     }
-    // counter
     document.getElementById('qnum').textContent = cur+1;
-    // dots
-    for(let i=0;i<7;i++){
+    for(let i=0;i<8;i++){
       const d=document.getElementById('qd'+i);
       if(d) d.className='qd'+(i<cur?' done':i===cur?' active':'');
     }
-    // progress
-    const pct = 50 + Math.round((cur/7)*20);
+    const pct = 50 + Math.round((cur/8)*20);
     document.getElementById('prog-f').style.width = pct+'%';
-    // buttons
     document.getElementById('btn-back').disabled = cur===0;
-    document.getElementById('btn-next').textContent = cur===6 ? 'Рассчитать прогноз →' : 'Следующий параметр →';
+    document.getElementById('btn-next').textContent = cur===7 ? 'Рассчитать прогноз →' : 'Следующий параметр →';
     document.getElementById('hint').classList.remove('show');
   }
 
   function build(){
     const q = QS[cur];
+    // Profession: grid of chip buttons
+    if(q.isSelect){
+      const sel = answers[q.key]||'';
+      const chips = q.options.map(o=>`<button class="prof-chip${sel===o.val?' picked':''}" onclick="pickProf('${o.val}',this)">${o.lbl}</button>`).join('');
+      return `<div class="qcard in">
+        <div class="qnum-bg">01</div>
+        <div class="qtag">${q.tag}</div>
+        <div class="qtext">${q.text}</div>
+        <div class="prof-grid">${chips}</div>
+      </div>`;
+    }
     const sel = answers[q.key];
-    const cls = (v)=>{
-      if(!sel||sel!==v) return '';
-      return v===q.a.val?' sa':v===q.b.val?' sb':' sc';
-    };
+    const cls = (v)=>{ if(!sel||sel!==v) return ''; return v===q.a.val?' sa':v===q.b.val?' sb':' sc'; };
     const chk = (v)=> sel===v ? '✓':'';
     return `<div class="qcard in">
       <div class="qnum-bg">0${cur+1}</div>
@@ -320,6 +349,16 @@
           <div class="ochk">${chk(q.c.val)}</div>
         </button>
       </div>
+    </div>`;
+  }
+
+  function pickProf(val, el){
+    answers['profession'] = val;
+    document.querySelectorAll('.prof-chip').forEach(c=>c.classList.remove('picked'));
+    el.classList.add('picked');
+    document.getElementById('hint').classList.remove('show');
+    setTimeout(()=>next(), 380);
+  }
     </div>`;
   }
 
@@ -348,7 +387,7 @@
       document.getElementById('hint').classList.add('show');
       shake(); return;
     }
-    if(cur===6){ finish(); return; }
+    if(cur===7){ finish(); return; }
     cur++; render(1);
   }
 
@@ -407,20 +446,41 @@
     },550);
   }
 
-  // ── FORECAST ENGINE ──
+  // ── FORECAST ENGINE — реальные зарплаты КЗ 2025–2026 ──
   function calcForecast(sc, ans){
-    const BASE={
-      switch: {min:400,max:700,growth:.22,risk:.72},
-      grow:   {min:600,max:900,growth:.16,risk:.85},
-      restart:{min:280,max:550,growth:.26,risk:.58},
-    };
-    const b=BASE[sc]||BASE.switch;
+    const prof = ans.profession || 'other';
 
-    const rM={low:{im:.85,pm:1.1,tm:1.2},medium:{im:1,pm:1,tm:1},high:{im:1.25,pm:.88,tm:.8}};
+    // Base salaries по профессии (тысяч тенге/мес, КЗ рынок 2025-2026)
+    const PROF_BASE = {
+      law:        {min:200, max:350, growth:.18, risk:.7},
+      finance:    {min:280, max:450, growth:.16, risk:.78},
+      it:         {min:400, max:650, growth:.28, risk:.82},
+      marketing:  {min:240, max:400, growth:.20, risk:.75},
+      design:     {min:220, max:380, growth:.19, risk:.72},
+      medicine:   {min:170, max:300, growth:.14, risk:.80},
+      hr:         {min:190, max:320, growth:.15, risk:.76},
+      education:  {min:140, max:250, growth:.12, risk:.82},
+      sales:      {min:200, max:380, growth:.22, risk:.70},
+      engineering:{min:220, max:380, growth:.16, risk:.78},
+      creative:   {min:110, max:220, growth:.20, risk:.62},
+      other:      {min:200, max:350, growth:.16, risk:.72},
+    };
+
+    // Scenario modifiers
+    const SC_MOD = {
+      switch: {incomeMul:1.15, growthMul:1.2, riskMul:0.92},
+      grow:   {incomeMul:1.0,  growthMul:1.0, riskMul:1.05},
+      restart:{incomeMul:0.85, growthMul:1.3,  riskMul:0.88},
+    };
+
+    const b = PROF_BASE[prof];
+    const sm = SC_MOD[sc]||SC_MOD.switch;
+
+    const rM={low:{im:.82,pm:1.1,tm:1.25},medium:{im:1,pm:1,tm:1},high:{im:1.28,pm:.87,tm:.78}};
     const spM={slow:{im:.9,pm:1.05,tm:1.4},medium:{im:1,pm:1,tm:1},fast:{im:1.15,pm:.92,tm:.75}};
-    const prM={money:{im:1.2,pm:.9},stability:{im:.9,pm:1.1},interest:{im:1.05,pm:1}};
-    const hM={short:{im:.7,gm:.8},mid:{im:1,gm:1},long:{im:1.35,gm:1.25}};
-    const skM={low:{im:.75,pm:.85},medium:{im:1,pm:1},high:{im:1.3,pm:1.15}};
+    const prM={money:{im:1.18,pm:.9},stability:{im:.88,pm:1.1},interest:{im:1.04,pm:1}};
+    const hM={short:{im:.72,gm:.8},mid:{im:1,gm:1},long:{im:1.32,gm:1.25}};
+    const skM={low:{im:.75,pm:.84},medium:{im:1,pm:1},high:{im:1.32,pm:1.15}};
 
     const r=rM[ans.risk]||rM.medium;
     const sp=spM[ans.speed]||spM.medium;
@@ -428,39 +488,48 @@
     const h=hM[ans.horizon]||hM.mid;
     const sk=skM[ans.skills]||skM.medium;
 
-    const im=r.im*sp.im*pr.im*h.im*sk.im;
-    const pm=r.pm*sp.pm*sk.pm;
-    const tm=r.tm*sp.tm;
-    const gm=b.growth*h.gm;
+    const im = r.im*sp.im*pr.im*h.im*sk.im*sm.incomeMul;
+    const pm = r.pm*sp.pm*sk.pm*sm.riskMul;
+    const tm = r.tm*sp.tm;
+    const gm = b.growth*h.gm*sm.growthMul;
 
-    const n0=Math.round(b.min*im/10)*10;
-    const n0x=Math.round(b.max*im/10)*10;
-    const n2=Math.round(n0*(1+gm*2*tm)/10)*10;
-    const n2x=Math.round(n0x*(1+gm*2*tm)/10)*10;
-    const n5=Math.round(n0*(1+gm*5*tm)/10)*10;
-    const n5x=Math.round(n0x*(1+gm*5*tm)/10)*10;
+    const n0  = Math.round(b.min*im/10)*10;
+    const n0x = Math.round(b.max*im/10)*10;
+    const n2  = Math.round(n0*(1+gm*2*tm)/10)*10;
+    const n2x = Math.round(n0x*(1+gm*2*tm)/10)*10;
+    const n5  = Math.round(n0*(1+gm*5*tm)/10)*10;
+    const n5x = Math.round(n0x*(1+gm*5*tm)/10)*10;
 
-    const prob=Math.round(Math.min(Math.max(b.risk*pm,.42),.96)*100);
-    const riskLvl=ans.risk==='high'?'Высокий':ans.risk==='low'?'Низкий':'Средний';
-    const riskCls=ans.risk==='high'?'red':ans.risk==='low'?'green':'yellow';
+    const prob = Math.round(Math.min(Math.max(b.risk*pm,.42),.96)*100);
+    const riskLvl = ans.risk==='high'?'Высокий':ans.risk==='low'?'Низкий':'Средний';
+    const riskCls = ans.risk==='high'?'red':ans.risk==='low'?'green':'yellow';
 
-    const fmt=v=>v.toLocaleString('ru-RU');
+    const fmt = v=>v.toLocaleString('ru-RU');
 
-    // Skills
+    // Skills profile
     const baseSkills={
-      switch: {an:65,cm:55,cr:70,st:60},
-      grow:   {an:75,cm:70,cr:50,st:80},
-      restart:{an:55,cm:75,cr:65,st:45},
-    }[sc]||{an:60,cm:60,cr:60,st:60};
+      it:         {an:80,cm:55,cr:60,st:70},
+      law:        {an:75,cm:65,cr:45,st:72},
+      finance:    {an:78,cm:60,cr:42,st:75},
+      marketing:  {an:62,cm:78,cr:72,st:65},
+      design:     {an:55,cm:65,cr:85,st:52},
+      medicine:   {an:70,cm:68,cr:50,st:65},
+      hr:         {an:62,cm:82,cr:58,st:68},
+      education:  {an:65,cm:80,cr:62,st:62},
+      sales:      {an:55,cm:85,cr:60,st:62},
+      engineering:{an:78,cm:52,cr:55,st:72},
+      creative:   {an:48,cm:65,cr:88,st:50},
+      other:      {an:60,cm:65,cr:60,st:62},
+    }[prof]||{an:60,cm:65,cr:60,st:62};
+
     const sb=ans.skills==='high'?12:ans.skills==='low'?-12:0;
     const skills={
       analytics:    Math.min(baseSkills.an+sb,98),
-      communication:Math.min(baseSkills.cm+(ans.risk==='high'?8:0),98),
+      communication:Math.min(baseSkills.cm+(ans.risk==='high'?7:0),98),
       creativity:   Math.min(baseSkills.cr+(ans.priority==='interest'?10:0),98),
       strategy:     Math.min(baseSkills.st+(ans.horizon==='long'?10:0),98),
     };
 
-    // Motivation
     const pp=ans.priority||'interest';
     const motivation={
       money:    pp==='money'?85:50,
@@ -469,31 +538,46 @@
       stability:pp==='stability'?75:42,
     };
 
-    // Strengths
     const all=[
       {id:'analytical',lbl:'Аналитическое мышление',ico:'🔬'},
-      {id:'strategic', lbl:'Стратегическое видение',ico:'🧭'},
-      {id:'adaptive',  lbl:'Адаптивность',           ico:'🌊'},
-      {id:'creative',  lbl:'Творческий подход',      ico:'✨'},
-      {id:'decisive',  lbl:'Решительность',          ico:'⚡'},
-      {id:'resilient', lbl:'Устойчивость к стрессу', ico:'🛡️'},
+      {id:'strategic', lbl:'Стратегическое видение', ico:'🧭'},
+      {id:'adaptive',  lbl:'Адаптивность',            ico:'🌊'},
+      {id:'creative',  lbl:'Творческий подход',       ico:'✨'},
+      {id:'decisive',  lbl:'Решительность',           ico:'⚡'},
+      {id:'resilient', lbl:'Устойчивость к стрессу',  ico:'🛡️'},
+      {id:'communicator',lbl:'Коммуникабельность',    ico:'🤝'},
+      {id:'expert',    lbl:'Глубокая экспертиза',     ico:'🎓'},
     ];
-    const picks={
-      switch: ['adaptive','creative','decisive','resilient'],
-      grow:   ['analytical','strategic','decisive','adaptive'],
-      restart:['resilient','adaptive','creative','strategic'],
-    }[sc]||['adaptive','strategic','creative','decisive'];
+    const profStrPicks={
+      it:['analytical','strategic','adaptive','decisive'],
+      law:['analytical','expert','decisive','resilient'],
+      finance:['analytical','strategic','expert','resilient'],
+      marketing:['creative','communicator','adaptive','strategic'],
+      design:['creative','adaptive','expert','communicator'],
+      medicine:['expert','resilient','communicator','decisive'],
+      hr:['communicator','adaptive','strategic','resilient'],
+      education:['communicator','expert','creative','adaptive'],
+      sales:['communicator','decisive','adaptive','resilient'],
+      engineering:['analytical','expert','strategic','decisive'],
+      creative:['creative','adaptive','communicator','resilient'],
+      other:['adaptive','strategic','creative','decisive'],
+    };
+    const picks = profStrPicks[prof]||profStrPicks.other;
     if(ans.risk==='high'&&!picks.includes('decisive')) picks[3]='decisive';
-    if(ans.skills==='high'&&!picks.includes('analytical')) picks[0]='analytical';
+    if(ans.skills==='high'&&!picks.includes('expert')) picks[2]='expert';
     const strengths=all.filter(s=>picks.includes(s.id)).slice(0,4);
 
-    // Chart data
     const chart=[];
     for(let i=0;i<=9;i++) chart.push(Math.round(n0*(1+gm*(i*.55)*tm)));
 
     return {
-      sc, ans, prob, riskLvl, riskCls,
-      income:{now:`${fmt(n0)} – ${fmt(n0x)} тг`,y2:`${fmt(n2)} – ${fmt(n2x)} тг`,y5:`${fmt(n5)} – ${fmt(n5x)} тг`,nowVal:n0,y2Val:n2,y5Val:n5},
+      sc, ans, prof, prob, riskLvl, riskCls,
+      income:{
+        now:`${fmt(n0)} – ${fmt(n0x)} тг`,
+        y2:`${fmt(n2)} – ${fmt(n2x)} тг`,
+        y5:`${fmt(n5)} – ${fmt(n5x)} тг`,
+        nowVal:n0, y2Val:n2, y5Val:n5,
+      },
       skills, motivation, strengths, chart,
     };
   }
