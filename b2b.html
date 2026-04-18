@@ -136,7 +136,7 @@
 
     /* PRICING */
     .pricing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:44px;}
-    .price-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:32px 28px;position:relative;transition:border-color .2s;}
+    .price-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:32px 28px;position:relative;transition:border-color .2s;display:flex;flex-direction:column;}
     .price-card.featured{border-color:rgba(96,165,250,.4);background:linear-gradient(135deg,rgba(96,165,250,.06),var(--card));}
     .price-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),transparent 70%);border-radius:18px 18px 0 0;}
     .p-badge{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--bd);border:1px solid var(--bm);color:var(--blue);padding:3px 10px;border-radius:100px;margin-bottom:14px;display:inline-block;}
@@ -145,7 +145,7 @@
     .p-desc{font-size:.84rem;color:var(--muted);line-height:1.6;margin-bottom:20px;}
     .p-price{font-family:var(--D);font-size:2.2rem;font-weight:800;color:var(--blue);letter-spacing:-.04em;margin-bottom:4px;}
     .p-price-note{font-size:.78rem;color:var(--muted);margin-bottom:20px;}
-    .p-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+    .p-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;flex:1;}
     .p-feat{display:flex;align-items:center;gap:8px;font-size:.84rem;color:var(--muted);}
     .p-feat-ico{color:var(--blue);flex-shrink:0;}
     .p-feat-ico.acc{color:var(--accent);}
@@ -289,7 +289,7 @@
         <span class="dim">данных, не интуиции</span>
       </h1>
       <p class="hero-sub">
-        <strong>Trajecta B2B</strong> — инструмент для HR и руководителей. Выявляет сотрудников, готовых к росту, тех, кто в риске выгорания, и строит персональные карьерные треки для каждого.
+        <strong>Trajecta B2B</strong> — инструмент для HR и руководителей. Выявляет сотрудников, готовых к росту, тех, кто в риске выгорания, и строит персональные карьерные треки. <strong>Также используется для объективной оценки кандидатов на интервью.</strong>
       </p>
       <div class="hero-actions">
         <button class="btn btn-lg" onclick="openModal()">Запросить демо →</button>
