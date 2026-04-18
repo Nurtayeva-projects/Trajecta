@@ -445,7 +445,7 @@
         <div class="qtext">${q.text}</div>
         <div class="prof-grid">${chips}</div>
         <div class="other-input-wrap${sel==='other'?' show':''}" id="other-wrap">
-          <input class="other-input" id="other-text" type="text" placeholder="Например: архитектор, логист, повар…" value="${answers.otherText||''}" oninput="answers.otherText=this.value">
+          <input class="other-input" id="other-text" type="text" placeholder="Например: архитектор, логист, повар…" value="${answers.otherText||''}" oninput="onOtherInput(this.value)">
         </div>
       </div>`;
     }
@@ -474,6 +474,14 @@
         </button>
       </div>
     </div>`;
+  }
+
+  function onOtherInput(val){
+    answers.otherText = val;
+    answers.profLabel = val; // save for display in result
+    // Show hint to proceed if text entered
+    const hint = document.getElementById('hint');
+    if(val.trim().length > 1 && hint) hint.classList.remove('show');
   }
 
   function pickProf(val, el){
@@ -541,12 +549,23 @@
 
   function finish(){
     clearInterval(timerInt);
+    // Validate: if 'other' selected, need text
+    if(answers.profession === 'other' && !answers.otherText?.trim()){
+      document.getElementById('hint').classList.add('show');
+      document.getElementById('hint').textContent = '👆 Укажи свою сферу выше';
+      cur = 0; render(0); return;
+    }
     // Normalize keys across scenarios
     if(!answers.priority && answers.growStrategy) answers.priority = answers.growStrategy;
     if(!answers.priority && answers.motivation)   answers.priority = answers.motivation;
     if(!answers.speed)    answers.speed = 'medium';
     if(!answers.horizon && answers.currentLevel) {
       answers.horizon = answers.currentLevel==='low'?'short':answers.currentLevel==='high'?'long':'mid';
+    }
+    // Save profLabel for display
+    if(!answers.profLabel){
+      const PROF_LABELS = {law:'Юрист',finance:'Финансист',it:'IT-специалист',marketing:'Маркетолог',design:'Дизайнер',medicine:'Медик',hr:'HR',education:'Педагог',sales:'Продажник',engineering:'Инженер',creative:'Творческая сфера'};
+      answers.profLabel = PROF_LABELS[answers.profession] || 'Специалист';
     }
     save('answers', answers);
     save('time', timerSec);
