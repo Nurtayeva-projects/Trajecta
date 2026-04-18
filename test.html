@@ -229,18 +229,29 @@
       {val:'education', lbl:'Педагог / Тренер / Коуч'},
       {val:'sales',     lbl:'Продажи / Менеджер по клиентам'},
       {val:'engineering',lbl:'Инженер / Технолог / Производство'},
-      {val:'creative',  lbl:'Творческая сфера (флорист, повар, фото)'},
-      {val:'other',     lbl:'Другая сфера'},
+      {val:'creative',  lbl:'Творческая сфера (флорист, повар, фотограф)'},
+      {val:'other',     lbl:'Другая сфера (укажи свою)'},
     ]
   };
 
-  // Вопрос о желаемом направлении (для switch и restart)
+  // CSS for other input field
+  const otherStyle = document.createElement('style');
+  otherStyle.textContent = `
+    .other-input-wrap{margin-top:10px;display:none;animation:fup .3s ease both;}
+    .other-input-wrap.show{display:block;}
+    .other-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--am);border-radius:10px;color:var(--text);font-family:var(--B);font-size:.95rem;padding:12px 16px;outline:none;transition:border-color .2s;}
+    .other-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ad);}
+    .other-input::placeholder{color:var(--dim);}
+  `;
+  document.head.appendChild(otherStyle);
+
+  // Вопрос о желаемом направлении (для switch и restart) — универсальный
   const Q_DIRECTION = {
-    tag:'🎯 Направление', key:'direction',
-    text:'В каком направлении ты хочешь развиваться?',
-    a:{val:'tech',    lbl:'Технологии и IT',    txt:'Разработка, данные, продукт, автоматизация. Самый быстрорастущий рынок с высоким потолком дохода.'},
-    b:{val:'business',lbl:'Бизнес и управление', txt:'Менеджмент, предпринимательство, консалтинг. Влияние, стратегия, команды.'},
-    c:{val:'creative', lbl:'Творчество и люди', txt:'Дизайн, образование, медиа, помогающие профессии. Смысл и реализация важнее дохода.'},
+    tag:'🧭 Направление', key:'direction',
+    text:'Что для тебя важнее всего в новом направлении?',
+    a:{val:'income',  lbl:'Рост дохода',          txt:'Главное — зарабатывать значительно больше. Новое направление должно давать финансовую свободу и высокий потолок.'},
+    b:{val:'stable',  lbl:'Стабильность',          txt:'Предсказуемость и надёжность важнее максимального дохода. Хочу уверенности в завтрашнем дне.'},
+    c:{val:'new',     lbl:'Смена сферы / свобода', txt:'Хочу кардинально сменить контекст и найти то, что действительно моё. Деньги — следствие правильного выбора.'},
   };
 
   // Вопросы по сценарию СМЕНА ПРОФЕССИИ
@@ -433,6 +444,9 @@
         <div class="qtag">${q.tag}</div>
         <div class="qtext">${q.text}</div>
         <div class="prof-grid">${chips}</div>
+        <div class="other-input-wrap${sel==='other'?' show':''}" id="other-wrap">
+          <input class="other-input" id="other-text" type="text" placeholder="Например: архитектор, логист, повар…" value="${answers.otherText||''}" oninput="answers.otherText=this.value">
+        </div>
       </div>`;
     }
     const sel = answers[q.key];
@@ -467,6 +481,17 @@
     document.querySelectorAll('.prof-chip').forEach(c=>c.classList.remove('picked'));
     el.classList.add('picked');
     document.getElementById('hint').classList.remove('show');
+    // Show input for 'other'
+    const wrap = document.getElementById('other-wrap');
+    if(wrap){
+      if(val === 'other'){
+        wrap.classList.add('show');
+        setTimeout(()=>{ const inp=document.getElementById('other-text'); if(inp) inp.focus(); }, 100);
+        return; // don't auto-advance — user needs to type
+      } else {
+        wrap.classList.remove('show');
+      }
+    }
     setTimeout(()=>next(), 380);
   }
 
