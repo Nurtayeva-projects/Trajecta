@@ -675,14 +675,22 @@
   function purchase(){
     save('paid', true);
     closeModal();
-    // Remove all blur overlays
+    // Remove all blur overlays with fade
     document.querySelectorAll('.blur-ov, .rm-blur-ov').forEach(el=>{
-      el.style.opacity='0'; el.style.transition='opacity .4s';
+      el.style.opacity='0';
+      el.style.transition='opacity .4s';
       setTimeout(()=>el.remove(), 400);
     });
-    // Enable path B card
-    const pb = document.querySelector('.pb2');
-    if(pb){ pb.style.pointerEvents='all'; pb.style.opacity='1'; pb.onclick=()=>selectPath('b',pb); }
+    // Enable path B card — remove pointer-events:none and restore opacity
+    setTimeout(()=>{
+      const pb = document.querySelector('.pb2');
+      if(pb){
+        pb.style.pointerEvents = 'all';
+        pb.style.opacity = '1';
+        pb.style.cursor = 'pointer';
+        pb.onclick = function(){ selectPath('b', this); };
+      }
+    }, 450);
   }
 </script>
 </body>
