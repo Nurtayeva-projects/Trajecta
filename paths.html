@@ -293,7 +293,7 @@
 
     const paths   = getPathsData(prof, sc, gt, dir);
     const warning = getWarning(sc);
-    const roadmap = getRoadmap(sc, inc);
+    const roadmap = getRoadmapForPath(sc, inc, 'a'); // default to path A initially
 
     const SCLABEL = {switch:'Смена профессии', grow:'Рост дохода', restart:'Перезапуск'};
     const GTLABEL = {fast:'Быстрый рост', stable:'Стабильный рост', new:'Новое направление'};
@@ -356,49 +356,38 @@
           <div class="pcta"><span class="pcta-txt">Выбрать эту стратегию</span><span class="pcta-arr">→</span></div>
         </div>
 
-        <!-- PATH B — заблюрен -->
-        <div class="blur-wrap">
-          <div class="pcard pb2" style="pointer-events:none;opacity:.7">
-            <div class="pcheck"></div>
-            <span class="pemoji">${paths.b.ico}</span>
-            <div class="ptype-tag">Стратегия Б · ${paths.b.type}</div>
-            <div class="pname">${paths.b.name}</div>
-            <p class="pdesc">${paths.b.desc}</p>
-            <div class="pmetrics">
-              <div class="pmetric"><span class="pm-lbl">Доход через 2 года</span><span class="pm-val">${paths.b.salary}</span></div>
-              <div class="pmetric"><span class="pm-lbl">Срок до результата</span><span class="pm-val">${paths.b.time}</span></div>
-              <div class="pmetric"><span class="pm-lbl">Вероятность успеха</span><span class="pm-val">${paths.b.prob}%</span></div>
-            </div>
-            <div class="pbars">
-              ${['Доход','Скорость','Стабильность','Риск'].map((n,i)=>{
-                const vals = [paths.b.bars.income, paths.b.bars.speed, paths.b.bars.stability, paths.b.bars.risk];
-                return `<div class="pbar-row"><span class="pbar-name">${n}</span><div class="pbar-track"><div class="pbar-fill" data-w="${vals[i]}" style="width:${vals[i]}%"></div></div></div>`;
-              }).join('')}
-            </div>
-            <div class="pcta"><span class="pcta-txt" style="color:var(--muted)">Заблокировано</span><span>🔒</span></div>
+        <!-- PATH B — тоже открыт -->
+        <div class="pcard pb2" id="pb" onclick="selectPath('b', this)">
+          <div class="pcheck" id="chk-b"></div>
+          <span class="pemoji">${paths.b.ico}</span>
+          <div class="ptype-tag">Стратегия Б · ${paths.b.type}</div>
+          <div class="pname">${paths.b.name}</div>
+          <p class="pdesc">${paths.b.desc}</p>
+          <div class="pmetrics">
+            <div class="pmetric"><span class="pm-lbl">Доход через 2 года</span><span class="pm-val">${paths.b.salary}</span></div>
+            <div class="pmetric"><span class="pm-lbl">Срок до результата</span><span class="pm-val">${paths.b.time}</span></div>
+            <div class="pmetric"><span class="pm-lbl">Вероятность успеха</span><span class="pm-val">${paths.b.prob}%</span></div>
           </div>
-          ${!paid ? `
-          <div class="blur-ov">
-            <div style="text-align:center;margin-bottom:16px">
-              <div style="font-size:2rem;margin-bottom:8px">🔒</div>
-              <div style="font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:6px">Стратегия Б закрыта</div>
-              <div style="font-size:.82rem;color:var(--muted);line-height:1.55;max-width:240px;margin:0 auto">Другой тип роста — другие цифры, другие сроки. Может подойти тебе больше.</div>
-            </div>
-            <button class="btn" style="font-size:.95rem;padding:13px 28px;margin:4px 0" onclick="openModal()">🔓 Открыть за 9 900 ₸</button>
-            <div style="font-size:.72rem;color:var(--dim)">обычно 15 990 ₸ · без подписки</div>
-          </div>` : ``}
+          <div class="pbars">
+            ${['Доход','Скорость','Стабильность','Риск'].map((n,i)=>{
+              const vals = [paths.b.bars.income, paths.b.bars.speed, paths.b.bars.stability, paths.b.bars.risk];
+              return `<div class="pbar-row"><span class="pbar-name">${n}</span><div class="pbar-track"><div class="pbar-fill" data-w="${vals[i]}"></div></div></div>`;
+            }).join('')}
+          </div>
+          <div class="pcta"><span class="pcta-txt">Выбрать эту стратегию</span><span class="pcta-arr">→</span></div>
         </div>
 
       </div>
 
-      <!-- ROADMAP -->
+      <!-- ROADMAP — открыт -->
       <div class="sec-lbl">Дорожная карта</div>
       <div class="rm-blur-wrap">
         <div class="roadmap">
           <div class="rm-head">
             <span class="rm-ico">🗺️</span>
-            <span class="rm-title">Дорожная карта · 3 года</span>
+            <span class="rm-title" id="roadmap-title">Дорожная карта · 3 года</span>
           </div>
+          <div id="roadmap-steps">
           ${roadmap.map((s,i)=>`
           <div class="rm-item">
             <div class="rm-num">${i+1}</div>
@@ -409,26 +398,18 @@
               <div class="rm-income">${s.income}</div>
             </div>
           </div>`).join('')}
+          </div>
         </div>
-        ${!paid ? `
-        <div class="rm-blur-ov">
-          <div style="font-size:2rem;margin-bottom:10px">🗺️</div>
-          <div style="font-family:var(--D);font-size:1.05rem;font-weight:800;margin-bottom:6px">Детальный план закрыт</div>
-          <div style="font-size:.82rem;color:var(--muted);line-height:1.55;max-width:280px;margin:0 auto 14px">Что делать каждые 90 дней, где потеряешь деньги и как этого избежать</div>
-          <button class="btn" style="font-size:.95rem;padding:13px 28px" onclick="openModal()">🔓 Открыть полный план →</button>
-          <div style="font-size:.72rem;color:var(--dim);margin-top:8px">9 900 ₸ · обычно 15 990 ₸</div>
-        </div>` : ''}
       </div>
 
       <!-- FINAL CTA -->
       <div class="final-cta">
-        <div class="fc-title">Выбери стратегию — получи <em>план действий</em></div>
-        <p class="fc-desc">С твоим профилем реально выйти на <strong style="color:var(--accent)">${inc.y2||'целевой доход'}</strong> за 2 года. Нужен только правильный путь.</p>
+        <div class="fc-title">Выбери стратегию — и получи <em>детальный план</em></div>
+        <p class="fc-desc" id="fc-desc">С твоим профилем реально выйти на <strong style="color:var(--accent)">${inc.y2||'целевой доход'}</strong> за 2 года. Выбери путь выше — откроется персональный план действий.</p>
         <div class="fc-btns">
-          <button class="btn btn-lg" onclick="openModal()">🔓 Полный план · 9 900 ₸</button>
-          <a href="result.html" class="btn btn-g btn-lg">Вернуться к результату</a>
+          <a href="result.html" class="btn btn-g btn-lg">← Вернуться к результату</a>
+          <a href="choose.html" class="btn btn-g btn-lg">Новый сценарий</a>
         </div>
-        <div class="fc-note">обычно 15 990 ₸ — скидка действует до конца месяца</div>
       </div>
     `;
 
@@ -444,15 +425,39 @@
     }
   }
 
-  // ── PATH SELECTION ──
-  function selectPath(p, el, openPay=true){
+  // ── PATH SELECTION — ведёт на детальную страницу ──
+  function selectPath(p, el){
     document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('sel'));
     document.querySelectorAll('[id^="chk-"]').forEach(c=>c.textContent='');
     el.classList.add('sel');
     const chk = document.getElementById('chk-'+p);
     if(chk) chk.textContent = '✓';
     save('selected_path', p);
-    if(openPay) setTimeout(()=>openModal(), 700);
+
+    // Update roadmap for selected path
+    const rm = getRoadmapForPath(R.sc, R.income, p);
+    const stepsEl = document.getElementById('roadmap-steps');
+    const titleEl = document.getElementById('roadmap-title');
+    if(stepsEl){
+      stepsEl.innerHTML = rm.map((s,i)=>`
+        <div class="rm-item">
+          <div class="rm-num">${i+1}</div>
+          <div>
+            <div class="rm-period">${s.period}</div>
+            <div class="rm-step-title">${s.title}</div>
+            <div class="rm-desc">${s.desc}</div>
+            <div class="rm-income">${s.income}</div>
+          </div>
+        </div>`).join('');
+    }
+    if(titleEl){
+      const paths = getPathsData(R.prof||'other', R.sc||'switch', R.growthType||'stable', R.direction||null);
+      const pdata = p==='a' ? paths.a : paths.b;
+      titleEl.textContent = `Дорожная карта · ${pdata.name}`;
+    }
+
+    // Navigate to detail page after brief delay
+    setTimeout(()=>{ window.location.href = 'path-detail.html'; }, 600);
   }
 
   // ── DATA ──
@@ -641,30 +646,65 @@
     }[sc] || {title:'Без стратегии ты теряешь время',desc:'Каждый месяц без выбранного направления — это месяц потерянного прогресса и дохода.'};
   }
 
-  function getRoadmap(sc, inc){
-    const y2  = inc.y2  || '—';
-    const now = inc.now || '—';
-    const y5  = inc.y5  || 'значительно выше';
-    return {
-      switch:[
-        {period:'Месяцы 1–3',  title:'Подготовка и первые шаги',    desc:'Анализ целевого рынка. Портфолио или резюме под новую нишу. 3–5 разговоров с людьми из новой сферы.',       income:now},
-        {period:'Месяцы 4–8',  title:'Первые результаты',           desc:'Первый проект или позиция. Нетворкинг, менторы, обратная связь от рынка — скорректируй курс.',              income:now},
-        {period:'Год 1–2',     title:'Рост и закрепление',          desc:'Наращивание экспертизы, повышение стоимости, переход на следующий уровень в новой профессии.',               income:y2},
-        {period:'Год 2–3',     title:'Экспертный уровень',          desc:'Консалтинг, лидерская роль или собственный проект. Доход выходит на плановый уровень.',                      income:y5},
-      ],
-      grow:[
-        {period:'Месяцы 1–2',  title:'Аудит рыночной ценности',     desc:'Сравнение с рынком, выявление недостающих навыков, определение целевой позиции и работодателей.',            income:now},
-        {period:'Месяцы 3–6',  title:'Рост ценности',               desc:'Освоение ключевых навыков, публичная экспертиза, переговоры о повышении или поиск нового места.',             income:now},
-        {period:'Год 1–2',     title:'Новый уровень дохода',        desc:'Смена работодателя или роли с целевым доходом. Рост через смену контекста, а не ожидание.',                  income:y2},
-        {period:'Год 2–3',     title:'Стратегическое позиционирование', desc:'Управленческая роль или ключевая экспертная позиция. Бонусы и equity становятся реальными.',             income:y5},
-      ],
-      restart:[
-        {period:'Месяцы 1–2',  title:'Стабилизация',                desc:'Финансовая подушка, первая форма дохода (фриланс, временная занятость), восстановление ресурса.',            income:now},
-        {period:'Месяцы 3–6',  title:'Выбор направления',           desc:'Тестирование 2–3 направлений. Фокусировка на наиболее перспективном по итогам первых попыток.',               income:now},
-        {period:'Год 1–2',     title:'Новая траектория',            desc:'Устойчивый рост в выбранном направлении. Формирование репутации и первые значимые результаты.',               income:y2},
-        {period:'Год 2–3',     title:'Выход на целевой доход',      desc:'Перезапуск завершён. Доход на целевом уровне, стратегия работает, вектор понятен.',                           income:y5},
-      ],
-    }[sc] || [];
+  function getRoadmapForPath(sc, inc, path){
+    // Path A = влияние/быстрый, Path B = управление/стабильный
+    const y2  = inc?.y2  || '—';
+    const now = inc?.now || '—';
+    const y5  = inc?.y5  || 'значительно выше';
+
+    const MAPS = {
+      switch:{
+        a:[
+          {period:'Месяцы 1–2', title:'Исследование и нетворкинг',       desc:'Поговори с 10–15 людьми из целевой сферы. LinkedIn, конференции, профессиональные чаты. Задача — понять реальность изнутри, а не из статей.',  income:now},
+          {period:'Месяцы 3–5', title:'Первый результат или проект',      desc:'Стажировка, фриланс-проект или side-project. Нужно что-то конкретное в портфолио — реальное, а не учебное.',                                     income:now},
+          {period:'Месяцы 6–10',title:'Первый оффер или первый клиент',   desc:'С портфолио и нетворком выходи на рынок. Цель — первый оффер или первый платящий клиент. Не ждать идеальной подготовки.',                           income:y2},
+          {period:'Год 1–2',    title:'Укрепление и рост дохода',         desc:'Первый год в новой сфере — обучение на практике. Не сравнивай себя с ветеранами. Фокус — скорость роста, а не абсолютный уровень.',                income:y2},
+          {period:'Год 2–3',    title:'Экспертиза и переход на новый уровень',desc:'Ты уже не новичок. Пора претендовать на более высокие позиции или повышать ставку. Цель — экспертный уровень с ценностью выше рынка.',         income:y5},
+        ],
+        b:[
+          {period:'Месяцы 1–3', title:'Глубокая подготовка и план',        desc:'Составь детальный план перехода: какие навыки нужны, какие компании целевые, какое портфолио нужно. Действуй системно, не хаотично.',           income:now},
+          {period:'Месяцы 4–8', title:'Обучение и сертификация',           desc:'Пройди профильный курс или получи сертификат. Это снижает барьер входа и повышает уверенность в переговорах с работодателями.',                   income:now},
+          {period:'Месяцы 9–14',title:'Первая позиция в новой сфере',      desc:'С подготовленным портфолио и сертификатом выходи на рынок. Системный подход даёт более высокую стартовую точку входа.',                          income:y2},
+          {period:'Год 2–3',    title:'Стабильный рост и специализация',   desc:'Углубляй экспертизу в выбранной нише. Постепенный системный рост без скачков — твой стиль и твоё преимущество.',                               income:y2},
+          {period:'Год 3+',     title:'Экспертный уровень',                desc:'Признанный специалист в новой сфере. Менторство, более высокие позиции или консалтинг.',                                                          income:y5},
+        ],
+      },
+      grow:{
+        a:[
+          {period:'Месяцы 1–2', title:'Аудит и переговоры о повышении',    desc:'Сравни свою зарплату с рынком. Если ниже — иди к руководителю с данными. Если откажут — это сигнал искать новое место.',                        income:now},
+          {period:'Месяцы 3–6', title:'Смена работодателя или роли',       desc:'Поиск компании, готовой платить за твой уровень. Не жди — действуй. Лучший рост дохода происходит при смене работодателя.',                    income:now},
+          {period:'Месяцы 7–12',title:'Закрепление на новом уровне',       desc:'Первые 6 месяцев на новом месте — доказательство своей ценности. Выстраивай репутацию и результаты.',                                           income:y2},
+          {period:'Год 2',      title:'Рост и следующий шаг',              desc:'С доказанными результатами переходи к следующему уровню — лидерство, расширенная роль или ещё одна смена.',                                      income:y2},
+          {period:'Год 3',      title:'Стратегическое позиционирование',   desc:'Ты уже в высокооплачиваемом сегменте. Цель — управление, консалтинг или equity в растущей компании.',                                          income:y5},
+        ],
+        b:[
+          {period:'Месяцы 1–3', title:'Специализация и прокачка навыков',  desc:'Выбери узкую нишу внутри своей профессии. Глубокая специализация = дефицитность = выше оплата. Запишись на целевой курс.',                    income:now},
+          {period:'Месяцы 4–8', title:'Повышение внутри текущей компании', desc:'С новыми навыками иди на переговоры. Подготовь кейсы своей ценности. Если нет роста — начинай смотреть рынок.',                               income:now},
+          {period:'Год 1',      title:'Новая роль или новый работодатель',  desc:'Специализация открывает двери к более высоким позициям. Переход с сохранением стабильности.',                                                   income:y2},
+          {period:'Год 1–2',    title:'Консолидация на новом уровне',      desc:'Стабильный рост внутри выбранного пути. Репутация эксперта в узкой нише.',                                                                       income:y2},
+          {period:'Год 3',      title:'Лидерская или экспертная позиция',  desc:'Head of / Lead / независимый консультант. Ты на верху своей специализации.',                                                                     income:y5},
+        ],
+      },
+      restart:{
+        a:[
+          {period:'Недели 1–4',  title:'Стабилизация и первый доход',      desc:'Первая задача — не найти идеальное направление, а найти хоть какой-то доход. Фриланс, временная работа, небольшие заказы.',                   income:now},
+          {period:'Месяцы 2–4',  title:'Тестирование 2–3 направлений',    desc:'Попробуй несколько вариантов параллельно. Не ищи ответ в голове — ищи в реальных попытках. Быстрый фидбэк важнее долгого планирования.',       income:now},
+          {period:'Месяцы 5–8',  title:'Фокус на лучшем варианте',        desc:'К этому моменту один из вариантов даёт больше всего — фокусируйся на нём. Убери остальное.',                                                    income:now},
+          {period:'Месяцы 9–18', title:'Рост и закрепление',              desc:'Ты уже в новом направлении. Инвестируй в навыки и репутацию. Первые признаки устойчивого дохода.',                                             income:y2},
+          {period:'Год 2–3',     title:'Новая траектория сформирована',   desc:'Перезапуск завершён. Доход на целевом уровне, вектор понятен, уверенность восстановлена.',                                                       income:y5},
+        ],
+        b:[
+          {period:'Месяцы 1–3',  title:'Подготовленный перезапуск',       desc:'В отличие от хаотичного старта — сначала составь план. Финансовая подушка, чёткое направление, первые шаги без спешки.',                     income:now},
+          {period:'Месяцы 4–7',  title:'Обучение и подготовка к входу',   desc:'Курс, сертификат или менторство в выбранном направлении. Вход через подготовку — выше стартовая позиция.',                                    income:now},
+          {period:'Месяцы 8–14', title:'Первая позиция нового старта',    desc:'С подготовкой и планом — выход на рынок. Системный подход даёт более стабильный результат.',                                                    income:y2},
+          {period:'Год 2',       title:'Стабильность и рост',             desc:'Предсказуемый рост в новом направлении. Ты создал надёжную базу для долгосрочного развития.',                                                   income:y2},
+          {period:'Год 3',       title:'Полноценный новый старт',         desc:'Перезапуск по плану завершён. Устойчивый доход, ясная траектория.',                                                                              income:y5},
+        ],
+      },
+    };
+    const sc2 = sc||'switch';
+    const map = MAPS[sc2]||MAPS.switch;
+    return (path==='a' ? map.a : map.b) || map.a;
   }
 
   // ── MODAL ──
