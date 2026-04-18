@@ -669,6 +669,8 @@
       .f-links { display: none; }
       .section, .section-sm { padding: 56px 20px; }
       .section-sm { padding-top: 0; }
+      /* New blocks responsive */
+      .model-grid { grid-template-columns: 1fr !important; }
     }
   </style>
 </head>
@@ -706,11 +708,19 @@
         <span class="ghost">будущее заранее?</span>
       </h1>
 
-      <p class="hero-sub">
+      <p class="hero-sub" style="margin-bottom:10px">
         <strong>Trajecta</strong> — система сценарного моделирования.
         Анализирует твою поведенческую модель и строит прогноз дохода,
         карьерной траектории и вероятности успеха на 5&nbsp;лет вперёд.
       </p>
+      <p style="font-size:.9rem;color:rgba(198,255,0,.75);font-weight:600;margin-bottom:32px;line-height:1.5">
+        Ты уже движешься по траектории, которая определит твой доход через 2–3 года.
+      </p>
+
+      <!-- URGENCY -->
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,140,60,.1);border:1px solid rgba(255,140,60,.25);color:rgba(255,160,80,.9);font-size:.75rem;font-weight:600;padding:5px 14px;border-radius:100px;margin-bottom:20px;letter-spacing:.08em">
+        ⚡ Доступно ограниченное количество симуляций сегодня
+      </div>
 
       <div class="hero-actions">
         <a href="choose.html" class="btn btn-lg">Смоделировать сценарий →</a>
@@ -724,7 +734,10 @@
           <div class="proof-av">👨‍🔬</div>
           <div class="proof-av">👩‍💼</div>
         </div>
-        <p class="proof-txt">Уже <strong>3 200+</strong> сценариев смоделировано</p>
+        <div>
+          <p class="proof-txt">Уже <strong>3 200+</strong> сценариев смоделировано</p>
+          <p style="font-size:.74rem;color:var(--muted);margin-top:3px">87% пользователей отметили совпадение с реальной ситуацией</p>
+        </div>
       </div>
     </div>
 
@@ -827,34 +840,65 @@
   <section class="section" id="how">
     <div class="reveal">
       <span class="section-label">Как работает</span>
-      <h2 class="section-title">Алгоритм за <em>4 шага</em></h2>
+      <h2 class="section-title">Алгоритм за <em>5 шагов</em></h2>
       <p class="section-sub">От выбора сценария до персонального прогноза — без шаблонов и обобщений.</p>
     </div>
     <div class="steps reveal d1" style="grid-template-columns:repeat(5,1fr)">
-      <div class="step">
+      <div class="step" style="min-width:0">
         <div class="step-n">01</div><div class="step-ico">🎯</div>
         <h3>Выбор сценария</h3>
         <p>Смена профессии, рост дохода или перезапуск. Каждый запускает свою прогностическую модель.</p>
       </div>
-      <div class="step">
+      <div class="step" style="min-width:0">
         <div class="step-n">02</div><div class="step-ico">👤</div>
-        <h3>Профиль и направление</h3>
+        <h3>Профиль</h3>
         <p>Текущая профессия и желаемое направление. Вопросы адаптируются под твой контекст.</p>
       </div>
-      <div class="step">
+      <div class="step" style="min-width:0">
         <div class="step-n">03</div><div class="step-ico">🧠</div>
         <h3>Настройка модели</h3>
         <p>6–7 параметров: риск, горизонт, приоритеты, тип роста. Каждый влияет на расчёт дохода.</p>
       </div>
-      <div class="step">
+      <div class="step" style="min-width:0">
         <div class="step-n">04</div><div class="step-ico">📊</div>
-        <h3>Прогноз и профиль</h3>
-        <p>Доход на 2 и 5 лет, вероятность успеха, навыки, главный риск и рекомендованные профессии.</p>
+        <h3>Прогноз</h3>
+        <p>Доход на 2 и 5 лет, вероятность успеха, главный риск и рекомендованные профессии.</p>
       </div>
-      <div class="step">
+      <div class="step" style="min-width:0">
         <div class="step-n">05</div><div class="step-ico">🗺️</div>
-        <h3>Стратегия развития</h3>
+        <h3>Стратегия</h3>
         <p>Два персональных пути с зарплатами КЗ, сроками входа и дорожной картой на 3 года.</p>
+      </div>
+    </div>
+
+    <!-- КАК РАБОТАЕТ МОДЕЛЬ -->
+    <div class="reveal d2 model-grid" style="margin-top:32px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:18px;padding:28px 32px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center">
+      <div>
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Как работает модель</div>
+        <div style="font-family:var(--display);font-size:1.15rem;font-weight:800;letter-spacing:-.025em;margin-bottom:12px;line-height:1.3">Не тест. <span style="color:var(--accent)">Алгоритм.</span></div>
+        <p style="font-size:.875rem;color:var(--muted);line-height:1.7">Trajecta анализирует комбинацию поведенческих параметров и строит персональный прогноз — так же, как финансовые модели оценивают инвестиции.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+          <div style="font-size:1.1rem;margin-bottom:6px">🧠</div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:4px">Поведенческая модель</div>
+          <div style="font-size:.75rem;color:var(--muted)">Как ты принимаешь решения</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+          <div style="font-size:1.1rem;margin-bottom:6px">⚡</div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:4px">Толерантность к риску</div>
+          <div style="font-size:.75rem;color:var(--muted)">Готовность к неопределённости</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+          <div style="font-size:1.1rem;margin-bottom:6px">⏱</div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:4px">Скорость решений</div>
+          <div style="font-size:.75rem;color:var(--muted)">Темп и горизонт планирования</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+          <div style="font-size:1.1rem;margin-bottom:6px">📈</div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:4px">Карьерные траектории</div>
+          <div style="font-size:.75rem;color:var(--muted)">История рынка КЗ 2024–2026</div>
+        </div>
       </div>
     </div>
   </section>
@@ -900,23 +944,38 @@
     <div class="reveal">
       <span class="section-label">B2B решение</span>
       <h2 class="section-title">Для бизнеса и <em>HR</em></h2>
-      <p class="section-sub">Trajecta масштабируется в корпоративный инструмент оценки и развития людей.</p>
+      <p class="section-sub">Trajecta — корпоративный инструмент оценки и развития людей. Также используется для оценки кандидатов на интервью.</p>
     </div>
     <div class="b2b-grid reveal d1">
       <div class="b2b-card">
-        <div class="b2b-ico">🏢</div>
-        <h3>HR и подбор</h3>
-        <p>Алгоритм определяет карьерные траектории кандидатов и прогнозирует их потенциал роста в компании.</p>
+        <div class="b2b-ico">🔍</div>
+        <h3>HR и найм</h3>
+        <p>Алгоритм оценивает поведенческий профиль кандидата на интервью и прогнозирует потенциал роста в конкретной роли.</p>
+      </div>
+      <div class="b2b-card">
+        <div class="b2b-ico">🗺️</div>
+        <h3>Карьерные треки</h3>
+        <p>Персональные траектории развития для каждого сотрудника — кто готов к повышению, кому нужна поддержка или смена роли.</p>
       </div>
       <div class="b2b-card">
         <div class="b2b-ico">📚</div>
         <h3>Корп. обучение</h3>
-        <p>Выявляет мотивацию и поведенческую модель сотрудников, формирует персональные треки развития.</p>
+        <p>Выявляет мотивацию и поведенческую модель сотрудников, формирует персональные программы развития.</p>
+      </div>
+      <div class="b2b-card">
+        <div class="b2b-ico">🛡️</div>
+        <h3>Риск выгорания</h3>
+        <p>Выявляет сотрудников в зоне риска до того, как они подадут заявление об уходе. Снижает текучку на 30–40%.</p>
       </div>
       <div class="b2b-card">
         <div class="b2b-ico">🚀</div>
         <h3>Развитие команды</h3>
         <p>Помогает руководителям видеть кто готов к росту, кто в риске выгорания, кому нужна смена роли.</p>
+      </div>
+      <div class="b2b-card" style="background:rgba(96,165,250,.05);border-color:rgba(96,165,250,.2)">
+        <div class="b2b-ico">🏢</div>
+        <h3>Демо для бизнеса</h3>
+        <p>30-минутное демо на вашей команде. <a href="b2b.html" style="color:rgba(96,165,250,.9);font-weight:600">Запросить демо →</a></p>
       </div>
     </div>
   </section>
