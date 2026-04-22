@@ -120,6 +120,35 @@
 
     @media(max-width:900px){.cards{grid-template-columns:1fr;max-width:480px;gap:12px;}}
     @media(max-width:480px){header{padding:0 20px;}.sdots{right:20px;}main{padding:96px 16px 52px;}.ptitle{font-size:1.85rem;}}
+
+    /* ── ГЕЙМИФИКАЦИЯ choose.html ── */
+
+    /* Floating particles */
+    .particle{position:absolute;border-radius:50%;pointer-events:none;animation:floatUp 1s ease-out forwards;}
+    @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-60px) scale(0)}}
+
+    /* Card illustrations */
+    .c-illustration{position:absolute;right:-10px;bottom:-10px;width:110px;height:110px;opacity:.12;pointer-events:none;font-size:5rem;display:flex;align-items:center;justify-content:center;filter:blur(2px);transition:opacity .3s,transform .3s;}
+    .sc:hover .c-illustration{opacity:.22;transform:scale(1.1) rotate(-5deg);}
+
+    /* Glow behind card on hover */
+    .sw:hover{box-shadow:0 24px 60px rgba(198,255,0,.12),0 0 0 1px rgba(198,255,0,.25);}
+    .gr:hover{box-shadow:0 24px 60px rgba(96,165,250,.12),0 0 0 1px rgba(96,165,250,.25);}
+    .re:hover{box-shadow:0 24px 60px rgba(167,139,250,.12),0 0 0 1px rgba(167,139,250,.25);}
+
+    /* Picked state — stronger glow */
+    .sw.picked{box-shadow:0 0 40px rgba(198,255,0,.2),0 0 0 2px rgba(198,255,0,.5);}
+    .gr.picked{box-shadow:0 0 40px rgba(96,165,250,.2),0 0 0 2px rgba(96,165,250,.5);}
+    .re.picked{box-shadow:0 0 40px rgba(167,139,250,.2),0 0 0 2px rgba(167,139,250,.5);}
+
+    /* Pulse on emoji */
+    @keyframes emoPop{0%{transform:scale(1)}40%{transform:scale(1.4)}70%{transform:scale(.9)}100%{transform:scale(1)}}
+    .cemoji{display:block;font-size:2.6rem;margin-bottom:16px;transition:transform .2s;}
+    .sc:hover .cemoji{animation:emoPop .5s cubic-bezier(.34,1.56,.64,1);}
+
+    /* Count-up tag */
+    .cuser-tag{position:absolute;top:16px;right:52px;font-size:.68rem;font-weight:700;color:var(--muted);background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:100px;padding:3px 10px;}
+
   </style>
 </head>
 <body>
@@ -147,6 +176,7 @@
   <div class="cards">
 
     <div class="sc sw" id="c-switch" onclick="pick('switch',this)">
+      <div class="c-illustration">🚀</div>
       <div class="chk" id="k-switch"></div>
       <span class="cemoji">🔄</span>
       <div class="cbadge">Сценарий 1</div>
@@ -161,6 +191,7 @@
     </div>
 
     <div class="sc gr" id="c-grow" onclick="pick('grow',this)">
+      <div class="c-illustration">💎</div>
       <div class="chk" id="k-grow"></div>
       <span class="cemoji">📈</span>
       <div class="cbadge">Сценарий 2</div>
@@ -175,6 +206,7 @@
     </div>
 
     <div class="sc re" id="c-restart" onclick="pick('restart',this)">
+      <div class="c-illustration">🌱</div>
       <div class="chk" id="k-restart"></div>
       <span class="cemoji">🔁</span>
       <div class="cbadge">Сценарий 3</div>
@@ -211,6 +243,18 @@
     if(k)k.textContent='✓';
   }
 
+  function spawnParticles(el, color){
+    const rect = el.getBoundingClientRect();
+    for(let i=0;i<8;i++){
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 4+Math.random()*6;
+      p.style.cssText = `width:${size}px;height:${size}px;background:${color};left:${rect.left+Math.random()*rect.width}px;top:${rect.top+window.scrollY+Math.random()*rect.height*0.5}px;position:fixed;z-index:9999;animation-delay:${Math.random()*0.2}s`;
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(), 1200);
+    }
+  }
+
   function pick(sc,el){
     ['switch','grow','restart'].forEach(s=>{
       const c=document.getElementById('c-'+s);
@@ -221,12 +265,14 @@
     el.classList.add('picked');
     document.getElementById('k-'+sc).textContent='✓';
     save('scenario',sc);
+    const colors={switch:'rgba(198,255,0,.8)',grow:'rgba(96,165,250,.8)',restart:'rgba(167,139,250,.8)'};
+    spawnParticles(el, colors[sc]||'rgba(198,255,0,.8)');
 
     // Loading animation
     const lov=document.getElementById('lov');
     const lf=document.getElementById('lfill');
     const lt=document.getElementById('ltxt');
-    const msgs=['Инициализация модели...','Загрузка параметров...','Подготовка алгоритма...','Готово!'];
+    const msgs=['Анализируем рынок КЗ...','Загружаем прогностическую модель...','Готовим вопросы под тебя...','Всё готово!'];
     const pcts=[20,55,85,100];
     lov.classList.add('show');
     let i=0;
