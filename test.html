@@ -77,28 +77,32 @@
     .okey{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-weight:800;font-size:.82rem;flex-shrink:0;transition:all .2s;}
     .obody{flex:1;}
     .oval{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;transition:color .2s;}
-    .otxt{font-size:.93rem;line-height:1.55;color:var(--muted);transition:color .2s;}
-    .ochk{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;margin-top:5px;transition:all .2s;color:transparent;}
+    /* OPTION CARDS — упрощённые, без длинного текста */
+    .opts{display:flex;flex-direction:column;gap:10px;}
+    .opt{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;transition:all .2s;text-align:left;width:100%;}
+    .opt:hover{border-color:var(--border2);background:rgba(255,255,255,.05);}
+    .okey{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-size:.75rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .2s;}
+    .obody{flex:1;}
+    .oval{font-size:1rem;font-weight:600;color:var(--text);transition:color .2s;}
+    .otxt{font-size:.82rem;line-height:1.5;color:var(--muted);margin-top:3px;transition:color .2s;}
+    .ochk{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;transition:all .2s;color:transparent;}
 
     /* A = blue */
     .opt.sa{border-color:rgba(96,165,250,.45);background:rgba(96,165,250,.07);}
     .opt.sa .okey{background:rgba(96,165,250,.2);color:rgba(96,165,250,1);}
-    .opt.sa .oval{color:rgba(96,165,250,.7);}
-    .opt.sa .otxt{color:var(--text);}
+    .opt.sa .oval{color:rgba(96,165,250,.9);}
     .opt.sa .ochk{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.15);color:rgba(96,165,250,1);}
 
     /* B = green */
     .opt.sb{border-color:rgba(198,255,0,.4);background:var(--ad);}
     .opt.sb .okey{background:rgba(198,255,0,.18);color:var(--accent);}
-    .opt.sb .oval{color:rgba(198,255,0,.7);}
-    .opt.sb .otxt{color:var(--text);}
+    .opt.sb .oval{color:var(--accent);}
     .opt.sb .ochk{border-color:var(--accent);background:rgba(198,255,0,.15);color:var(--accent);}
 
     /* C = purple */
     .opt.sc{border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.07);}
     .opt.sc .okey{background:rgba(167,139,250,.2);color:rgba(167,139,250,1);}
-    .opt.sc .oval{color:rgba(167,139,250,.7);}
-    .opt.sc .otxt{color:var(--text);}
+    .opt.sc .oval{color:rgba(167,139,250,.9);}
     .opt.sc .ochk{border-color:rgba(167,139,250,.7);background:rgba(167,139,250,.15);color:rgba(167,139,250,1);}
 
     .hint{font-size:.78rem;color:rgba(255,100,100,.7);text-align:center;min-height:20px;margin-top:10px;opacity:0;transition:opacity .3s;}
@@ -143,6 +147,39 @@
     .prof-chip{background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--B);font-size:.9rem;color:var(--muted);}
     .prof-chip:hover{border-color:rgba(255,255,255,.2);color:var(--text);background:rgba(255,255,255,.05);}
     .prof-chip.picked{border-color:rgba(198,255,0,.5);background:var(--ad);color:var(--accent);}
+
+    /* ── ГЕЙМИФИКАЦИЯ test.html ── */
+
+    /* XP / прогресс-бар с числом */
+    .xp-wrap{width:100%;max-width:680px;display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+    .xp-bar-track{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+    .xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);border-radius:4px;transition:width .8s cubic-bezier(.34,1.2,.64,1);box-shadow:0 0 8px var(--ag);}
+    .xp-label{font-family:var(--D);font-size:.75rem;font-weight:800;color:var(--accent);white-space:nowrap;}
+
+    /* Answer pop animation */
+    @keyframes optPop{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
+    @keyframes checkBounce{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+    .opt.sa .ochk,
+    .opt.sb .ochk,
+    .opt.sc .ochk{animation:checkBounce .35s cubic-bezier(.34,1.56,.64,1) both;}
+
+    /* Opt hover lift */
+    .opt:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.3);}
+    .opt.sa:hover{box-shadow:0 4px 20px rgba(96,165,250,.15);}
+    .opt.sb:hover{box-shadow:0 4px 20px rgba(198,255,0,.15);}
+    .opt.sc:hover{box-shadow:0 4px 20px rgba(167,139,250,.15);}
+
+    /* Streak badge */
+    .streak-badge{display:none;align-items:center;gap:6px;background:rgba(255,140,60,.12);border:1px solid rgba(255,140,60,.3);color:rgba(255,160,80,.9);font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:100px;animation:fup .4s ease both;}
+    .streak-badge.show{display:inline-flex;}
+    @keyframes streakPop{0%{transform:scale(0) rotate(-10deg)}60%{transform:scale(1.2) rotate(3deg)}100%{transform:scale(1) rotate(0)}}
+    .streak-badge.pop{animation:streakPop .5s cubic-bezier(.34,1.56,.64,1) both;}
+
+    /* Prof chips hover */
+    .prof-chip{transition:all .18s cubic-bezier(.34,1.2,.64,1);}
+    .prof-chip:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3);}
+    .prof-chip.picked{transform:scale(1.04);}
+
   </style>
 </head>
 <body>
@@ -189,7 +226,14 @@
 
   <div class="q-top" style="width:100%;max-width:680px">
     <div class="q-counter">Параметр <span id="qnum">1</span> из 8</div>
+    <div class="xp-wrap" id="xp-wrap">
+    <div class="xp-bar-track"><div class="xp-bar-fill" id="xp-fill" style="width:0%"></div></div>
+    <span class="xp-label" id="xp-label">0 XP</span>
+  </div>
+  <div style="width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
     <div class="qdots" id="qdots"></div>
+    <span class="streak-badge" id="streak-badge">🔥 Серия!</span>
+  </div>
   </div>
 
   <div id="qwrap" style="width:100%;max-width:680px"></div>
@@ -212,184 +256,167 @@
   const scLabel = document.getElementById('sc-label');
   if(scLabel) scLabel.textContent = LABELS[scenario]||'Смена профессии';
 
-  // ── ВОПРОСЫ АДАПТИРУЮТСЯ ПОД СЦЕНАРИЙ ──
+  // ── ВОПРОСЫ — короткие и понятные ──
 
-  // Общие вопросы (для всех сценариев)
   const Q_PROFESSION = {
     tag:'👤 Профессия', isSelect:true, key:'profession',
-    text:'Кем ты работаешь сейчас или кем работал последний раз?',
+    text:'Кем ты работаешь сейчас?',
     options:[
       {val:'law',       lbl:'Юрист / Нотариус'},
-      {val:'finance',   lbl:'Финансист / Бухгалтер / Банкир'},
-      {val:'it',        lbl:'IT / Разработчик / Аналитик данных'},
-      {val:'marketing', lbl:'Маркетолог / SMM / PR'},
-      {val:'design',    lbl:'Дизайнер / Иллюстратор'},
+      {val:'finance',   lbl:'Финансист / Бухгалтер'},
+      {val:'it',        lbl:'IT / Разработчик / Аналитик'},
+      {val:'marketing', lbl:'Маркетолог / SMM'},
+      {val:'design',    lbl:'Дизайнер'},
       {val:'medicine',  lbl:'Медик / Фармацевт'},
-      {val:'hr',        lbl:'HR / Рекрутер / L&D'},
-      {val:'education', lbl:'Педагог / Тренер / Коуч'},
-      {val:'sales',     lbl:'Продажи / Менеджер по клиентам'},
-      {val:'engineering',lbl:'Инженер / Технолог / Производство'},
+      {val:'hr',        lbl:'HR / Рекрутер'},
+      {val:'education', lbl:'Педагог / Тренер'},
+      {val:'sales',     lbl:'Продажи / Менеджер'},
+      {val:'engineering',lbl:'Инженер / Технолог'},
       {val:'creative',  lbl:'Творческая сфера (флорист, повар, фотограф)'},
       {val:'other',     lbl:'Другая сфера (укажи свою)'},
     ]
   };
 
-  // CSS for other input field
+  // CSS for other input
   const otherStyle = document.createElement('style');
-  otherStyle.textContent = `
-    .other-input-wrap{margin-top:10px;display:none;animation:fup .3s ease both;}
-    .other-input-wrap.show{display:block;}
-    .other-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--am);border-radius:10px;color:var(--text);font-family:var(--B);font-size:.95rem;padding:12px 16px;outline:none;transition:border-color .2s;}
-    .other-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ad);}
-    .other-input::placeholder{color:var(--dim);}
-  `;
+  otherStyle.textContent = `.other-input-wrap{margin-top:10px;display:none;}.other-input-wrap.show{display:block;}.other-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--am);border-radius:10px;color:var(--text);font-family:var(--B);font-size:.95rem;padding:12px 16px;outline:none;transition:border-color .2s;}.other-input:focus{border-color:var(--accent);}.other-input::placeholder{color:var(--dim);}`;
   document.head.appendChild(otherStyle);
 
-  // Вопрос о желаемом направлении (для switch и restart) — универсальный
   const Q_DIRECTION = {
-    tag:'🧭 Направление', key:'direction',
-    text:'Что для тебя важнее всего в новом направлении?',
-    a:{val:'income',  lbl:'Рост дохода',          txt:'Главное — зарабатывать значительно больше. Новое направление должно давать финансовую свободу и высокий потолок.'},
-    b:{val:'stable',  lbl:'Стабильность',          txt:'Предсказуемость и надёжность важнее максимального дохода. Хочу уверенности в завтрашнем дне.'},
-    c:{val:'new',     lbl:'Смена сферы / свобода', txt:'Хочу кардинально сменить контекст и найти то, что действительно моё. Деньги — следствие правильного выбора.'},
+    tag:'🧭 Приоритет', key:'direction',
+    text:'Что важнее всего в новой жизни?',
+    a:{val:'income', lbl:'Больше денег',    txt:'Хочу зарабатывать значительно больше'},
+    b:{val:'stable', lbl:'Стабильность',    txt:'Хочу уверенности и предсказуемости'},
+    c:{val:'new',    lbl:'Свобода и смысл', txt:'Хочу заниматься тем, что нравится'},
   };
 
-  // Вопросы по сценарию СМЕНА ПРОФЕССИИ
   const QS_SWITCH = [
     Q_PROFESSION,
     Q_DIRECTION,
     { tag:'⚡ Риск', key:'risk',
-      text:'Ты готов первые 6–12 месяцев зарабатывать меньше, чем сейчас?',
-      a:{val:'low',   lbl:'Нет, мне нужна стабильность',    txt:'Хочу перейти плавно, без потери дохода. Буду двигаться осторожно, но надёжно.'},
-      b:{val:'medium',lbl:'Готов на небольшое снижение',     txt:'Могу потерпеть 3–4 месяца. Главное — быстро выйти на прежний уровень.'},
-      c:{val:'high',  lbl:'Да, готов на риск ради результата',txt:'Понимаю, что переход требует жертв. Готов терпеть ради большого скачка вперёд.'},
+      text:'Готов ли ты временно зарабатывать меньше?',
+      a:{val:'low',   lbl:'Нет, нужна стабильность', txt:'Хочу перейти без потери дохода'},
+      b:{val:'medium',lbl:'Немного, 2–3 месяца',      txt:'Могу потерпеть ради результата'},
+      c:{val:'high',  lbl:'Да, готов рискнуть',       txt:'Понимаю риски, хочу быстрый скачок'},
     },
-    { tag:'⏱ Скорость', key:'speed',
-      text:'Как быстро ты хочешь совершить переход?',
-      a:{val:'slow',  lbl:'Постепенно, 12–18 месяцев',   txt:'Хочу основательно подготовиться, получить дополнительное образование, не торопиться.'},
-      b:{val:'medium',lbl:'За 6–12 месяцев',              txt:'Оптимальный темп — подготовка параллельно с текущей работой, потом переход.'},
-      c:{val:'fast',  lbl:'Как можно быстрее, до 6 мес.', txt:'Хочу уйти уже сейчас. Буду учиться в процессе, главное — начать.'},
+    { tag:'⏱ Темп', key:'speed',
+      text:'Как быстро хочешь сделать переход?',
+      a:{val:'slow',  lbl:'Постепенно, 1–2 года', txt:'Без спешки, основательно'},
+      b:{val:'medium',lbl:'За 6–12 месяцев',       txt:'Параллельно с работой'},
+      c:{val:'fast',  lbl:'Как можно быстрее',     txt:'Хочу уйти уже сейчас'},
     },
-    { tag:'🎯 Приоритет', key:'priority',
-      text:'Что важнее всего в новой профессии?',
-      a:{val:'money',    lbl:'Высокий доход',          txt:'Главная цель — зарабатывать значительно больше. Новая сфера должна давать финансовую свободу.'},
-      b:{val:'stability',lbl:'Стабильность',           txt:'Хочу уверенности в завтрашнем дне. Предсказуемый доход важнее максимального.'},
-      c:{val:'interest', lbl:'Смысл и интерес',        txt:'Хочу наконец заниматься тем, что нравится. Деньги вторичны — главное призвание.'},
+    { tag:'💪 Опыт', key:'skills',
+      text:'Есть ли опыт в желаемой сфере?',
+      a:{val:'low',   lbl:'Нет, с нуля',              txt:'Всему буду учиться заново'},
+      b:{val:'medium',lbl:'Базовое понимание есть',    txt:'Немного знаю, опыта мало'},
+      c:{val:'high',  lbl:'Есть переносимые навыки',   txt:'Мои навыки частично подходят'},
     },
-    { tag:'💪 Навыки', key:'skills',
-      text:'Есть ли у тебя навыки или опыт в желаемом направлении?',
-      a:{val:'low',   lbl:'Почти нет, начинаю с нуля',       txt:'В новой сфере я новичок. Нужно будет учиться практически всему заново.'},
-      b:{val:'medium',lbl:'Базовое понимание есть',           txt:'Кое-что знаю — читал, пробовал, интересовался. Но глубокого опыта нет.'},
-      c:{val:'high',  lbl:'Есть переносимые навыки',         txt:'Мои текущие навыки частично применимы в новой сфере. Перенос будет быстрым.'},
+    { tag:'📅 Цель', key:'horizon',
+      text:'Чего хочешь достичь через 2 года?',
+      a:{val:'short',lbl:'Закрепиться на новом месте', txt:'Стабильно работать в новой сфере'},
+      b:{val:'mid',  lbl:'Зарабатывать не меньше',     txt:'Доход не ниже текущего'},
+      c:{val:'long', lbl:'Стать экспертом',             txt:'Репутация, клиенты или свой проект'},
     },
-    { tag:'📅 Горизонт', key:'horizon',
-      text:'На какой результат ты рассчитываешь через 2 года?',
-      a:{val:'short',lbl:'Закрепиться на новом месте',    txt:'Через 2 года хочу просто уверенно работать в новой сфере и стабильно зарабатывать.'},
-      b:{val:'mid',  lbl:'Выйти на хороший доход',        txt:'Через 2 года хочу зарабатывать не меньше, чем сейчас, а лучше — больше.'},
-      c:{val:'long', lbl:'Стать экспертом / запустить своё', txt:'Через 2 года хочу уже иметь репутацию, клиентов или собственный проект в новой сфере.'},
-    },
-    { tag:'🚀 Тип роста', key:'growthType',
-      text:'Как ты планируешь двигаться к новой профессии?',
-      a:{val:'fast',  lbl:'Уволюсь и пойду ва-банк',      txt:'Хочу сделать чёткий разрыв — уйти с работы и полностью сосредоточиться на переходе.'},
-      b:{val:'stable',lbl:'Буду совмещать до первых денег', txt:'Буду развивать новую сферу параллельно с текущей работой — пока не появится доход.'},
-      c:{val:'new',   lbl:'Сначала обучусь, потом уйду',   txt:'Хочу получить чёткий навык или сертификат, и только потом менять работу.'},
+    { tag:'🚀 Стратегия', key:'growthType',
+      text:'Как планируешь двигаться?',
+      a:{val:'fast',  lbl:'Уволюсь и займусь полностью', txt:'Чёткий разрыв со старым'},
+      b:{val:'stable',lbl:'Буду совмещать до первого дохода', txt:'Пока не появится заработок'},
+      c:{val:'new',   lbl:'Сначала обучусь, потом уйду', txt:'Получу навык, потом сменю работу'},
     },
   ];
 
-  // Вопросы по сценарию РОСТ ДОХОДА
   const QS_GROW = [
     Q_PROFESSION,
-    { tag:'💰 Текущий доход', key:'currentLevel',
-      text:'Насколько ты доволен своим текущим доходом?',
-      a:{val:'low',   lbl:'Зарабатываю сильно ниже рынка',   txt:'Мой доход не соответствует рынку. Понимаю, что недооценён, но не знаю как это изменить.'},
-      b:{val:'medium',lbl:'На уровне рынка, хочу больше',     txt:'Зарабатываю нормально, но хочу принципиально другого уровня. Не 20%, а в 2 раза.'},
-      c:{val:'high',  lbl:'Выше рынка, но хочу масштабировать',txt:'Уже зарабатываю хорошо. Хочу нелинейного роста — через свой бизнес, инвестиции или масштаб.'},
+    { tag:'💰 Ситуация', key:'currentLevel',
+      text:'Как оцениваешь свой доход сейчас?',
+      a:{val:'low',   lbl:'Сильно ниже рынка', txt:'Знаю что недооценён'},
+      b:{val:'medium',lbl:'На уровне рынка',    txt:'Нормально, но хочу больше'},
+      c:{val:'high',  lbl:'Выше рынка',         txt:'Хочу нелинейного роста'},
     },
-    { tag:'🎯 Стратегия', key:'growStrategy',
-      text:'Через что ты хочешь увеличить доход?',
-      a:{val:'money',   lbl:'Новая работа с более высокой зп',  txt:'Хочу найти работодателя, который заплатит за мои навыки столько, сколько они стоят на рынке.'},
-      b:{val:'interest',lbl:'Повышение / новая роль там же',    txt:'Хочу получить повышение или расширить роль в текущей компании — я знаю здесь всё.'},
-      c:{val:'stability',lbl:'Фриланс / консалтинг / свой бизнес',txt:'Хочу монетизировать экспертизу самостоятельно — без потолка зарплаты наёмного сотрудника.'},
+    { tag:'🎯 Путь', key:'growStrategy',
+      text:'Через что хочешь вырасти?',
+      a:{val:'money',    lbl:'Найти работу с зарплатой выше', txt:'Сменить работодателя'},
+      b:{val:'interest', lbl:'Повышение или новая роль',       txt:'Остаться и вырасти'},
+      c:{val:'stability',lbl:'Свой бизнес или фриланс',        txt:'Выйти из найма'},
     },
     { tag:'⚡ Готовность', key:'risk',
-      text:'Насколько ты готов рискнуть ради роста дохода?',
-      a:{val:'low',   lbl:'Хочу безопасный рост',     txt:'Не готов терять стабильность. Рост должен быть планомерным и предсказуемым.'},
-      b:{val:'medium',lbl:'Готов на разумный шаг',    txt:'Готов сменить работу или попробовать новый формат, но не к радикальным шагам.'},
-      c:{val:'high',  lbl:'Готов на агрессивный рост', txt:'Готов уволиться, запустить своё или переехать — если это даст x2–x3 к доходу.'},
+      text:'На что готов ради роста дохода?',
+      a:{val:'low',   lbl:'Безопасный рост',       txt:'Без потери стабильности'},
+      b:{val:'medium',lbl:'Готов сменить работу',  txt:'Разумный шаг вперёд'},
+      c:{val:'high',  lbl:'Готов на радикальные шаги', txt:'Уволиться, запустить своё'},
     },
-    { tag:'💪 Навыки', key:'skills',
-      text:'Как ты оцениваешь свою рыночную ценность прямо сейчас?',
-      a:{val:'low',   lbl:'Навыки есть, но не монетизированы',    txt:'Умею многое, но резюме слабое, нетворк небольшой и не умею себя продавать.'},
-      b:{val:'medium',lbl:'Хороший специалист среднего уровня',  txt:'Стабильный профессионал. Чтобы расти в доходе — нужно прокачать конкретные навыки.'},
-      c:{val:'high',  lbl:'Эксперт с сильным портфолио',         txt:'Мои навыки редкие и востребованные. Вопрос только в правильном позиционировании.'},
+    { tag:'💪 Уровень', key:'skills',
+      text:'Как оцениваешь себя как специалиста?',
+      a:{val:'low',   lbl:'Есть навыки, но плохо себя продаю', txt:'Не умею позиционировать'},
+      b:{val:'medium',lbl:'Хороший специалист',                 txt:'Нужно прокачать навыки'},
+      c:{val:'high',  lbl:'Эксперт с портфолио',                txt:'Вопрос в позиционировании'},
     },
     { tag:'📅 Срок', key:'horizon',
-      text:'За какое время ты хочешь значительно вырасти в доходе?',
-      a:{val:'short',lbl:'3–6 месяцев',   txt:'Хочу быстрый результат. Уже начал переговоры или поиск.'},
-      b:{val:'mid',  lbl:'6–12 месяцев',  txt:'Готов полгода-год инвестировать в себя, чтобы потом сделать скачок.'},
-      c:{val:'long', lbl:'1–2 года',      txt:'Строю долгосрочную стратегию. Хочу устойчивый высокий доход, а не разовый рост.'},
+      text:'За сколько хочешь вырасти в доходе?',
+      a:{val:'short',lbl:'3–6 месяцев', txt:'Хочу быстрый результат'},
+      b:{val:'mid',  lbl:'6–12 месяцев',txt:'Готов инвестировать год'},
+      c:{val:'long', lbl:'1–2 года',    txt:'Строю долгосрочно'},
     },
-    { tag:'🏆 Цель', key:'priority',
-      text:'Какую главную цель ты хочешь достичь?',
-      a:{val:'money',    lbl:'Финансовая независимость',   txt:'Хочу зарабатывать столько, чтобы не зависеть от работодателя и иметь выбор.'},
-      b:{val:'stability',lbl:'Комфортный уровень жизни',  txt:'Хочу повысить качество жизни: жильё, путешествия, семья. Без гонки за миллионами.'},
-      c:{val:'interest', lbl:'Признание и статус',        txt:'Хочу стать известным экспертом в своей области. Деньги — следствие признания.'},
+    { tag:'🏆 Зачем', key:'priority',
+      text:'Зачем тебе больше денег?',
+      a:{val:'money',    lbl:'Финансовая свобода',    txt:'Не зависеть от работодателя'},
+      b:{val:'stability',lbl:'Лучше жить',            txt:'Жильё, путешествия, семья'},
+      c:{val:'interest', lbl:'Статус и признание',    txt:'Стать лучшим в своей области'},
     },
-    { tag:'🚀 Тип роста', key:'growthType',
-      text:'Какой путь к росту дохода тебе ближе?',
-      a:{val:'fast',  lbl:'Агрессивный — новая роль / компания',  txt:'Сменю работу или позицию, чтобы сразу выйти на новый уровень. Переговоры уже веду.'},
-      b:{val:'stable',lbl:'Системный — рост внутри + навыки',     txt:'Буду планомерно прокачиваться и ждать правильного момента для повышения или перехода.'},
-      c:{val:'new',   lbl:'Нелинейный — свой проект / консалтинг',txt:'Хочу выйти за рамки найма. Планирую фриланс, консалтинг или собственный бизнес.'},
+    { tag:'🚀 Действие', key:'growthType',
+      text:'Как будешь расти?',
+      a:{val:'fast',  lbl:'Ищу новую работу прямо сейчас', txt:'Активный поиск идёт'},
+      b:{val:'stable',lbl:'Планомерно прокачиваюсь',       txt:'Системный рост'},
+      c:{val:'new',   lbl:'Хочу выйти из найма',           txt:'Фриланс или своё дело'},
     },
   ];
 
-  // Вопросы по сценарию ПЕРЕЗАПУСК
   const QS_RESTART = [
     Q_PROFESSION,
     { tag:'🔁 Причина', key:'restartReason',
-      text:'Почему ты хочешь начать заново?',
-      a:{val:'low',    lbl:'Выгорание / усталость от текущей сферы',  txt:'Больше не могу заниматься тем, чем занимался. Нужен свежий старт в другой области.'},
-      b:{val:'medium', lbl:'Потеря работы / вынужденная смена',       txt:'Обстоятельства вынуждают меняться. Хочу использовать это как шанс выйти на новый уровень.'},
-      c:{val:'high',   lbl:'Осознанный выбор — хочу кардинально иначе',txt:'Сознательно решил перезапустить карьеру. Накопил ресурс и готов к новому вектору.'},
+      text:'Почему хочешь начать заново?',
+      a:{val:'low',   lbl:'Выгорел, устал',        txt:'Нужен свежий старт'},
+      b:{val:'medium',lbl:'Потерял работу',          txt:'Обстоятельства вынуждают'},
+      c:{val:'high',  lbl:'Хочу кардинально иначе', txt:'Осознанное решение'},
     },
     Q_DIRECTION,
     { tag:'⚡ Ресурс', key:'risk',
-      text:'Какой финансовый ресурс у тебя есть для перезапуска?',
-      a:{val:'low',   lbl:'Минимальный — нужно зарабатывать быстро',  txt:'Финансовая подушка маленькая. Нужно как можно скорее выйти на стабильный доход.'},
-      b:{val:'medium',lbl:'3–6 месяцев без работы',                   txt:'Есть время на подготовку. Могу не торопиться и сделать всё правильно.'},
-      c:{val:'high',  lbl:'Год и больше — есть возможность вложить',  txt:'Есть ресурс для серьёзной инвестиции в себя: обучение, переезд, запуск своего дела.'},
+      text:'Сколько времени есть на перезапуск?',
+      a:{val:'low',   lbl:'Нужно зарабатывать быстро', txt:'Подушка маленькая'},
+      b:{val:'medium',lbl:'3–6 месяцев',                txt:'Время на подготовку есть'},
+      c:{val:'high',  lbl:'Год и больше',               txt:'Готов вложить в себя'},
     },
-    { tag:'💪 Опыт', key:'skills',
-      text:'Что из прошлого опыта ты хочешь сохранить?',
-      a:{val:'low',   lbl:'Ничего — начинаю с чистого листа',         txt:'Хочу полный разрыв. Прошлый опыт не применим или я не хочу его использовать.'},
-      b:{val:'medium',lbl:'Часть навыков переносимы',                 txt:'Некоторые навыки — аналитика, коммуникации, управление — применимы в новой сфере.'},
-      c:{val:'high',  lbl:'Мой опыт — конкурентное преимущество',    txt:'Уникальное сочетание прошлого опыта + новое направление даёт мне преимущество.'},
+    { tag:'💼 Опыт', key:'skills',
+      text:'Что хочешь взять из прошлого?',
+      a:{val:'low',   lbl:'Ничего, с нуля',              txt:'Полный разрыв'},
+      b:{val:'medium',lbl:'Часть навыков применима',      txt:'Есть что перенести'},
+      c:{val:'high',  lbl:'Мой опыт — моё преимущество', txt:'Уникальное сочетание'},
     },
-    { tag:'🎯 Приоритет', key:'priority',
-      text:'Что самое важное в новом старте?',
-      a:{val:'money',    lbl:'Выйти на хороший доход',        txt:'Перезапуск должен привести к доходу выше прежнего. Иначе в чём смысл.'},
-      b:{val:'stability',lbl:'Стабильность и уверенность',   txt:'Хочу больше не зависеть от внешних обстоятельств. Предсказуемость важнее максимума.'},
-      c:{val:'interest', lbl:'Смысл и удовольствие от работы',txt:'Хочу наконец делать то, что приносит удовлетворение каждый день, а не выживать.'},
+    { tag:'🎯 Главное', key:'priority',
+      text:'Что важнее всего в новом старте?',
+      a:{val:'money',    lbl:'Зарабатывать больше',    txt:'Доход выше прежнего'},
+      b:{val:'stability',lbl:'Стабильность',           txt:'Уверенность в завтрашнем дне'},
+      c:{val:'interest', lbl:'Удовольствие от работы', txt:'Делать то, что нравится'},
     },
-    { tag:'📅 Горизонт', key:'horizon',
-      text:'Какой результат ты ожидаешь через 2 года?',
-      a:{val:'short',lbl:'Восстановить прежний доход',        txt:'Через 2 года хочу зарабатывать не меньше, чем до перезапуска — это минимальная цель.'},
-      b:{val:'mid',  lbl:'Выйти на новый уровень',            txt:'Через 2 года — новая профессия, стабильный рост и ощущение, что я на правильном пути.'},
-      c:{val:'long', lbl:'Запустить своё / стать экспертом',  txt:'Через 2 года хочу иметь свой проект или репутацию эксперта в новой области.'},
+    { tag:'📅 Результат', key:'horizon',
+      text:'Что ожидаешь через 2 года?',
+      a:{val:'short',lbl:'Восстановить прежний доход', txt:'Минимальная цель'},
+      b:{val:'mid',  lbl:'Выйти на новый уровень',     txt:'Новая профессия и рост'},
+      c:{val:'long', lbl:'Запустить своё дело',         txt:'Свой проект или экспертиза'},
     },
-    { tag:'🚀 Скорость', key:'growthType',
-      text:'Как ты планируешь стартовать заново?',
-      a:{val:'fast',  lbl:'Быстро — ухожу сейчас и начинаю',     txt:'Уже принял решение. Хочу начать немедленно и учиться в процессе.'},
-      b:{val:'stable',lbl:'Планомерно — сначала подготовлюсь',    txt:'Хочу правильно подготовиться: обучение, нетворкинг, первые проекты — потом полный переход.'},
-      c:{val:'new',   lbl:'Параллельно — пробую пока не уволился', txt:'Буду тестировать новое направление параллельно, пока не появится уверенность и доход.'},
+    { tag:'🚀 Темп', key:'growthType',
+      text:'Как будешь стартовать?',
+      a:{val:'fast',  lbl:'Начинаю прямо сейчас',  txt:'Учусь в процессе'},
+      b:{val:'stable',lbl:'Сначала подготовлюсь',   txt:'Правильно, без спешки'},
+      c:{val:'new',   lbl:'Пробую параллельно',      txt:'Пока не уволился'},
     },
   ];
 
-  // Выбираем набор вопросов под сценарий
   const QS = scenario==='grow' ? QS_GROW : scenario==='restart' ? QS_RESTART : QS_SWITCH;
 
   let cur = 0;
   let answers = {};
+  let answeredCount = 0;
   let timerSec = 0;
 
   // Timer
@@ -429,8 +456,14 @@
     const pct = 50 + Math.round((cur/TOTAL_Q)*20);
     document.getElementById('prog-f').style.width = pct+'%';
     document.getElementById('btn-back').disabled = cur===0;
-    document.getElementById('btn-next').textContent = cur===TOTAL_Q-1 ? 'Рассчитать прогноз →' : 'Следующий параметр →';
+    document.getElementById('btn-next').textContent = cur===TOTAL_Q-1 ? 'Рассчитать прогноз →' : 'Следующий →';
     document.getElementById('hint').classList.remove('show');
+    // XP bar
+    const xpPct = Math.round((cur/TOTAL_Q)*100);
+    const xpEl = document.getElementById('xp-fill');
+    const xpLbl = document.getElementById('xp-label');
+    if(xpEl) xpEl.style.width = xpPct+'%';
+    if(xpLbl) xpLbl.textContent = (cur*12)+' XP';
   }
 
   function build(){
@@ -507,17 +540,27 @@
     answers[key]=val;
     const wrap=document.getElementById('qwrap');
     const opts=wrap.querySelectorAll('.opt');
-    opts.forEach((o,i)=>{
+    opts.forEach(o=>{
       o.className='opt';
-      o.querySelector('.ochk').textContent='';
+      const ck=o.querySelector('.ochk');
+      if(ck) ck.textContent='';
     });
     const lmap={a:0,b:1,c:2};
     const el=opts[lmap[letter]];
     if(el){
       el.className='opt s'+letter;
-      el.querySelector('.ochk').textContent='✓';
+      el.style.animation='none';
+      requestAnimationFrame(()=>{ el.style.animation='optPop .35s ease'; });
+      const ck=el.querySelector('.ochk');
+      if(ck) ck.textContent='✓';
     }
     document.getElementById('hint').classList.remove('show');
+    // Streak
+    answeredCount++;
+    if(answeredCount>1 && answeredCount%3===0){
+      const sb=document.getElementById('streak-badge');
+      if(sb){ sb.textContent='🔥 Серия '+answeredCount+'!'; sb.classList.add('show','pop'); setTimeout(()=>sb.classList.remove('pop'),500); setTimeout(()=>sb.classList.remove('show'),2500); }
+    }
     // Auto-advance on mobile
     if(window.innerWidth<=600) setTimeout(()=>{ if(answers[QS[cur].key]) next(); },500);
   }
