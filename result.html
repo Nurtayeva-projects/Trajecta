@@ -477,19 +477,35 @@
         <div class="insight-title" style="font-size:clamp(1.2rem,3vw,1.7rem)">${insightData.title}</div>
       </div>
 
-      <!-- ① b ПСИХОТИП -->
+      <!-- ① b ПСИХОТИП — с расшифровкой -->
       ${R.psychotype ? `
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px">
-        <div style="width:42px;height:42px;border-radius:10px;background:var(--ad);border:1px solid var(--am);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">
-          ${{analyst:'🔬',doer:'⚡',feeler:'🎯'}[R.psychotype]||'🧠'}
-        </div>
-        <div>
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Твой психотип</div>
-          <div style="font-family:var(--D);font-size:.95rem;font-weight:800">
-            ${{analyst:'Аналитик',doer:'Практик',feeler:'Интуит'}[R.psychotype]||'Аналитик'}
+      <div style="background:linear-gradient(135deg,rgba(167,139,250,.08),rgba(167,139,250,.03));border:1.5px solid rgba(167,139,250,.25);border-radius:16px;padding:20px 24px">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+          <div style="width:48px;height:48px;border-radius:12px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">
+            ${{A:'🔬',B:'🏗️',C:'🤝',D:'⚡',E:'🚀',analyst:'🔬',doer:'⚡',feeler:'🚀'}[R.psychotype]||'🧠'}
           </div>
-          <div style="font-size:.78rem;color:var(--muted);margin-top:2px">
-            ${{analyst:'Тебе важны данные — план должен быть конкретным и измеримым',doer:'Тебе нужно быстро начать и корректировать по ходу',feeler:'Тебе нужно ощущение правильности пути прежде чем действовать'}[R.psychotype]||''}
+          <div>
+            <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(167,139,250,.8);margin-bottom:3px">Твой психотип</div>
+            <div style="font-family:var(--D);font-size:1.05rem;font-weight:800;letter-spacing:-.02em">
+              ${{A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель',E:'Визионер',analyst:'Аналитик',doer:'Исполнитель',feeler:'Визионер'}[R.psychotype]||R.psychotype}
+            </div>
+            <div style="font-size:.8rem;color:var(--muted);margin-top:2px">
+              ${{A:'Принимаешь решения на основе данных — глубина важнее скорости',B:'Видишь системы там где другие видят хаос',C:'Твоя сила в людях — строишь доверие и коалиции',D:'Действуешь быстро и получаешь конкретный результат',E:'Мыслишь нестандартно и видишь возможности',analyst:'Сначала анализируешь — потом действуешь',doer:'Учишься в процессе и делаешь',feeler:'Доверяешь интуиции и ощущениям'}[R.psychotype]||''}
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="mobile-stack">
+          <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:6px">💪 Сильные стороны</div>
+            <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
+              ${{A:'Системное мышление · Точность · Надёжность прогнозов',B:'Стратегическое видение · Управление сложностью',C:'Построение доверия · Переговоры · Эмпатия',D:'Скорость · Результативность · Практичность',E:'Генерация идей · Адаптивность · Вдохновение',analyst:'Системное мышление и точность',doer:'Скорость и результативность',feeler:'Интуиция и адаптивность'}[R.psychotype]||'—'}
+            </div>
+          </div>
+          <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:6px">🎯 Лучшие роли</div>
+            <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
+              ${{A:'Data Analyst · PM · Стратегический консультант',B:'CTO · Operations Manager · Архитектор решений',C:'HR BP · Sales Manager · Коуч / Ментор',D:'Project Manager · Предприниматель · Технический специалист',E:'Founder · Creative Director · Продуктовый визионер',analyst:'Аналитик, исследователь, PM',doer:'Менеджер, предприниматель',feeler:'Коуч, творческая сфера, стратег'}[R.psychotype]||'Зависит от сценария'}
+            </div>
           </div>
         </div>
       </div>` : ''}
