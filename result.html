@@ -477,6 +477,23 @@
         <div class="insight-title" style="font-size:clamp(1.2rem,3vw,1.7rem)">${insightData.title}</div>
       </div>
 
+      <!-- ① b ПСИХОТИП -->
+      ${R.psychotype ? `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px">
+        <div style="width:42px;height:42px;border-radius:10px;background:var(--ad);border:1px solid var(--am);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">
+          ${{analyst:'🔬',doer:'⚡',feeler:'🎯'}[R.psychotype]||'🧠'}
+        </div>
+        <div>
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px">Твой психотип</div>
+          <div style="font-family:var(--D);font-size:.95rem;font-weight:800">
+            ${{analyst:'Аналитик',doer:'Практик',feeler:'Интуит'}[R.psychotype]||'Аналитик'}
+          </div>
+          <div style="font-size:.78rem;color:var(--muted);margin-top:2px">
+            ${{analyst:'Тебе важны данные — план должен быть конкретным и измеримым',doer:'Тебе нужно быстро начать и корректировать по ходу',feeler:'Тебе нужно ощущение правильности пути прежде чем действовать'}[R.psychotype]||''}
+          </div>
+        </div>
+      </div>` : ''}
+
       <!-- ② ПРОГНОЗ — только цифры, никакого текста -->
       <div class="card at">
         <div class="ch"><span class="ci">💰</span><span class="ct">Прогноз дохода</span></div>
