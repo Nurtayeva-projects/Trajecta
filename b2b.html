@@ -199,6 +199,45 @@
     .f-back:hover{color:var(--text);}
 
     /* RESPONSIVE */
+
+    /* ── АНИМАЦИИ b2b.html ── */
+    @keyframes fup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes countUp{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+
+    /* Hero elements */
+    .badge{animation:fup .5s ease both;}
+    .hero-h1{animation:fup .6s .1s ease both;}
+    .hero-sub{animation:fup .6s .2s ease both;}
+    .hero-actions{animation:fup .6s .3s ease both;}
+    .hero-stats{animation:fup .6s .4s ease both;}
+
+    /* Stats pop */
+    .hs-n{animation:countUp .6s cubic-bezier(.34,1.56,.64,1) both;}
+    .hs:nth-child(1) .hs-n{animation-delay:.5s}
+    .hs:nth-child(2) .hs-n{animation-delay:.65s}
+    .hs:nth-child(3) .hs-n{animation-delay:.8s}
+
+    /* Use cards hover glow */
+    .use-card:hover{border-color:rgba(96,165,250,.4);box-shadow:0 16px 40px rgba(96,165,250,.08);}
+    .use-ico{font-size:2.2rem;margin-bottom:14px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+    .use-card:hover .use-ico{transform:scale(1.2) rotate(-5deg);}
+
+    /* Pricing featured card pulse */
+    @keyframes featPulse{0%,100%{box-shadow:0 0 0 0 rgba(96,165,250,.3)}70%{box-shadow:0 0 0 10px rgba(96,165,250,0)}}
+    .price-card.featured{animation:featPulse 3s ease-in-out infinite;}
+
+    /* Dashboard team items */
+    .team-item{transition:all .2s;cursor:default;}
+    .team-item:hover{background:rgba(255,255,255,.06);transform:translateX(4px);}
+
+    /* CTA button */
+    .btn:not(.btn-g){transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;}
+    .btn:not(.btn-g):hover{transform:translateY(-3px);}
+
+    /* Steps hover */
+    .step-b{transition:background .2s,transform .2s;}
+    .step-b:hover{transform:translateY(-3px);background:rgba(255,255,255,.04);}
+
     @media(max-width:1024px){
       header{padding:0 32px;}
       .hero{grid-template-columns:1fr;gap:40px;padding:130px 32px 60px;}
