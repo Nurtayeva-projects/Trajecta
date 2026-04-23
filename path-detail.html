@@ -392,11 +392,11 @@
         <div class="ch"><span class="ci">📚</span><span class="ct">Ресурсы и инструменты для старта</span></div>
         <div class="resources-list">
           ${resources.map(r=>`
-          <div class="res-item">
+          <a class="res-item" href="${r.url||'#'}" target="${r.url?'_blank':'_self'}" rel="noopener noreferrer" style="text-decoration:none;cursor:${r.url?'pointer':'default'}">
             <span class="res-tag ${r.type==='free'?'rt-free':r.type==='paid'?'rt-paid':'rt-community'}">${r.type==='free'?'Бесплатно':r.type==='paid'?'Платно':'Сообщество'}</span>
             <span class="res-name">${r.name}</span>
-            <span class="res-desc">${r.desc}</span>
-          </div>`).join('')}
+            <span class="res-desc" style="margin-left:auto;display:flex;align-items:center;gap:4px">${r.desc}${r.url?' <span style="color:var(--accent);font-size:.72rem">↗</span>':''}</span>
+          </a>`).join('')}
         </div>
       </div>
 
@@ -796,33 +796,58 @@
 
   function getResources(prof, sc){
     const BASE = [
-      {type:'free',    name:'LinkedIn',                desc:'Нетворкинг и поиск вакансий'},
-      {type:'free',    name:'hh.kz',                   desc:'Рынок труда КЗ — вакансии и зарплаты'},
-      {type:'free',    name:'Astana Hub',               desc:'Экосистема стартапов и нетворкинг'},
-      {type:'paid',    name:'Coursera / Udemy',         desc:'Профильные курсы и сертификаты'},
-      {type:'community',name:'Telegram-сообщества КЗ', desc:'Профессиональные чаты по сфере'},
+      {type:'free',    name:'LinkedIn',                desc:'Нетворкинг и поиск вакансий',      url:'https://linkedin.com'},
+      {type:'free',    name:'hh.kz',                   desc:'Рынок труда КЗ — вакансии',        url:'https://hh.kz'},
+      {type:'free',    name:'Astana Hub',               desc:'Экосистема стартапов КЗ',          url:'https://astanahub.com'},
+      {type:'paid',    name:'Coursera',                 desc:'Профильные курсы и сертификаты',   url:'https://coursera.org'},
+      {type:'paid',    name:'Udemy',                    desc:'Практические курсы от экспертов',  url:'https://udemy.com'},
+      {type:'community',name:'Telegram-сообщества КЗ', desc:'Профессиональные чаты по сфере',   url:'https://t.me'},
     ];
     const EXTRA = {
       it:[
-        {type:'free',name:'LeetCode / HackerRank',desc:'Подготовка к техническим собеседованиям'},
-        {type:'free',name:'GitHub',               desc:'Портфолио и open source проекты'},
-        {type:'paid',name:'Reforge',              desc:'Product management курсы высшего уровня'},
+        {type:'free',name:'LeetCode',     desc:'Подготовка к техническим собеседованиям', url:'https://leetcode.com'},
+        {type:'free',name:'GitHub',       desc:'Портфолио и open source',                 url:'https://github.com'},
+        {type:'paid',name:'Reforge',      desc:'Product management курсы',                url:'https://reforge.com'},
       ],
       law:[
-        {type:'free',name:'Egov.kz',             desc:'Законодательство РК'},
-        {type:'community',name:'Юридические телеграм-каналы КЗ',desc:'Сообщество юристов'},
+        {type:'free',name:'Adilet.zan.kz', desc:'Законодательство РК',                   url:'https://adilet.zan.kz'},
+        {type:'community',name:'Legal КЗ Telegram', desc:'Сообщество юристов',           url:'https://t.me'},
       ],
       marketing:[
-        {type:'free',name:'Google Skillshop',    desc:'Бесплатные сертификаты Google'},
-        {type:'free',name:'Meta Blueprint',      desc:'Сертификаты Facebook/Instagram Ads'},
+        {type:'free',name:'Google Skillshop',desc:'Бесплатные сертификаты Google',        url:'https://skillshop.google.com'},
+        {type:'free',name:'Meta Blueprint', desc:'Сертификаты Facebook/Instagram Ads',    url:'https://www.facebook.com/business/learn'},
       ],
       finance:[
-        {type:'paid',name:'CFA Institute',       desc:'Сертификация CFA — мировой стандарт'},
-        {type:'paid',name:'ACCA',                desc:'Бухгалтерская и финансовая сертификация'},
+        {type:'paid',name:'CFA Institute', desc:'Сертификация CFA',                       url:'https://cfainstitute.org'},
+        {type:'paid',name:'ACCA',          desc:'Бухгалтерская сертификация',              url:'https://accaglobal.com'},
       ],
       design:[
-        {type:'free',name:'Figma Community',     desc:'Шаблоны, ресурсы, сообщество'},
-        {type:'free',name:'Dribbble / Behance',  desc:'Портфолио и вдохновение'},
+        {type:'free',name:'Figma',         desc:'Основной инструмент продуктового дизайна',url:'https://figma.com'},
+        {type:'free',name:'Dribbble',      desc:'Портфолио и вдохновение',                 url:'https://dribbble.com'},
+      ],
+      hr:[
+        {type:'paid',name:'SHRM',          desc:'HR сертификация',                         url:'https://shrm.org'},
+        {type:'free',name:'Работа в КЗ',   desc:'Вакансии для HR специалистов',            url:'https://hh.kz'},
+      ],
+      medicine:[
+        {type:'free',name:'DOC+',          desc:'Платформа телемедицины',                  url:'https://docplus.ru'},
+        {type:'paid',name:'MedScape',      desc:'Медицинское образование',                 url:'https://medscape.com'},
+      ],
+      engineering:[
+        {type:'paid',name:'Autodesk',      desc:'Инженерные инструменты и курсы',          url:'https://autodesk.com'},
+        {type:'free',name:'Engineering КЗ',desc:'Профессиональное сообщество',             url:'https://t.me'},
+      ],
+      sales:[
+        {type:'free',name:'Kaspi Business',desc:'B2B продажи и e-commerce',               url:'https://kaspi.kz/b2b'},
+        {type:'paid',name:'Sandler Training',desc:'Методология продаж',                   url:'https://sandler.com'},
+      ],
+      education:[
+        {type:'free',name:'Stepik',        desc:'Платформа онлайн-курсов в СНГ',          url:'https://stepik.org'},
+        {type:'paid',name:'Teachable',     desc:'Создать свою онлайн-школу',               url:'https://teachable.com'},
+      ],
+      creative:[
+        {type:'free',name:'Instagram для бизнеса',desc:'Продвижение творческой сферы',    url:'https://instagram.com'},
+        {type:'paid',name:'Skillbox',      desc:'Творческие профессии онлайн',             url:'https://skillbox.ru'},
       ],
     };
     return [...BASE, ...(EXTRA[prof]||[])].slice(0,7);
