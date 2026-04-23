@@ -59,6 +59,22 @@
     .hero-title{font-family:var(--D);font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;letter-spacing:-.035em;margin-bottom:10px;animation:fup .5s .3s ease both;}
     .hero-sub{font-size:1rem;color:var(--muted);margin-bottom:40px;animation:fup .5s .35s ease both;}
 
+
+    /* ── ГЕЙМИФИКАЦИЯ: Achievements ── */
+    .achievements{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
+    .ach{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:100px;padding:5px 12px;font-size:.74rem;font-weight:600;color:var(--muted);transition:all .4s;opacity:0;transform:scale(.7);}
+    .ach.unlocked{opacity:1;transform:scale(1);animation:achPop .5s cubic-bezier(.34,1.56,.64,1) both;}
+    .ach.gold{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:rgba(251,191,36,.9);}
+    .ach.blue{background:var(--bd);border-color:var(--bm);color:var(--blue);}
+    .ach.green{background:var(--ad);border-color:var(--am);color:var(--accent);}
+    .ach.purple{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.3);color:rgba(167,139,250,.9);}
+    @keyframes achPop{0%{transform:scale(.5) rotate(-5deg)}60%{transform:scale(1.15) rotate(2deg)}100%{transform:scale(1) rotate(0)}}
+
+    /* Score ring on hero */
+    .score-ring{display:inline-flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:16px;}
+    .sr-val{font-family:var(--D);font-size:2.8rem;font-weight:800;letter-spacing:-.04em;line-height:1;}
+    .sr-lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+
     /* RINGS — увеличены для читаемости */
     .rings{display:flex;align-items:center;justify-content:center;gap:40px;margin-bottom:48px;flex-wrap:wrap;animation:fup .5s .4s ease both;}
     .ring-item{text-align:center;}
@@ -375,13 +391,16 @@
     <p class="hero-sub" style="font-size:1rem;margin-bottom:6px;color:var(--muted)">возможный доход через 2 года</p>
     <p class="hero-sub" id="hsub" style="font-size:.85rem;margin-bottom:28px;color:var(--dim)"></p>
 
-    <!-- Три простых факта вместо колец -->
-    <div id="stat-pills" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;animation:fup .5s .4s ease both"></div>
+    <!-- Stat pills -->
+    <div id="stat-pills" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;animation:fup .5s .4s ease both"></div>
 
-    <!-- Навигатор — что делать на этой странице -->
-    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:10px 20px;display:inline-flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);margin-bottom:0;animation:fup .5s .5s ease both">
+    <!-- Achievement badges — unlocked by answers -->
+    <div class="achievements" id="achievements" style="justify-content:center;animation:fup .5s .5s ease both"></div>
+
+    <!-- Навигатор -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:8px 18px;display:inline-flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);margin-top:8px;animation:fup .5s .6s ease both">
       <span>👇</span>
-      <span>Посмотри прогноз и риски — потом выбери стратегию внизу</span>
+      <span>Изучи прогноз — и выбери стратегию внизу</span>
     </div>
   </div>
 
@@ -424,6 +443,7 @@
     buildContent();
     setTimeout(()=>{
       renderRecommendedProfs();
+      renderAchievements();
     }, 50);
   }
 
@@ -502,7 +522,7 @@
             </div>
           </div>
           <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px">
-            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:6px">🎯 Лучшие роли</div>
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:6px">🎯 Подходящие профессии</div>
             <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
               ${{A:'Data Analyst · PM · Стратегический консультант',B:'CTO · Operations Manager · Архитектор решений',C:'HR BP · Sales Manager · Коуч / Ментор',D:'Project Manager · Предприниматель · Технический специалист',E:'Founder · Creative Director · Продуктовый визионер',analyst:'Аналитик, исследователь, PM',doer:'Менеджер, предприниматель',feeler:'Коуч, творческая сфера, стратег'}[R.psychotype]||'Зависит от сценария'}
             </div>
@@ -548,7 +568,10 @@
       <div class="card" id="rec-profs-card">
         <div class="ch">
           <span class="ci">${R.sc==='grow' ? '📈' : '🎯'}</span>
-          <span class="ct">${R.sc==='grow' ? 'Как вырасти в доходе' : R.sc==='restart' ? 'С чего начать' : 'Куда перейти'}</span>
+          <span class="ct">${R.sc==='grow' ? 'Варианты роста внутри твоей сферы' : R.sc==='restart' ? 'Варианты нового старта с твоим опытом' : 'Профессии, в которые переходят из твоей сферы'}</span>
+        </div>
+        <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,.03);border-radius:8px;line-height:1.55">
+          💡 Это не твой финальный выбор — это <strong style="color:rgba(240,244,255,.75)">ориентиры для сравнения</strong>. Конкретные пути с планом действий — на следующем шаге.
         </div>
         <div id="rec-profs-list"></div>
       </div>
@@ -923,6 +946,33 @@
     const alt  = Math.round(y2v * 1.2 / 10) * 10;
     const altX = Math.round(alt * 1.25 / 10) * 10;
     return `${fmtK(alt)} – ${fmtK(altX)} тг/мес`;
+  }
+
+
+  // ── ACHIEVEMENTS ENGINE ──
+  function renderAchievements(){
+    const el = document.getElementById('achievements');
+    if(!el) return;
+    const ach = [];
+    const sc = R.sc, ans = R.ans, prob = R.prob;
+
+    if(prob >= 75) ach.push({ico:'🎯', lbl:'Высокий потенциал', cls:'green'});
+    if(ans.risk === 'high') ach.push({ico:'⚡', lbl:'Смельчак', cls:'gold'});
+    if(ans.risk === 'low') ach.push({ico:'🛡️', lbl:'Стратег', cls:'blue'});
+    if(ans.skills === 'high') ach.push({ico:'💎', lbl:'Эксперт', cls:'gold'});
+    if(ans.horizon === 'long') ach.push({ico:'🔭', lbl:'Мыслит вдолгую', cls:'purple'});
+    if(ans.growthType === 'fast') ach.push({ico:'🚀', lbl:'Быстрый старт', cls:'green'});
+    if(sc === 'switch') ach.push({ico:'🔄', lbl:'Готов к переменам', cls:'blue'});
+    if(sc === 'restart') ach.push({ico:'🌱', lbl:'Новый старт', cls:'green'});
+    if(sc === 'freelance') ach.push({ico:'💼', lbl:'Свободный агент', cls:'gold'});
+    if(R.psychotype === 'E' || R.psychotype === 'feeler') ach.push({ico:'🚀', lbl:'Визионер', cls:'purple'});
+    if(R.psychotype === 'A' || R.psychotype === 'analyst') ach.push({ico:'🔬', lbl:'Аналитик', cls:'blue'});
+
+    // Show max 3
+    el.innerHTML = ach.slice(0,3).map((a,i)=>`
+      <div class="ach ${a.cls} unlocked" style="animation-delay:${0.5+i*0.15}s">
+        <span>${a.ico}</span>${a.lbl}
+      </div>`).join('');
   }
 
   function openModal(){ document.getElementById('modal').classList.add('open'); }
