@@ -93,6 +93,21 @@
     .opt.sa .oval{color:rgba(96,165,250,.9);}
     .opt.sa .ochk{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.15);color:rgba(96,165,250,1);}
 
+    /* D = orange */
+    .opt.sd{border-color:rgba(255,140,60,.4);background:rgba(255,140,60,.07);}
+    .opt.sd .okey{background:rgba(255,140,60,.2);color:rgba(255,140,60,.95);}
+    .opt.sd .oval{color:rgba(255,140,60,.9);}
+    .opt.sd .ochk{border-color:rgba(255,140,60,.6);background:rgba(255,140,60,.15);color:rgba(255,140,60,.95);}
+
+    /* E = pink */
+    .opt.se{border-color:rgba(244,114,182,.4);background:rgba(244,114,182,.07);}
+    .opt.se .okey{background:rgba(244,114,182,.2);color:rgba(244,114,182,.95);}
+    .opt.se .oval{color:rgba(244,114,182,.9);}
+    .opt.se .ochk{border-color:rgba(244,114,182,.6);background:rgba(244,114,182,.15);color:rgba(244,114,182,.95);}
+    .opt.sa .okey{background:rgba(96,165,250,.2);color:rgba(96,165,250,1);}
+    .opt.sa .oval{color:rgba(96,165,250,.9);}
+    .opt.sa .ochk{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.15);color:rgba(96,165,250,1);}
+
     /* B = green */
     .opt.sb{border-color:rgba(198,255,0,.4);background:var(--ad);}
     .opt.sb .okey{background:rgba(198,255,0,.18);color:var(--accent);}
@@ -179,6 +194,28 @@
     .prof-chip{transition:all .18s cubic-bezier(.34,1.2,.64,1);}
     .prof-chip:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3);}
     .prof-chip.picked{transform:scale(1.04);}
+
+
+    /* ══ ГЕЙМИФИКАЦИЯ test.html ══ */
+
+    /* Profile completion bar */
+    .profile-bar-wrap{width:100%;max-width:680px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:16px;animation:fup .5s ease both;}
+    .pb-label{display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:8px;}
+    .pb-pct{font-family:var(--D);font-size:.9rem;font-weight:800;color:var(--accent);}
+    .pb-track{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+    .pb-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);border-radius:3px;transition:width .8s cubic-bezier(.34,1.2,.64,1);}
+
+    /* Answer pop feedback */
+    .answer-feedback{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:var(--card);border:1.5px solid var(--am);border-radius:16px;padding:16px 24px;font-family:var(--D);font-size:1.1rem;font-weight:800;color:var(--accent);pointer-events:none;z-index:999;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+    .answer-feedback.show{transform:translate(-50%,-50%) scale(1);}
+    .answer-feedback.hide{transform:translate(-50%,-60%) scale(0);opacity:0;}
+
+    /* Options micro-lift on hover */
+    .opt:active{transform:scale(.97);}
+
+    /* Completion burst */
+    @keyframes completeBurst{0%{box-shadow:0 0 0 0 rgba(198,255,0,.5)}50%{box-shadow:0 0 0 20px rgba(198,255,0,0)}100%{box-shadow:0 0 0 0 rgba(198,255,0,0)}}
+    .btn-next.complete{animation:completeBurst .6s ease;}
 
   </style>
 </head>
@@ -300,6 +337,26 @@
     c:{val:'new',    lbl:'Свобода и смысл', txt:'Хочу заниматься тем, что нравится'},
   };
 
+  // Новый вопрос: текущий доход (для логики прогноза — не ниже текущего)
+  const Q_CURRENT_SALARY = {
+    tag:'💰 Доход сейчас', key:'currentSalary',
+    text:'Сколько примерно ты зарабатываешь сейчас?',
+    a:{val:'below200',  lbl:'До 200 000 тг',         txt:''},
+    b:{val:'200to400',  lbl:'200 000 – 400 000 тг',  txt:''},
+    c:{val:'400to700',  lbl:'400 000 – 700 000 тг',  txt:''},
+    d:{val:'700to1000', lbl:'700 000 – 1 000 000 тг',txt:''},
+    e:{val:'above1000', lbl:'Свыше 1 000 000 тг',    txt:''},
+  };
+
+  // Новый вопрос: формат работы
+  const Q_WORK_FORMAT = {
+    tag:'🏢 Формат работы', key:'workFormat',
+    text:'Как ты хочешь работать?',
+    a:{val:'office',  lbl:'В офисе',     txt:'Важна структура, коллеги и разделение работы и дома'},
+    b:{val:'remote',  lbl:'Удалённо',    txt:'Свобода выбора места, нет привязки к городу'},
+    c:{val:'hybrid',  lbl:'Гибрид',      txt:'Лучшее из двух — офис когда нужно, дома когда хочу'},
+  };
+
   const QS_SWITCH = [
     Q_PROFESSION,
     Q_DIRECTION,
@@ -333,6 +390,8 @@
       b:{val:'stable',lbl:'Буду совмещать до первого дохода', txt:'Пока не появится заработок'},
       c:{val:'new',   lbl:'Сначала обучусь, потом уйду', txt:'Получу навык, потом сменю работу'},
     },
+    Q_CURRENT_SALARY,
+    Q_WORK_FORMAT,
   ];
 
   const QS_GROW = [
@@ -379,6 +438,8 @@
       b:{val:'stable',lbl:'Планомерно прокачиваюсь',       txt:'Системный рост'},
       c:{val:'new',   lbl:'Хочу выйти из найма',           txt:'Фриланс или своё дело'},
     },
+    Q_CURRENT_SALARY,
+    Q_WORK_FORMAT,
   ];
 
   const QS_RESTART = [
@@ -463,6 +524,8 @@
       b:{val:'stable',lbl:'Системно — чек и качество', txt:'Меньше клиентов, дороже'},
       c:{val:'new',   lbl:'Новый продукт или формат',  txt:'Курс, агентство, партнёрство'},
     },
+    Q_CURRENT_SALARY,
+    Q_WORK_FORMAT,
   ];
 
   const QS = scenario==='freelance' ? QS_FREELANCE : scenario==='grow' ? QS_GROW : scenario==='restart' ? QS_RESTART : QS_SWITCH;
@@ -509,7 +572,7 @@
     const pct = 50 + Math.round((cur/TOTAL_Q)*20);
     document.getElementById('prog-f').style.width = pct+'%';
     document.getElementById('btn-back').disabled = cur===0;
-    document.getElementById('btn-next').textContent = cur===TOTAL_Q-1 ? 'Рассчитать прогноз →' : 'Следующий →';
+    document.getElementById('btn-next').textContent = cur===TOTAL_Q-1 ? '🎯 Рассчитать прогноз' : 'Следующий →';
     document.getElementById('hint').classList.remove('show');
     // XP bar
     const xpPct = Math.round((cur/TOTAL_Q)*100);
@@ -517,6 +580,12 @@
     const xpLbl = document.getElementById('xp-label');
     if(xpEl) xpEl.style.width = xpPct+'%';
     if(xpLbl) xpLbl.textContent = (cur*12)+' XP';
+    // Profile completion bar
+    const pctFilled = Math.round((Object.keys(answers).filter(k=>answers[k]).length / TOTAL_Q)*100);
+    const pbFill = document.getElementById('pb-fill');
+    const pbPct  = document.getElementById('pb-pct');
+    if(pbFill) pbFill.style.width = pctFilled+'%';
+    if(pbPct)  pbPct.textContent = pctFilled+'%';
   }
 
   function build(){
@@ -536,29 +605,26 @@
       </div>`;
     }
     const sel = answers[q.key];
-    const cls = (v)=>{ if(!sel||sel!==v) return ''; return v===q.a.val?' sa':v===q.b.val?' sb':' sc'; };
+    const LETTERS = ['a','b','c','d','e'];
+    const KEYS    = ['A','B','C','D','E'];
+    const CLS_MAP = {a:' sa', b:' sb', c:' sc', d:' sd', e:' se'};
+    const cls = (v)=> sel===v ? (CLS_MAP[LETTERS.find(l=>q[l]&&q[l].val===v)]||' sb') : '';
     const chk = (v)=> sel===v ? '✓':'';
+
+    const opts = LETTERS
+      .filter(l => q[l])
+      .map((l,i) => `
+        <button class="opt${cls(q[l].val)}" onclick="pick('${q.key}','${q[l].val}','${l}')">
+          <div class="okey">${KEYS[i]}</div>
+          <div class="obody"><div class="oval">${q[l].lbl}</div>${q[l].txt?`<div class="otxt">${q[l].txt}</div>`:''}</div>
+          <div class="ochk">${chk(q[l].val)}</div>
+        </button>`).join('');
+
     return `<div class="qcard in">
       <div class="qnum-bg">0${cur+1}</div>
       <div class="qtag">${q.tag}</div>
       <div class="qtext">${q.text}</div>
-      <div class="opts">
-        <button class="opt${cls(q.a.val)}" onclick="pick('${q.key}','${q.a.val}','a')">
-          <div class="okey">A</div>
-          <div class="obody"><div class="oval">${q.a.lbl}</div><div class="otxt">${q.a.txt}</div></div>
-          <div class="ochk">${chk(q.a.val)}</div>
-        </button>
-        <button class="opt${cls(q.b.val)}" onclick="pick('${q.key}','${q.b.val}','b')">
-          <div class="okey">B</div>
-          <div class="obody"><div class="oval">${q.b.lbl}</div><div class="otxt">${q.b.txt}</div></div>
-          <div class="ochk">${chk(q.b.val)}</div>
-        </button>
-        <button class="opt${cls(q.c.val)}" onclick="pick('${q.key}','${q.c.val}','c')">
-          <div class="okey">C</div>
-          <div class="obody"><div class="oval">${q.c.lbl}</div><div class="otxt">${q.c.txt}</div></div>
-          <div class="ochk">${chk(q.c.val)}</div>
-        </button>
-      </div>
+      <div class="opts">${opts}</div>
     </div>`;
   }
 
@@ -608,6 +674,14 @@
       if(ck) ck.textContent='✓';
     }
     document.getElementById('hint').classList.remove('show');
+    // Answer feedback flash
+    const fb = document.getElementById('ans-feedback');
+    if(fb){
+      const msgs = ['✓ Записано','✓ Учтено','✓ Понял','✓ Принято','✓ Ок'];
+      fb.textContent = msgs[Math.floor(Math.random()*msgs.length)];
+      fb.classList.add('show');
+      setTimeout(()=>{ fb.classList.remove('show'); fb.classList.add('hide'); setTimeout(()=>fb.classList.remove('hide'),300); }, 600);
+    }
     // Streak
     answeredCount++;
     if(answeredCount>1 && answeredCount%3===0){
@@ -754,10 +828,29 @@
 
     const n0  = Math.round(b.min*im/10)*10;
     const n0x = Math.round(b.max*im/10)*10;
-    const n2  = Math.round(n0*(1+gm*2*tm)/10)*10;
-    const n2x = Math.round(n0x*(1+gm*2*tm)/10)*10;
-    const n5  = Math.round(n0*(1+gm*5*tm)/10)*10;
-    const n5x = Math.round(n0x*(1+gm*5*tm)/10)*10;
+    let n2  = Math.round(n0*(1+gm*2*tm)/10)*10;
+    let n2x = Math.round(n0x*(1+gm*2*tm)/10)*10;
+    let n5  = Math.round(n0*(1+gm*5*tm)/10)*10;
+    let n5x = Math.round(n0x*(1+gm*5*tm)/10)*10;
+
+    // Floor: прогноз не ниже текущей зарплаты пользователя
+    const salaryFloorMap = {
+      below200:0, '200to400':200, '400to700':400, '700to1000':700, above1000:1000
+    };
+    const salaryFloor = salaryFloorMap[ans.currentSalary] || 0;
+    if(salaryFloor > 0){
+      // Старт не ниже текущей зарплаты
+      const nFloor = Math.max(n0, Math.round(salaryFloor * 0.9 / 10) * 10);
+      const nxFloor = Math.max(n0x, Math.round(salaryFloor * 1.1 / 10) * 10);
+      // Y2 должен быть выше текущей зарплаты минимум на 15%
+      const y2Floor = Math.round(salaryFloor * 1.15 / 10) * 10;
+      if(n2 < y2Floor) n2 = y2Floor;
+      if(n2x < Math.round(y2Floor * 1.3 / 10) * 10) n2x = Math.round(y2Floor * 1.3 / 10) * 10;
+      // Y5 ещё выше
+      const y5Floor = Math.round(salaryFloor * 1.4 / 10) * 10;
+      if(n5 < y5Floor) n5 = y5Floor;
+      if(n5x < Math.round(y5Floor * 1.35 / 10) * 10) n5x = Math.round(y5Floor * 1.35 / 10) * 10;
+    }
 
     const prob = Math.round(Math.min(Math.max(b.risk*pm,.42),.96)*100);
     const riskLvl = ans.risk==='high'?'Высокий':ans.risk==='low'?'Низкий':'Средний';
