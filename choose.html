@@ -132,11 +132,14 @@
     .sc:hover .c-illustration{opacity:.22;transform:scale(1.1) rotate(-5deg);}
 
     /* Glow behind card on hover */
+    .sc:hover{box-shadow:0 24px 60px rgba(0,0,0,.4);}
     .sw:hover{box-shadow:0 24px 60px rgba(198,255,0,.12),0 0 0 1px rgba(198,255,0,.25);}
     .gr:hover{box-shadow:0 24px 60px rgba(96,165,250,.12),0 0 0 1px rgba(96,165,250,.25);}
     .re:hover{box-shadow:0 24px 60px rgba(167,139,250,.12),0 0 0 1px rgba(167,139,250,.25);}
 
     /* Picked state — stronger glow */
+    #c-freelance.picked{box-shadow:0 0 40px rgba(251,191,36,.2),0 0 0 2px rgba(251,191,36,.5);border-color:rgba(251,191,36,.5) !important;}
+    #c-freelance:hover{box-shadow:0 24px 60px rgba(251,191,36,.1),0 0 0 1px rgba(251,191,36,.3);}
     .sw.picked{box-shadow:0 0 40px rgba(198,255,0,.2),0 0 0 2px rgba(198,255,0,.5);}
     .gr.picked{box-shadow:0 0 40px rgba(96,165,250,.2),0 0 0 2px rgba(96,165,250,.5);}
     .re.picked{box-shadow:0 0 40px rgba(167,139,250,.2),0 0 0 2px rgba(167,139,250,.5);}
@@ -170,10 +173,10 @@
 
 <main>
   <div class="pbadge"><span class="bdot"></span>Шаг 1 из 3</div>
-  <h1 class="ptitle">Выбери своё<br><em>состояние</em></h1>
-  <p class="psub">Каждый сценарий — отдельная прогностическая модель. Выбери ту, что соответствует твоей ситуации прямо сейчас.</p>
+  <h1 class="ptitle">Выбери свою<br><em>ситуацию</em></h1>
+  <p class="psub">Кем бы ты ни работал — в найме, фрилансе или своём деле — выбери ситуацию которая тебе ближе всего прямо сейчас.</p>
 
-  <div class="cards">
+  <div class="cards" style="grid-template-columns:repeat(2,1fr);max-width:840px">
 
     <div class="sc sw" id="c-switch" onclick="pick('switch',this)">
       <div class="c-illustration">🚀</div>
@@ -211,11 +214,27 @@
       <span class="cemoji">🔁</span>
       <div class="cbadge">Сценарий 3</div>
       <div class="cname">Перезапуск</div>
-      <p class="cdesc">Выгорание, кризис или потеря работы. Моделируем сценарий восстановления и нового старта с нуля.</p>
+      <p class="cdesc">Выгорание, кризис или потеря работы. Моделируем сценарий восстановления и нового старта.</p>
       <div class="cstats">
         <div class="cst"><span class="cst-ico">💰</span><span class="cst-lbl">Потенциал дохода</span><span class="cst-val">Широкий</span></div>
         <div class="cst"><span class="cst-ico">⚡</span><span class="cst-lbl">Неопределённость</span><span class="cst-val">Высокая</span></div>
         <div class="cst"><span class="cst-ico">⏱</span><span class="cst-lbl">Горизонт</span><span class="cst-val">6–24 мес.</span></div>
+      </div>
+      <div class="ccta"><span class="ccta-txt">Выбрать сценарий</span><span class="carr">→</span></div>
+    </div>
+
+    <!-- СЦЕНАРИЙ 4 — ФРИЛАНС / САМОЗАНЯТОСТЬ -->
+    <div class="sc" id="c-freelance" onclick="pick('freelance',this)" style="border-color:rgba(251,191,36,.2)">
+      <div class="c-illustration" style="filter:blur(2px)">💼</div>
+      <div class="chk" id="k-freelance" style="background:rgba(251,191,36,.15);color:rgba(251,191,36,.9);border-color:rgba(251,191,36,.3)"></div>
+      <span class="cemoji">💼</span>
+      <div class="cbadge" style="background:rgba(251,191,36,.1);color:rgba(251,191,36,.8);border-color:rgba(251,191,36,.2)">Сценарий 4</div>
+      <div class="cname">Фриланс и своё дело</div>
+      <p class="cdesc">Ты самозанятый, фрилансер или предприниматель. Помогаем масштабировать доход и выйти на стабильный уровень.</p>
+      <div class="cstats">
+        <div class="cst"><span class="cst-ico">💰</span><span class="cst-lbl">Потенциал дохода</span><span class="cst-val">Нелинейный</span></div>
+        <div class="cst"><span class="cst-ico">⚡</span><span class="cst-lbl">Гибкость</span><span class="cst-val">Высокая</span></div>
+        <div class="cst"><span class="cst-ico">⏱</span><span class="cst-lbl">Горизонт</span><span class="cst-val">3–18 мес.</span></div>
       </div>
       <div class="ccta"><span class="ccta-txt">Выбрать сценарий</span><span class="carr">→</span></div>
     </div>
@@ -256,7 +275,7 @@
   }
 
   function pick(sc,el){
-    ['switch','grow','restart'].forEach(s=>{
+    ['switch','grow','restart','freelance'].forEach(s=>{
       const c=document.getElementById('c-'+s);
       const k=document.getElementById('k-'+s);
       if(c)c.classList.remove('picked');
