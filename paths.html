@@ -286,57 +286,6 @@
     }
 
     /* ══ ГЕЙМИФИКАЦИЯ ══ */
-
-    /* Progress steps top bar */
-    .journey-steps{display:flex;align-items:center;gap:0;margin-bottom:28px;animation:fup .5s .05s ease both;}
-    .js-step{display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:600;padding:6px 12px;border-radius:100px;white-space:nowrap;}
-    .js-done{color:var(--accent);background:var(--ad);border:1px solid var(--am);}
-    .js-active{color:var(--text);background:rgba(255,255,255,.08);border:1px solid var(--border2);}
-    .js-next{color:var(--dim);background:transparent;}
-    .js-arrow{color:var(--dim);font-size:.65rem;margin:0 2px;}
-
-    /* Urgency live bar */
-    .urgency-bar{background:rgba(255,140,60,.07);border:1px solid rgba(255,140,60,.18);border-radius:12px;padding:10px 18px;display:flex;align-items:center;gap:10px;font-size:.82rem;margin-bottom:16px;}
-    .ub-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,140,60,.85);animation:blink 1.2s infinite;flex-shrink:0;}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-    .ub-txt{color:var(--muted);}
-    .ub-txt strong{color:rgba(255,170,80,.95);}
-
-    /* Path cards — stronger hover and glow */
-    .pcard{transition:transform .25s cubic-bezier(.34,1.2,.64,1),box-shadow .25s,border-color .25s !important;}
-    .pcard.pa:hover{transform:translateY(-8px);box-shadow:0 32px 64px rgba(0,0,0,.5),0 0 0 1.5px rgba(255,140,60,.5),0 0 40px rgba(255,140,60,.1);}
-    .pcard.pb2:hover{transform:translateY(-8px);box-shadow:0 32px 64px rgba(0,0,0,.5),0 0 0 1.5px rgba(96,165,250,.5),0 0 40px rgba(96,165,250,.1);}
-    .pcard.sel{animation:selectedPulse .5s cubic-bezier(.34,1.56,.64,1);}
-    @keyframes selectedPulse{0%{transform:scale(1)}40%{transform:scale(1.02)}100%{transform:scale(1)}}
-
-    /* Check icon pop */
-    .pcheck{width:24px;height:24px;border-radius:50%;background:var(--ad);border:1.5px solid var(--am);display:flex;align-items:center;justify-content:center;font-size:.72rem;color:transparent;position:absolute;top:16px;right:16px;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
-    .pcard.sel .pcheck{background:var(--accent);border-color:var(--accent);color:#020617;transform:scale(1.15);}
-
-    /* Popular badge */
-    .popular-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--accent),#a8e000);color:#020617;font-size:.65rem;font-weight:800;padding:3px 12px;border-radius:100px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;box-shadow:0 4px 12px rgba(198,255,0,.4);}
-
-    /* Roadmap steps expandable */
-    .rm-item{cursor:pointer;border-radius:12px;padding:14px 10px;transition:background .2s,padding .2s;}
-    .rm-item:hover{background:rgba(255,255,255,.03);}
-    .rm-item.open{background:rgba(255,255,255,.04);border:1px solid var(--border);}
-    .rm-expand-hint{font-size:.68rem;color:var(--dim);display:flex;align-items:center;gap:4px;margin-top:4px;}
-    .rm-actions{display:none;flex-direction:column;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
-    .rm-item.open .rm-actions{display:flex;}
-    .rm-item.open .rm-expand-hint{display:none;}
-    .rm-action{display:flex;align-items:flex-start;gap:8px;font-size:.8rem;color:var(--muted);line-height:1.5;}
-    .rm-action::before{content:'→';color:var(--accent);flex-shrink:0;margin-top:1px;}
-    .rm-metric{margin-top:8px;display:inline-flex;align-items:center;gap:5px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:100px;}
-
-    /* Comparison tooltip */
-    .pbar-row{position:relative;}
-    .pbar-tooltip{position:absolute;right:0;top:-24px;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-size:.65rem;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;}
-    .pbar-row:hover .pbar-tooltip{opacity:1;}
-
-    /* Confetti particle */
-    .confetti-particle{position:fixed;pointer-events:none;border-radius:2px;z-index:9999;animation:confettiFall .8s cubic-bezier(.4,0,1,1) forwards;}
-    @keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(-80px) rotate(360deg)}}
-
   </style>
 </head>
 <body>
