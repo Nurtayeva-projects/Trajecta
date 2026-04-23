@@ -396,14 +396,14 @@
   const R = load('result');
   const paid = load('paid')===true;
 
-  const SLABELS={switch:'🔄 Смена профессии',grow:'📈 Рост дохода',restart:'🔁 Перезапуск'};
+  const SLABELS={switch:'🔄 Смена профессии',grow:'📈 Рост дохода',restart:'🔁 Перезапуск',freelance:'💼 Фриланс / Своё дело'};
 
   if(!R){
     document.getElementById('content').innerHTML=`<div style="text-align:center;padding:80px 20px"><div style="font-size:3rem;margin-bottom:16px">🔍</div><h2 style="font-family:var(--D);font-size:1.8rem;margin-bottom:12px">Нет данных</h2><p style="color:var(--muted);margin-bottom:28px">Пройди настройку сценария</p><a href="choose.html" class="btn">Запустить симуляцию →</a></div>`;
   } else {
     const PLABELS2 = {law:'Юрист',finance:'Финансист',it:'IT-специалист',marketing:'Маркетолог',design:'Дизайнер',medicine:'Медик',hr:'HR',education:'Педагог',sales:'Продажник',engineering:'Инженер',creative:'Творческая сфера',other:'Специалист'};
     const profLabel = R.ans?.profLabel || PLABELS2[R.prof] || 'Специалист';
-    const scShort = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск'}[R.sc]||'Смена профессии';
+    const scShort = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск',freelance:'Фриланс / Своё дело'}[R.sc]||'Карьерный прогноз';
     const hscEl = document.getElementById('hsc');
     if(hscEl) hscEl.textContent = scShort;
     const heroIncome = document.getElementById('hero-income');
