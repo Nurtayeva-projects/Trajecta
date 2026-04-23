@@ -273,8 +273,18 @@
       {val:'sales',     lbl:'Продажи / Менеджер'},
       {val:'engineering',lbl:'Инженер / Технолог'},
       {val:'creative',  lbl:'Творческая сфера (флорист, повар, фотограф)'},
+      {val:'freelance', lbl:'Фриланс / Самозанятый / Предприниматель'},
       {val:'other',     lbl:'Другая сфера (укажи свою)'},
     ]
+  };
+
+  // Психотип — один вопрос который многое говорит
+  const Q_PSYCHOTYPE = {
+    tag:'🧠 Психотип', key:'psychotype',
+    text:'Как ты обычно принимаешь решения?',
+    a:{val:'analyst',  lbl:'Анализирую данные',       txt:'Сначала изучаю, считаю, сравниваю — потом действую'},
+    b:{val:'doer',     lbl:'Действую и смотрю',       txt:'Пробую на практике, учусь в процессе'},
+    c:{val:'feeler',   lbl:'Слушаю интуицию',          txt:'Доверяю ощущениям и внутренним сигналам'},
   };
 
   // CSS for other input
@@ -292,6 +302,7 @@
 
   const QS_SWITCH = [
     Q_PROFESSION,
+    Q_PSYCHOTYPE,
     Q_DIRECTION,
     { tag:'⚡ Риск', key:'risk',
       text:'Готов ли ты временно зарабатывать меньше?',
@@ -327,6 +338,7 @@
 
   const QS_GROW = [
     Q_PROFESSION,
+    Q_PSYCHOTYPE,
     { tag:'💰 Ситуация', key:'currentLevel',
       text:'Как оцениваешь свой доход сейчас?',
       a:{val:'low',   lbl:'Сильно ниже рынка', txt:'Знаю что недооценён'},
@@ -373,6 +385,7 @@
 
   const QS_RESTART = [
     Q_PROFESSION,
+    Q_PSYCHOTYPE,
     { tag:'🔁 Причина', key:'restartReason',
       text:'Почему хочешь начать заново?',
       a:{val:'low',   lbl:'Выгорел, устал',        txt:'Нужен свежий старт'},
@@ -412,7 +425,51 @@
     },
   ];
 
-  const QS = scenario==='grow' ? QS_GROW : scenario==='restart' ? QS_RESTART : QS_SWITCH;
+
+  // Вопросы для фрилансеров и самозанятых
+  const QS_FREELANCE = [
+    Q_PROFESSION,
+    Q_PSYCHOTYPE,
+    { tag:'💰 Доход', key:'currentLevel',
+      text:'Как ты оцениваешь свой доход сейчас?',
+      a:{val:'low',   lbl:'Нестабильный, хочу больше',   txt:'Доход скачет, хочу стабильность'},
+      b:{val:'medium',lbl:'Нормально, но хочу масштаб',   txt:'Есть база, хочу x2–x3'},
+      c:{val:'high',  lbl:'Хороший, хочу систему',         txt:'Зарабатываю, но хаотично'},
+    },
+    { tag:'🎯 Задача', key:'growStrategy',
+      text:'Что для тебя важнее прямо сейчас?',
+      a:{val:'money',    lbl:'Найти больше клиентов',      txt:'Нужен поток заявок'},
+      b:{val:'interest', lbl:'Поднять чек / ставку',       txt:'Те же усилия — больше денег'},
+      c:{val:'stability',lbl:'Создать стабильный доход',   txt:'Без скачков, предсказуемо'},
+    },
+    { tag:'⚡ Риск', key:'risk',
+      text:'Готов ли рискнуть ради роста?',
+      a:{val:'low',   lbl:'Нет, сначала стабильность',  txt:'Нужна предсказуемость'},
+      b:{val:'medium',lbl:'Умеренный риск',              txt:'Разумные шаги'},
+      c:{val:'high',  lbl:'Готов инвестировать в себя',  txt:'Курсы, реклама, найм'},
+    },
+    Q_DIRECTION,
+    { tag:'💪 Ниша', key:'skills',
+      text:'Насколько ты известен в своей нише?',
+      a:{val:'low',   lbl:'Только начинаю',            txt:'Портфолио небольшое'},
+      b:{val:'medium',lbl:'Есть постоянные клиенты',   txt:'Сарафан работает'},
+      c:{val:'high',  lbl:'Меня знают и рекомендуют',  txt:'Репутация есть'},
+    },
+    { tag:'📅 Горизонт', key:'horizon',
+      text:'Чего хочешь достичь через 2 года?',
+      a:{val:'short',lbl:'Стабильный доход без скачков',  txt:'Предсказуемость важнее максимума'},
+      b:{val:'mid',  lbl:'Вырасти в 2–3 раза',            txt:'Масштаб через нишу или команду'},
+      c:{val:'long', lbl:'Выйти на пассивный доход',       txt:'Продукты, курсы, агентство'},
+    },
+    { tag:'🚀 Стратегия', key:'growthType',
+      text:'Как планируешь расти?',
+      a:{val:'fast',  lbl:'Агрессивный маркетинг',     txt:'Реклама, контент, партнёрства'},
+      b:{val:'stable',lbl:'Системно — чек и качество', txt:'Меньше клиентов, дороже'},
+      c:{val:'new',   lbl:'Новый продукт или формат',  txt:'Курс, агентство, партнёрство'},
+    },
+  ];
+
+  const QS = scenario==='freelance' ? QS_FREELANCE : scenario==='grow' ? QS_GROW : scenario==='restart' ? QS_RESTART : QS_SWITCH;
 
   let cur = 0;
   let answers = {};
@@ -666,6 +723,7 @@
       engineering:{min:280, max:480, growth:.17, risk:.78},
       creative:   {min:250, max:450, growth:.22, risk:.65},
       other:      {min:260, max:450, growth:.17, risk:.72},
+      freelance:  {min:300, max:600, growth:.28, risk:.65},
     };
 
     // Scenario modifiers
@@ -783,6 +841,7 @@
 
     return {
       sc, ans, prof, prob, riskLvl, riskCls,
+      psychotype: ans.psychotype || 'analyst',
       growthType: ans.growthType || 'stable',
       direction:  ans.direction  || null,
       timeLoss: gt.timeLoss,
