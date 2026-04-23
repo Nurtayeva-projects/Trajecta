@@ -153,6 +153,59 @@
     .cta-sub{font-size:.9rem;color:var(--muted);line-height:1.65;margin-bottom:20px;}
     .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 
+
+    /* ── АНИМАЦИИ path-detail.html ── */
+    @keyframes fup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes slideInLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+    @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+    /* Hero */
+    .hero-badge{animation:fup .4s ease both;}
+    .hero-title{animation:fup .5s .1s ease both;}
+    .hero-sub{animation:fup .5s .15s ease both;}
+    .profile-bar{animation:fup .5s .2s ease both;}
+    .path-card{animation:popIn .5s .25s cubic-bezier(.34,1.2,.64,1) both;}
+
+    /* Salary timeline cells */
+    .st-cell{transition:background .2s;}
+    .st-cell:hover{background:rgba(255,255,255,.06);}
+    .st-val{transition:color .3s;}
+
+    /* 90 days cards stagger */
+    .day-card{opacity:0;transform:translateY(16px);animation:fup .4s ease forwards;}
+    .day-card:nth-child(1){animation-delay:.3s}
+    .day-card:nth-child(2){animation-delay:.4s}
+    .day-card:nth-child(3){animation-delay:.5s}
+    .day-card:nth-child(4){animation-delay:.6s}
+    .day-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+
+    /* Roadmap steps slide in */
+    .step-item{opacity:0;transform:translateX(-16px);animation:slideInLeft .4s ease forwards;}
+    .step-item:nth-child(1){animation-delay:.4s}
+    .step-item:nth-child(2){animation-delay:.52s}
+    .step-item:nth-child(3){animation-delay:.64s}
+    .step-item:nth-child(4){animation-delay:.76s}
+    .step-item:nth-child(5){animation-delay:.88s}
+
+    /* Skills hover */
+    .skill-item{transition:all .2s;}
+    .skill-item:hover{border-color:var(--border2);transform:translateY(-2px);}
+    .skill-ico{transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
+    .skill-item:hover .skill-ico{transform:scale(1.3);}
+
+    /* Risk items */
+    .risk-item{transition:all .2s;}
+    .risk-item:hover{border-color:rgba(255,80,50,.3);transform:translateX(4px);}
+
+    /* Resources */
+    .res-item{transition:all .2s;}
+    .res-item:hover{background:rgba(255,255,255,.05);border-color:var(--border2);transform:translateX(3px);}
+
+    /* CTA button pulse */
+    @keyframes ctaPulse{0%,100%{box-shadow:0 8px 28px rgba(198,255,0,.35)}50%{box-shadow:0 8px 40px rgba(198,255,0,.6)}}
+    .cta-block .btn{animation:ctaPulse 2.5s ease-in-out infinite;}
+    .cta-block .btn:hover{animation:none;}
+
     @media(max-width:640px){
       header{padding:0 20px;}
       .page{padding:92px 16px 80px;gap:14px;}
