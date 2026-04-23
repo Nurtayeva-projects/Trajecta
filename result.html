@@ -522,7 +522,7 @@
             </div>
           </div>
           <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px">
-            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:6px">🎯 Подходящие профессии</div>
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:6px">🎯 Роли под твой тип личности</div>
             <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
               ${{A:'Data Analyst · PM · Стратегический консультант',B:'CTO · Operations Manager · Архитектор решений',C:'HR BP · Sales Manager · Коуч / Ментор',D:'Project Manager · Предприниматель · Технический специалист',E:'Founder · Creative Director · Продуктовый визионер',analyst:'Аналитик, исследователь, PM',doer:'Менеджер, предприниматель',feeler:'Коуч, творческая сфера, стратег'}[R.psychotype]||'Зависит от сценария'}
             </div>
@@ -570,8 +570,9 @@
           <span class="ci">${R.sc==='grow' ? '📈' : '🎯'}</span>
           <span class="ct">${R.sc==='grow' ? 'Варианты роста внутри твоей сферы' : R.sc==='restart' ? 'Варианты нового старта с твоим опытом' : 'Профессии, в которые переходят из твоей сферы'}</span>
         </div>
-        <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,.03);border-radius:8px;line-height:1.55">
-          💡 Это не твой финальный выбор — это <strong style="color:rgba(240,244,255,.75)">ориентиры для сравнения</strong>. Конкретные пути с планом действий — на следующем шаге.
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:14px;line-height:1.6">
+          Это <strong style="color:rgba(240,244,255,.75)">ориентиры</strong> — не финальный выбор.
+          Конкретные пути с цифрами и планом действий — на следующем шаге.
         </div>
         <div id="rec-profs-list"></div>
       </div>
@@ -1261,10 +1262,26 @@
       return (RESTART_FROM[prof] || RESTART_FROM.other).slice(0,3);
     }
 
-    // Fallback
-    return [
-      {name:'Project Manager',why:'Универсальный трек для любой сферы.',salary:'500 000 – 900 000 тг',time:'4–8 мес.',prob:70},
-    ];
+    // Сценарий FREELANCE — масштабирование
+    if(sc === 'freelance'){
+      const FREELANCE = {
+        it:         [{name:'Tech Lead / Senior консультант',   why:'Повышение ставки через специализацию. Senior разработчик на фрилансе: $60–120/час.',   salary:'900 000 – 2 400 000 тг',time:'4–8 мес.',prob:78},
+                     {name:'Собственный IT-продукт / SaaS',    why:'Технические навыки + предпринимательство = нелинейный доход без потолка.',             salary:'500 000 – 5 000 000 тг',time:'12–24 мес.',prob:52},
+                     {name:'IT-агентство / команда',            why:'Масштаб через найм. 3 разработчика × твои клиенты = 3-кратный оборот.',               salary:'1 000 000 – 4 000 000 тг',time:'8–18 мес.',prob:60}],
+        marketing:  [{name:'Маркетинговое агентство',           why:'3–5 ретейнеров по 200–400к тг/мес = стабильный предсказуемый доход.',                 salary:'800 000 – 2 500 000 тг',time:'8–14 мес.',prob:65},
+                     {name:'Повышение чека через нишу',         why:'Специализация на одной индустрии удваивает ставку за 3–6 месяцев.',                   salary:'500 000 – 1 200 000 тг',time:'3–6 мес.',prob:74},
+                     {name:'Онлайн-курс по маркетингу',         why:'Один раз создаёшь — продаёшь постоянно. Пассивный доход на основе экспертизы.',       salary:'300 000 – 1 500 000 тг',time:'6–12 мес.',prob:60}],
+        other:      [{name:'Повысить чек на 30–50%',            why:'Большинство фрилансеров недооценены. Правильное позиционирование меняет это быстро.',  salary:'500 000 – 1 500 000 тг',time:'2–4 мес.',prob:72},
+                     {name:'Система привлечения клиентов',      why:'Уйти от сарафана к стабильному потоку — LinkedIn, контент, реклама.',                  salary:'600 000 – 2 000 000 тг',time:'4–8 мес.',prob:65},
+                     {name:'Первый найм / команда',              why:'Масштаб без потолка. Один помощник освобождает тебя для дорогих задач.',              salary:'800 000 – 3 000 000 тг',time:'8–18 мес.',prob:55}],
+      };
+      return (FREELANCE[prof] || FREELANCE.other).slice(0,3);
+    }
+
+    // Fallback — не должен срабатывать, но на всякий случай
+    return (SWITCH_FROM[prof] || SWITCH_FROM.other || [
+      {name:'Project Manager',why:'Управление проектами востребовано в любой сфере.',salary:'500 000 – 900 000 тг',time:'4–8 мес.',prob:70},
+    ]).slice(0,3);
   }
 
   function fmt(v){ return (v*1000).toLocaleString('ru-RU'); }
