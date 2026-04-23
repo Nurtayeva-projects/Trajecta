@@ -80,26 +80,34 @@
     .qtag{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);color:rgba(167,139,250,.9);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;}
     .qtext{font-family:var(--D);font-size:clamp(1.2rem,2.8vw,1.6rem);font-weight:800;line-height:1.2;letter-spacing:-.025em;margin-bottom:24px;padding-right:50px;}
 
-    /* OPTIONS */
+    /* Options — единый стиль, 5 вариантов */
     .opts{display:flex;flex-direction:column;gap:10px;}
     .opt{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:12px;padding:15px 18px;cursor:pointer;transition:all .2s;text-align:left;width:100%;font-family:var(--B);}
-    .opt:hover{border-color:rgba(167,139,250,.35);background:rgba(167,139,250,.05);transform:translateY(-2px);}
+    .opt:hover{border-color:rgba(167,139,250,.35);background:rgba(167,139,250,.06);transform:translateY(-2px);}
     .okey{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-weight:800;font-size:.78rem;flex-shrink:0;transition:all .2s;}
     .obody{flex:1;}
     .oval{font-size:.95rem;font-weight:600;color:var(--text);}
     .otxt{font-size:.8rem;color:var(--muted);margin-top:3px;line-height:1.4;}
     .ochk{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;transition:all .2s;color:transparent;}
 
-    /* Picked states */
-    .opt.sa{border-color:rgba(96,165,250,.45);background:rgba(96,165,250,.07);}
-    .opt.sa .okey{background:rgba(96,165,250,.2);color:rgba(96,165,250,1);}
-    .opt.sa .ochk{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.15);color:rgba(96,165,250,1);animation:checkBounce .35s cubic-bezier(.34,1.56,.64,1) both;}
-    .opt.sb{border-color:rgba(198,255,0,.4);background:var(--ad);}
-    .opt.sb .okey{background:rgba(198,255,0,.18);color:var(--accent);}
-    .opt.sb .ochk{border-color:var(--accent);background:rgba(198,255,0,.15);color:var(--accent);animation:checkBounce .35s cubic-bezier(.34,1.56,.64,1) both;}
-    .opt.sc{border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.07);}
-    .opt.sc .okey{background:rgba(167,139,250,.2);color:rgba(167,139,250,1);}
-    .opt.sc .ochk{border-color:rgba(167,139,250,.7);background:rgba(167,139,250,.15);color:rgba(167,139,250,1);animation:checkBounce .35s cubic-bezier(.34,1.56,.64,1) both;}
+    /* Picked — единый фиолетовый для всех 5 */
+    .opt.sa,.opt.sb,.opt.sc,.opt.sd,.opt.se{
+      border-color:rgba(167,139,250,.5);
+      background:rgba(167,139,250,.1);
+    }
+    .opt.sa .okey,.opt.sb .okey,.opt.sc .okey,.opt.sd .okey,.opt.se .okey{
+      background:rgba(167,139,250,.25);
+      color:rgba(167,139,250,1);
+    }
+    .opt.sa .oval,.opt.sb .oval,.opt.sc .oval,.opt.sd .oval,.opt.se .oval{
+      color:rgba(167,139,250,.95);
+    }
+    .opt.sa .ochk,.opt.sb .ochk,.opt.sc .ochk,.opt.sd .ochk,.opt.se .ochk{
+      border-color:rgba(167,139,250,.7);
+      background:rgba(167,139,250,.2);
+      color:rgba(167,139,250,1);
+      animation:checkBounce .35s cubic-bezier(.34,1.56,.64,1) both;
+    }
 
     .hint{font-size:.78rem;color:rgba(255,100,100,.7);text-align:center;min-height:20px;margin-top:10px;opacity:0;transition:opacity .3s;}
     .hint.show{opacity:1;}
@@ -340,17 +348,26 @@
 
   function pick(qnum, val, letter){
     answers[qnum] = val;
+    // Reset all options
     const opts = document.querySelectorAll('.opt');
-    opts.forEach(o=>{ o.className='opt'; const ck=o.querySelector('.ochk'); if(ck){ck.textContent='';} });
+    opts.forEach(o=>{
+      o.className='opt';
+      const ck=o.querySelector('.ochk');
+      if(ck){ ck.textContent=''; ck.style.color='transparent'; }
+    });
+    // Find and highlight selected
     const lmap={a:0,b:1,c:2,d:3,e:4};
-    const el = opts[lmap[letter]];
-    if(el){
-      el.className='opt s'+letter;
-      el.style.animation='none';
+    const idx = lmap[letter];
+    if(idx !== undefined && opts[idx]){
+      const el = opts[idx];
+      el.className = 'opt s'+letter;
+      el.style.animation = 'none';
       requestAnimationFrame(()=>{ el.style.animation='optPop .3s ease'; });
-      const ck=el.querySelector('.ochk'); if(ck) ck.textContent='✓';
+      const ck = el.querySelector('.ochk');
+      if(ck){ ck.textContent='✓'; ck.style.color='rgba(167,139,250,1)'; }
     }
     document.getElementById('hint').classList.remove('show');
+    // Auto-advance on mobile
     if(window.innerWidth<=600) setTimeout(()=>{ if(answers[PSYCHO_QS[cur].num]) next(); },450);
   }
 
