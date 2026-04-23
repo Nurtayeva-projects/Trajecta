@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trajecta B2B — Демо дашборд</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#020617;--card:#0d1b35;--card2:#111f3a;
+      --blue:rgba(96,165,250,.9);--bd:rgba(96,165,250,.12);--bm:rgba(96,165,250,.22);
+      --accent:#C6FF00;--ag:rgba(198,255,0,.45);--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);
+      --orange:rgba(255,140,60,.9);--od:rgba(255,140,60,.1);
+      --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+      --text:#f0f4ff;--muted:rgba(240,244,255,.48);--dim:rgba(240,244,255,.22);
+      --D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;
+    }
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:rgba(96,165,250,.2);border-radius:3px}
+
+    .bg-g{position:fixed;inset:0;pointer-events:none;z-index:0;
+      background:radial-gradient(ellipse 80% 50% at 60% 0%,rgba(96,165,250,.06) 0%,transparent 55%),
+                 radial-gradient(ellipse 40% 30% at 10% 80%,rgba(198,255,0,.03) 0%,transparent 50%);}
+
+    header{display:flex;align-items:center;padding:0 40px;height:64px;border-bottom:1px solid var(--border);background:rgba(2,6,23,.95);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;}
+    .logo{font-family:var(--D);font-size:1.3rem;font-weight:800;letter-spacing:-.02em;}
+    .logo span{color:var(--accent);}
+    .logo-tag{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);background:var(--bd);border:1px solid var(--bm);padding:2px 8px;border-radius:100px;margin-left:8px;}
+    .hbtns{margin-left:auto;display:flex;gap:10px;align-items:center;}
+    .btn{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#020617;font-family:var(--B);font-weight:700;font-size:.85rem;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;text-decoration:none;}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(96,165,250,.4);}
+    .btn-g{background:transparent;color:var(--muted);border:1px solid var(--border2);}
+    .btn-g:hover{color:var(--text);box-shadow:none;transform:translateY(-1px);}
+
+    @keyframes fup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    @keyframes countUp{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+    .wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:32px 40px 80px;}
+
+    /* INVESTOR BANNER */
+    .inv-banner{background:linear-gradient(135deg,rgba(198,255,0,.08),rgba(198,255,0,.02));border:1.5px solid rgba(198,255,0,.25);border-radius:16px;padding:20px 28px;display:flex;align-items:center;gap:16px;margin-bottom:28px;animation:fup .5s ease both;}
+    .inv-ico{font-size:1.5rem;flex-shrink:0;}
+    .inv-text{flex:1;}
+    .inv-title{font-family:var(--D);font-size:.9rem;font-weight:800;margin-bottom:3px;}
+    .inv-sub{font-size:.78rem;color:var(--muted);}
+    .inv-badge{display:inline-flex;align-items:center;gap:6px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+
+    /* DASHBOARD HEADER */
+    .db-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;animation:fup .5s .1s ease both;}
+    .db-h-left h1{font-family:var(--D);font-size:1.5rem;font-weight:800;letter-spacing:-.03em;}
+    .db-h-left p{font-size:.85rem;color:var(--muted);margin-top:4px;}
+    .db-live{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--blue);}
+    .db-live-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 1.5s infinite;}
+
+    /* METRIC CARDS */
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;animation:fup .5s .15s ease both;}
+    .metric{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
+    .metric-label{font-size:.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px;}
+    .metric-val{font-family:var(--D);font-size:1.8rem;font-weight:800;letter-spacing:-.03em;animation:countUp .6s cubic-bezier(.34,1.2,.64,1) both;}
+    .metric-change{font-size:.75rem;margin-top:5px;font-weight:600;}
+    .ch-up{color:var(--accent);}
+    .ch-dn{color:rgba(255,80,50,.8);}
+    .ch-ne{color:var(--muted);}
+
+    /* TWO COLUMN */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;}
+
+    /* TEAM TABLE */
+    .db-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;}
+    .db-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .db-card-title{font-family:var(--D);font-size:.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;}
+    .db-card-action{font-size:.75rem;color:var(--blue);cursor:pointer;font-weight:600;}
+    .db-card-action:hover{text-decoration:underline;}
+
+    .team-table{width:100%;border-collapse:collapse;}
+    .team-table th{font-size:.65rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.09em;padding:0 0 10px;text-align:left;border-bottom:1px solid var(--border);}
+    .team-table td{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.85rem;vertical-align:middle;}
+    .team-table tr:last-child td{border-bottom:none;}
+    .t-av{width:30px;height:30px;border-radius:8px;background:var(--bd);border:1px solid var(--bm);display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+    .t-name{font-weight:600;}
+    .t-role{font-size:.72rem;color:var(--muted);}
+
+    /* STATUS BADGES */
+    .status{font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;}
+    .s-grow{background:var(--ad);color:var(--accent);border:1px solid var(--am);}
+    .s-risk{background:rgba(255,80,50,.1);color:rgba(255,120,80,.9);border:1px solid rgba(255,80,50,.2);}
+    .s-ok{background:var(--bd);color:var(--blue);border:1px solid var(--bm);}
+    .s-new{background:rgba(167,139,250,.1);color:rgba(167,139,250,.9);border:1px solid rgba(167,139,250,.2);}
+
+    /* SCORE BAR */
+    .score-bar{display:flex;align-items:center;gap:8px;}
+    .score-track{width:60px;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
+    .score-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+    .sf-accent{background:var(--accent);}
+    .sf-blue{background:var(--blue);}
+    .sf-red{background:rgba(255,80,50,.8);}
+    .score-num{font-size:.78rem;font-weight:700;color:var(--muted);min-width:28px;}
+
+    /* PSYCHOTYPE DISTRIBUTION */
+    .psycho-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+    .psycho-item{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center;}
+    .pi-ico{font-size:1.2rem;margin-bottom:5px;}
+    .pi-name{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+    .pi-count{font-family:var(--D);font-size:1.2rem;font-weight:800;}
+    .pi-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:6px;overflow:hidden;}
+    .pi-fill{height:100%;border-radius:2px;background:var(--blue);transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+
+    /* RISK ALERTS */
+    .alerts-list{display:flex;flex-direction:column;gap:8px;}
+    .alert-item{display:flex;align-items:flex-start;gap:10px;background:rgba(255,80,50,.05);border:1px solid rgba(255,80,50,.15);border-radius:10px;padding:11px 14px;}
+    .alert-ico{font-size:.9rem;flex-shrink:0;margin-top:1px;}
+    .alert-name{font-size:.82rem;font-weight:600;margin-bottom:2px;}
+    .alert-desc{font-size:.72rem;color:var(--muted);}
+    .alert-level{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:100px;flex-shrink:0;margin-top:2px;}
+    .al-high{background:rgba(255,80,50,.15);color:rgba(255,100,80,.9);}
+    .al-med{background:rgba(255,170,50,.1);color:rgba(255,190,80,.9);}
+
+    /* GROWTH CHART BARS */
+    .chart-bars{display:flex;align-items:flex-end;gap:8px;height:80px;padding:0 4px;}
+    .cb{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+    .cb-bar{width:100%;border-radius:4px 4px 0 0;transition:height 1.2s cubic-bezier(.4,0,.2,1);min-height:4px;}
+    .cb-label{font-size:.6rem;color:var(--muted);text-align:center;}
+
+    /* INSIGHT CARD */
+    .insight-card{background:linear-gradient(135deg,rgba(96,165,250,.08),rgba(96,165,250,.02));border:1px solid rgba(96,165,250,.2);border-radius:14px;padding:18px 20px;}
+    .ins-tag{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;}
+    .ins-text{font-size:.9rem;font-weight:600;line-height:1.55;margin-bottom:8px;}
+    .ins-action{font-size:.78rem;color:var(--blue);font-weight:600;cursor:pointer;}
+    .ins-action:hover{text-decoration:underline;}
+
+    /* BOTTOM CTA */
+    .bottom-cta{background:linear-gradient(135deg,rgba(96,165,250,.08),rgba(96,165,250,.03));border:1.5px solid rgba(96,165,250,.25);border-radius:20px;padding:32px 40px;display:flex;align-items:center;gap:40px;margin-top:24px;animation:fup .5s .4s ease both;}
+    .bc-left{flex:1;}
+    .bc-title{font-family:var(--D);font-size:1.3rem;font-weight:800;letter-spacing:-.025em;margin-bottom:6px;}
+    .bc-sub{font-size:.88rem;color:var(--muted);line-height:1.65;}
+    .bc-right{flex-shrink:0;text-align:center;}
+    .bc-price{font-family:var(--D);font-size:1.8rem;font-weight:800;color:var(--blue);margin-bottom:4px;}
+    .bc-note{font-size:.72rem;color:var(--muted);margin-bottom:14px;}
+
+    @media(max-width:900px){
+      .wrap{padding:24px 20px 60px;}
+      .metrics{grid-template-columns:repeat(2,1fr);}
+      .two-col,.three-col{grid-template-columns:1fr;}
+      .psycho-grid{grid-template-columns:repeat(3,1fr);}
+      .bottom-cta{flex-direction:column;gap:20px;}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-g"></div>
+
+<header>
+  <a href="index.html" class="logo">Traject<span>a</span> <span class="logo-tag">B2B</span></a>
+  <div class="hbtns">
+    <a href="b2b.html" class="btn btn-g" style="font-size:.8rem">← Вернуться</a>
+    <a href="b2b.html" class="btn" onclick="event.preventDefault();document.getElementById('demo-toast').style.display='flex'">Запросить полный доступ</a>
+  </div>
+</header>
+
+<!-- Demo toast -->
+<div id="demo-toast" style="display:none;position:fixed;bottom:28px;right:28px;background:#0d1b35;border:1px solid rgba(96,165,250,.35);border-radius:14px;padding:18px 24px;z-index:9999;max-width:320px;animation:fup .4s ease">
+  <div style="font-weight:700;color:#f0f4ff;margin-bottom:5px">📬 Заявка отправлена!</div>
+  <div style="font-size:.82rem;color:rgba(240,244,255,.6)">Свяжемся в течение 24 часов для демо и доступа.</div>
+  <button onclick="this.parentElement.style.display='none'" style="position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(240,244,255,.4);cursor:pointer;font-size:1rem">✕</button>
+</div>
+
+<div class="wrap">
+
+  <!-- INVESTOR BANNER -->
+  <div class="inv-banner">
+    <div class="inv-ico">📊</div>
+    <div class="inv-text">
+      <div class="inv-title">Демо дашборд — Тариф «Команда» (10 человек)</div>
+      <div class="inv-sub">Это демонстрационные данные для инвесторов и партнёров. Реальные данные доступны после подключения.</div>
+    </div>
+    <div class="inv-badge">🔓 Открытый доступ</div>
+  </div>
+
+  <!-- DASHBOARD HEADER -->
+  <div class="db-header">
+    <div class="db-h-left">
+      <h1>Команда · Обзор потенциала</h1>
+      <p>Компания «ТехноСтарт» · 10 сотрудников · Апрель 2025</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="db-live"><div class="db-live-dot"></div>Данные актуальны</div>
+      <button class="btn" style="font-size:.8rem;padding:8px 16px" onclick="exportDemo()">📥 Экспорт CSV</button>
+    </div>
+  </div>
+
+  <!-- METRIC CARDS -->
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">Готовы к росту</div>
+      <div class="metric-val" style="color:var(--accent)">4</div>
+      <div class="metric-change ch-up">↑ +2 за квартал</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Риск ухода</div>
+      <div class="metric-val" style="color:rgba(255,100,80,.9)">2</div>
+      <div class="metric-change ch-dn">⚠️ Требует внимания</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Средний потенциал</div>
+      <div class="metric-val" style="color:var(--blue)">72%</div>
+      <div class="metric-change ch-up">↑ выше среднего по КЗ</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Пройдено тестов</div>
+      <div class="metric-val">10/10</div>
+      <div class="metric-change ch-ne">100% охват</div>
+    </div>
+  </div>
+
+  <!-- TEAM TABLE + ALERTS -->
+  <div class="two-col" style="grid-template-columns:2fr 1fr">
+
+    <!-- TEAM TABLE -->
+    <div class="db-card" style="animation:fup .5s .2s ease both">
+      <div class="db-card-head">
+        <span class="db-card-title">Команда · Профили</span>
+        <span class="db-card-action">Экспорт Excel →</span>
+      </div>
+      <table class="team-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Сотрудник</th>
+            <th>Психотип</th>
+            <th>Потенциал</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody id="team-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- RISK ALERTS -->
+    <div class="db-card" style="animation:fup .5s .25s ease both">
+      <div class="db-card-head">
+        <span class="db-card-title">⚠️ Риски</span>
+      </div>
+      <div class="alerts-list">
+        <div class="alert-item">
+          <div class="alert-ico">🔥</div>
+          <div style="flex:1">
+            <div class="alert-name">Данияр К.</div>
+            <div class="alert-desc">Признаки выгорания. 3+ мес. без роста.</div>
+          </div>
+          <div class="alert-level al-high">Высокий</div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-ico">⚡</div>
+          <div style="flex:1">
+            <div class="alert-name">Асель М.</div>
+            <div class="alert-desc">Готова к повышению. Риск ухода без оффера.</div>
+          </div>
+          <div class="alert-level al-med">Средний</div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-ico">📉</div>
+          <div style="flex:1">
+            <div class="alert-name">Айгерим Н.</div>
+            <div class="alert-desc">Доход ниже рынка на 35%. Уязвимость.</div>
+          </div>
+          <div class="alert-level al-med">Средний</div>
+        </div>
+      </div>
+      <div class="insight-card" style="margin-top:12px">
+        <div class="ins-tag">💡 AI Инсайт</div>
+        <div class="ins-text">2 из 10 сотрудников могут уйти в течение 6 месяцев без вмешательства.</div>
+        <div class="ins-action">Посмотреть рекомендации →</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PSYCHOTYPE DISTRIBUTION + GROWTH CHART -->
+  <div class="two-col" style="animation:fup .5s .3s ease both">
+
+    <div class="db-card">
+      <div class="db-card-head">
+        <span class="db-card-title">Психотипы команды</span>
+      </div>
+      <div class="psycho-grid" id="psycho-grid"></div>
+      <div style="margin-top:14px;font-size:.78rem;color:var(--muted);line-height:1.6">
+        💡 <strong style="color:rgba(240,244,255,.75)">Инсайт:</strong> В команде преобладают Исполнители (D) и Аналитики (A) — сильная операционная база, но не хватает Визионеров для роста.
+      </div>
+    </div>
+
+    <div class="db-card">
+      <div class="db-card-head">
+        <span class="db-card-title">Потенциал роста дохода</span>
+      </div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px">Прогноз через 2 года при инвестиции в развитие</div>
+      <div class="chart-bars" id="chart-bars"></div>
+      <div style="margin-top:14px;display:flex;align-items:center;gap:10px;font-size:.75rem">
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;background:var(--blue);border-radius:2px;display:inline-block"></span>Текущий</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;background:var(--accent);border-radius:2px;display:inline-block"></span>Через 2 года</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="three-col" style="animation:fup .5s .35s ease both">
+    <div class="db-card">
+      <div class="db-card-head"><span class="db-card-title">🎯 L&D Приоритеты</span></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;font-size:.82rem">
+          <span style="font-size:1rem">📊</span>
+          <div><div style="font-weight:600">Data Literacy</div><div style="color:var(--muted);font-size:.72rem">5 сотрудников — приоритет</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:.82rem">
+          <span style="font-size:1rem">🗣️</span>
+          <div><div style="font-weight:600">Коммуникация и переговоры</div><div style="color:var(--muted);font-size:.72rem">3 сотрудника — рекомендовано</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:.82rem">
+          <span style="font-size:1rem">🏗️</span>
+          <div><div style="font-weight:600">Project Management</div><div style="color:var(--muted);font-size:.72rem">2 сотрудника — для роста</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="db-card">
+      <div class="db-card-head"><span class="db-card-title">🚀 Карьерные треки</span></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:.82rem;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div>Асель М. → Team Lead</div>
+          <span class="status s-grow">Готова</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:.82rem;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div>Мадина Т. → Senior</div>
+          <span class="status s-ok">6 мес.</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:.82rem;padding:6px 0">
+          <div>Нурлан А. → L&D</div>
+          <span class="status s-new">Обсудить</span>
+        </div>
+      </div>
+    </div>
+    <div class="db-card">
+      <div class="db-card-head"><span class="db-card-title">💰 ROI инвестиции</span></div>
+      <div style="font-size:.82rem;color:var(--muted);margin-bottom:12px">При вложении в развитие команды</div>
+      <div style="font-family:var(--D);font-size:2rem;font-weight:800;color:var(--accent);margin-bottom:4px">×3.2</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:10px">средний ROI на обучение по рынку КЗ</div>
+      <div style="font-size:.75rem;color:var(--muted);background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px">
+        Удержание 1 опытного сотрудника = экономия 6–18 его зарплат на поиск замены
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="bottom-cta">
+    <div class="bc-left">
+      <div class="bc-title">Подключить реальную команду</div>
+      <p class="bc-sub">Тариф «Команда» включает 10 реальных прохождений, полный дашборд, экспорт и поддержку. Запустить за 1 рабочий день.</p>
+    </div>
+    <div class="bc-right">
+      <div class="bc-price">39 900 ₸</div>
+      <div class="bc-note">пакет на 10 человек</div>
+      <a href="b2b.html" class="btn" style="font-size:.9rem;padding:12px 28px;display:block">Подключить команду →</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // TEAM DATA
+  const team = [
+    {av:'👩‍💼',name:'Асель М.',     role:'Маркетолог · 3 года',   psycho:'🚀 Визионер', score:88, status:'s-grow', statusTxt:'Готова к росту'},
+    {av:'👨‍💻',name:'Данияр К.',    role:'Разработчик · 1.5 года', psycho:'⚡ Исполнитель',score:42, status:'s-risk', statusTxt:'Риск выгорания'},
+    {av:'👩‍🔬',name:'Мадина Т.',    role:'Аналитик · 2 года',      psycho:'🔬 Аналитик',  score:74, status:'s-ok',   statusTxt:'Стабильный рост'},
+    {av:'👨‍🎨',name:'Нурлан А.',    role:'Дизайнер · 1 год',       psycho:'🏗️ Архитектор',score:65, status:'s-new',  statusTxt:'Нужно обсудить'},
+    {av:'👩‍💼',name:'Айгерим Н.',   role:'HR · 2.5 года',          psycho:'🤝 Коммуникатор',score:58, status:'s-risk', statusTxt:'Доход ниже рынка'},
+    {av:'👨‍💼',name:'Серик Б.',     role:'PM · 3 года',            psycho:'🔬 Аналитик',  score:80, status:'s-ok',   statusTxt:'Стабильный рост'},
+    {av:'👩‍💻',name:'Камила Р.',    role:'Frontend · 2 года',      psycho:'⚡ Исполнитель',score:71, status:'s-grow', statusTxt:'Готова к росту'},
+    {av:'👨‍🔬',name:'Алибек С.',    role:'Data · 1 год',           psycho:'🔬 Аналитик',  score:68, status:'s-ok',   statusTxt:'Стабильный рост'},
+    {av:'👩‍🏫',name:'Жансая К.',    role:'Content · 2 года',       psycho:'🚀 Визионер',  score:77, status:'s-grow', statusTxt:'Готова к росту'},
+    {av:'👨‍⚕️',name:'Руслан М.',    role:'Sales · 3 года',         psycho:'🤝 Коммуникатор',score:82, status:'s-ok',   statusTxt:'Стабильный рост'},
+  ];
+
+  // Render team table
+  const tbody = document.getElementById('team-tbody');
+  team.forEach(m => {
+    const scoreColor = m.score >= 75 ? 'sf-accent' : m.score >= 55 ? 'sf-blue' : 'sf-red';
+    tbody.innerHTML += `
+      <tr>
+        <td><div class="t-av">${m.av}</div></td>
+        <td><div class="t-name">${m.name}</div><div class="t-role">${m.role}</div></td>
+        <td style="font-size:.78rem">${m.psycho}</td>
+        <td>
+          <div class="score-bar">
+            <div class="score-track"><div class="score-fill ${scoreColor}" data-w="${m.score}" style="width:0%"></div></div>
+            <span class="score-num">${m.score}%</span>
+          </div>
+        </td>
+        <td><span class="status ${m.status}">${m.statusTxt}</span></td>
+      </tr>`;
+  });
+
+  // Psychotype distribution
+  const psychoCount = {A:3,B:1,C:2,D:3,E:2};
+  const psychoData = [
+    {ico:'🔬',name:'Аналитик',  key:'A', color:'rgba(96,165,250,.8)'},
+    {ico:'🏗️',name:'Архитектор',key:'B', color:'rgba(167,139,250,.8)'},
+    {ico:'🤝',name:'Коммуникатор',key:'C', color:'rgba(198,255,0,.8)'},
+    {ico:'⚡',name:'Исполнитель',key:'D', color:'rgba(255,140,60,.8)'},
+    {ico:'🚀',name:'Визионер',  key:'E', color:'rgba(255,80,150,.8)'},
+  ];
+  const pg = document.getElementById('psycho-grid');
+  psychoData.forEach(p => {
+    pg.innerHTML += `
+      <div class="psycho-item">
+        <div class="pi-ico">${p.ico}</div>
+        <div class="pi-name">${p.name}</div>
+        <div class="pi-count" style="color:${p.color}">${psychoCount[p.key]}</div>
+        <div class="pi-bar"><div class="pi-fill" style="width:0%;background:${p.color}" data-w="${Math.round(psychoCount[p.key]/10*100)}"></div></div>
+      </div>`;
+  });
+
+  // Chart bars
+  const chartData = [
+    {name:'Асель',  cur:60,fut:95},
+    {name:'Данияр', cur:70,fut:75},
+    {name:'Мадина', cur:55,fut:85},
+    {name:'Нурлан', cur:50,fut:70},
+    {name:'Айгерим',cur:45,fut:80},
+  ];
+  const cb = document.getElementById('chart-bars');
+  chartData.forEach(d => {
+    const maxH = 70;
+    cb.innerHTML += `
+      <div class="cb">
+        <div style="display:flex;gap:2px;align-items:flex-end;height:${maxH}px">
+          <div class="cb-bar sf-blue" data-h="${Math.round(d.cur/100*maxH)}" style="height:0;width:16px;background:rgba(96,165,250,.5);border-radius:3px 3px 0 0"></div>
+          <div class="cb-bar sf-accent" data-h="${Math.round(d.fut/100*maxH)}" style="height:0;width:16px;background:rgba(198,255,0,.7);border-radius:3px 3px 0 0"></div>
+        </div>
+        <div class="cb-label">${d.name}</div>
+      </div>`;
+  });
+
+  // Animate on load
+  setTimeout(() => {
+    document.querySelectorAll('.score-fill[data-w]').forEach(el => { el.style.width = el.dataset.w + '%'; });
+    document.querySelectorAll('.pi-fill[data-w]').forEach(el => { el.style.width = el.dataset.w + '%'; });
+    document.querySelectorAll('.cb-bar[data-h]').forEach(el => { el.style.height = el.dataset.h + 'px'; });
+  }, 400);
+
+  function exportDemo(){
+    const blob = new Blob(['Имя,Психотип,Потенциал,Статус\n' + team.map(m=>`${m.name},${m.psycho},${m.score}%,${m.statusTxt}`).join('\n')], {type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'trajecta_team_demo.csv';
+    a.click();
+  }
+</script>
+</body>
+</html>
