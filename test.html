@@ -302,7 +302,6 @@
 
   const QS_SWITCH = [
     Q_PROFESSION,
-    Q_PSYCHOTYPE,
     Q_DIRECTION,
     { tag:'⚡ Риск', key:'risk',
       text:'Готов ли ты временно зарабатывать меньше?',
@@ -338,7 +337,6 @@
 
   const QS_GROW = [
     Q_PROFESSION,
-    Q_PSYCHOTYPE,
     { tag:'💰 Ситуация', key:'currentLevel',
       text:'Как оцениваешь свой доход сейчас?',
       a:{val:'low',   lbl:'Сильно ниже рынка', txt:'Знаю что недооценён'},
@@ -385,7 +383,6 @@
 
   const QS_RESTART = [
     Q_PROFESSION,
-    Q_PSYCHOTYPE,
     { tag:'🔁 Причина', key:'restartReason',
       text:'Почему хочешь начать заново?',
       a:{val:'low',   lbl:'Выгорел, устал',        txt:'Нужен свежий старт'},
@@ -429,7 +426,6 @@
   // Вопросы для фрилансеров и самозанятых
   const QS_FREELANCE = [
     Q_PROFESSION,
-    Q_PSYCHOTYPE,
     { tag:'💰 Доход', key:'currentLevel',
       text:'Как ты оцениваешь свой доход сейчас?',
       a:{val:'low',   lbl:'Нестабильный, хочу больше',   txt:'Доход скачет, хочу стабильность'},
@@ -699,7 +695,7 @@
       si++;
       if(si>=steps.length){
         clearInterval(t);
-        setTimeout(()=>{ window.location.href='result.html'; },500);
+        setTimeout(()=>{ window.location.href='test-psycho.html'; },500);
       }
     },550);
   }
