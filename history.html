@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>История — Trajecta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#020617;--card:#0d1b35;--card2:#111f3a;
+      --accent:#C6FF00;--ag:rgba(198,255,0,.45);--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);
+      --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+      --text:#f0f4ff;--muted:rgba(240,244,255,.48);--dim:rgba(240,244,255,.22);
+      --D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;
+    }
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;-webkit-font-smoothing:antialiased;}
+    .bg-g{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(198,255,0,.04),transparent 60%);}
+    header{display:flex;align-items:center;padding:0 40px;height:64px;border-bottom:1px solid var(--border);background:rgba(2,6,23,.92);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;}
+    .logo{font-family:var(--D);font-size:1.4rem;font-weight:800;text-decoration:none;color:var(--text);}
+    .logo span{color:var(--accent);}
+    .hbtns{margin-left:auto;display:flex;gap:10px;}
+    .btn{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#020617;font-family:var(--B);font-weight:700;font-size:.85rem;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;text-decoration:none;}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(198,255,0,.35);}
+    .btn-g{background:transparent;color:var(--muted);border:1px solid var(--border2);}
+    .btn-g:hover{color:var(--text);box-shadow:none;}
+    @keyframes fup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+    .wrap{max-width:800px;margin:0 auto;padding:40px 32px 80px;position:relative;z-index:1;}
+    .page-title{font-family:var(--D);font-size:1.8rem;font-weight:800;letter-spacing:-.035em;margin-bottom:6px;}
+    .page-title em{font-style:normal;color:var(--accent);}
+    .page-sub{font-size:.9rem;color:var(--muted);margin-bottom:28px;}
+
+    .history-list{display:flex;flex-direction:column;gap:12px;}
+    .h-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;display:flex;align-items:center;gap:16px;transition:border-color .2s,transform .15s;animation:fup .4s ease both;}
+    .h-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+    .h-card:nth-child(1){animation-delay:.05s}
+    .h-card:nth-child(2){animation-delay:.1s}
+    .h-card:nth-child(3){animation-delay:.15s}
+    .h-ico{width:44px;height:44px;border-radius:12px;background:var(--ad);border:1px solid var(--am);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .h-body{flex:1;}
+    .h-title{font-family:var(--D);font-size:.95rem;font-weight:800;margin-bottom:4px;letter-spacing:-.01em;}
+    .h-meta{font-size:.75rem;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;}
+    .h-income{font-family:var(--D);font-size:1.1rem;font-weight:800;color:var(--accent);text-align:right;flex-shrink:0;}
+    .h-date{font-size:.7rem;color:var(--dim);}
+    .h-prob{display:inline-flex;align-items:center;gap:4px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:100px;}
+
+    .empty{text-align:center;padding:80px 20px;animation:fup .5s ease both;}
+    .empty-ico{font-size:3rem;margin-bottom:16px;}
+    .empty-title{font-family:var(--D);font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+    .empty-sub{font-size:.9rem;color:var(--muted);margin-bottom:24px;}
+
+    .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:center;animation:fup .5s ease both;}
+    .stat-val{font-family:var(--D);font-size:1.4rem;font-weight:800;color:var(--accent);}
+    .stat-lbl{font-size:.72rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.07em;}
+
+    .clear-btn{background:rgba(255,80,50,.08);border:1px solid rgba(255,80,50,.2);color:rgba(255,100,80,.8);font-family:var(--B);font-size:.78rem;padding:6px 14px;border-radius:8px;cursor:pointer;transition:all .2s;}
+    .clear-btn:hover{background:rgba(255,80,50,.15);}
+
+    @media(max-width:640px){
+      header{padding:0 16px;}
+      .wrap{padding:28px 16px 60px;}
+      .stats-row{grid-template-columns:1fr 1fr;}
+      .h-card{flex-wrap:wrap;}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-g"></div>
+<header>
+  <a href="index.html" class="logo">Traject<span>a</span></a>
+  <div class="hbtns">
+    <a href="result.html" class="btn btn-g" style="font-size:.8rem">← Результат</a>
+    <a href="choose.html" class="btn">Новая симуляция →</a>
+  </div>
+</header>
+
+<div class="wrap" id="wrap">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div>
+      <h1 class="page-title">История <em>симуляций</em></h1>
+      <p class="page-sub">Все твои прогнозы в одном месте</p>
+    </div>
+    <button class="clear-btn" onclick="clearHistory()">🗑 Очистить</button>
+  </div>
+  <div id="content">Загрузка...</div>
+</div>
+
+<script>
+  const SC_ICO = {switch:'🔄',grow:'📈',restart:'🔁',freelance:'💼'};
+  const SC_LBL = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск',freelance:'Фриланс'};
+  const PROF_LBL = {law:'Юрист',finance:'Финансист',it:'IT-специалист',marketing:'Маркетолог',design:'Дизайнер',medicine:'Медик',hr:'HR',education:'Педагог',sales:'Продажник',engineering:'Инженер',creative:'Творческая сфера',other:'Специалист'};
+  const PT_LBL = {A:'🔬 Аналитик',B:'🏗️ Архитектор',C:'🤝 Коммуникатор',D:'⚡ Исполнитель',E:'🚀 Визионер',analyst:'🔬 Аналитик',doer:'⚡ Исполнитель',feeler:'🚀 Визионер'};
+
+  function load(k){ try{ return JSON.parse(localStorage.getItem('tr_'+k)); }catch(e){ return null; } }
+
+  function render(){
+    const hist = load('history') || [];
+    const content = document.getElementById('content');
+
+    if(hist.length === 0){
+      content.innerHTML=`
+        <div class="empty">
+          <div class="empty-ico">📊</div>
+          <div class="empty-title">Нет истории симуляций</div>
+          <p class="empty-sub">Пройди тест — и результат появится здесь. Мы сохраняем последние 10 симуляций.</p>
+          <a href="choose.html" class="btn">Начать симуляцию →</a>
+        </div>`;
+      return;
+    }
+
+    // Stats
+    const avgProb = Math.round(hist.reduce((s,h)=>s+(h.prob||0),0)/hist.length);
+    const scCounts = {};
+    hist.forEach(h=>{ scCounts[h.sc]=(scCounts[h.sc]||0)+1; });
+    const topSc = Object.entries(scCounts).sort((a,b)=>b[1]-a[1])[0]?.[0];
+
+    content.innerHTML=`
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val">${hist.length}</div><div class="stat-lbl">Симуляций</div></div>
+        <div class="stat-card" style="animation-delay:.05s"><div class="stat-val">${avgProb}%</div><div class="stat-lbl">Ср. вероятность</div></div>
+        <div class="stat-card" style="animation-delay:.1s"><div class="stat-val">${SC_ICO[topSc]||'📊'}</div><div class="stat-lbl">${SC_LBL[topSc]||'Разные'}</div></div>
+      </div>
+      <div class="history-list">
+        ${hist.map((h,i)=>`
+        <div class="h-card" style="animation-delay:${0.05+i*0.06}s">
+          <div class="h-ico">${SC_ICO[h.sc]||'📊'}</div>
+          <div class="h-body">
+            <div class="h-title">${PROF_LBL[h.prof]||h.prof||'Специалист'} · ${SC_LBL[h.sc]||h.sc}</div>
+            <div class="h-meta">
+              ${h.psychotype ? `<span>${PT_LBL[h.psychotype]||h.psychotype}</span>` : ''}
+              <span class="h-prob">${h.prob||0}% вероятность</span>
+              <span>${h.riskLvl||''}</span>
+            </div>
+          </div>
+          <div>
+            <div class="h-income">${h.income_y2||'—'}</div>
+            <div class="h-date">${h.date||''}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+      <div style="margin-top:20px;text-align:center">
+        <p style="font-size:.78rem;color:var(--dim);margin-bottom:12px">Данные хранятся в браузере · последние 10 симуляций</p>
+        <a href="choose.html" class="btn" style="font-size:.88rem;padding:10px 24px">Запустить новую симуляцию →</a>
+      </div>`;
+  }
+
+  function clearHistory(){
+    if(confirm('Очистить историю симуляций?')){
+      localStorage.removeItem('tr_history');
+      render();
+    }
+  }
+
+  render();
+</script>
+</body>
+</html>
