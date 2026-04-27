@@ -332,7 +332,7 @@
       <div class="qnum-bg">${q.num}</div>
       <div class="qtag">${q.tag}</div>
       <div class="qtext">${q.text}</div>
-      <div class="multi-hint">${selCount>0?'Выбрано: '+selCount+' · можно ещё':'Можно выбрать несколько'}</div>
+      <div class="multi-hint" style="display:none"></div>
       <div class="opts">${opts}</div>
     </div>`;
   }
@@ -448,7 +448,8 @@
       covSub.textContent = pt.desc;
     }, 400);
 
-    setTimeout(()=>{ window.location.href='result.html'; }, 2800);
+    setTimeout(()=>{ gtag('event','psycho_complete',{event_category:'funnel',psychotype:psychotype});
+    window.location.href='result.html'; }, 2800);
   }
 
   render();
