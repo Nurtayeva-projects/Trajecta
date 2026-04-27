@@ -380,49 +380,23 @@
 
     document.getElementById('root').innerHTML = `
 
-      <!-- JOURNEY PROGRESS -->
-      <div class="journey-steps">
-        <div class="js-step js-done">✓ Тест пройден</div>
-        <span class="js-arrow">›</span>
-        <div class="js-step js-done">✓ Результат</div>
-        <span class="js-arrow">›</span>
-        <div class="js-step js-active">🗺 Стратегия</div>
-        <span class="js-arrow">›</span>
-        <div class="js-step js-next">Детальный план</div>
-      </div>
-
-      <!-- HEADER -->
-      <div class="badge"><span class="bdot"></span>Стратегия развития</div>
-      <h1 class="page-title">Твоя стратегия <em>развития</em></h1>
-      <p class="page-sub">Два пути к твоему целевому доходу. Выбери один — получи детальный план.</p>
-
-      <!-- PROFILE BAR -->
-      <div class="profile-bar">
-        <div class="pb-item"><div class="pb-label">Профессия</div><div class="pb-val">${PLABEL[prof]||'Специалист'}</div></div>
-        <div class="pb-sep"></div>
-        <div class="pb-item"><div class="pb-label">Сценарий</div><div class="pb-val">${SCLABEL[sc]}</div></div>
-        <div class="pb-sep"></div>
-        <div class="pb-item"><div class="pb-label">Тип роста</div><div class="pb-val">${GTLABEL[gt]}</div></div>
-        <div class="pb-sep"></div>
-        <div class="pb-item"><div class="pb-label">Целевой доход</div><div class="pb-val" style="color:var(--accent)">${inc.y2||'—'}</div></div>
-      </div>
-
-      <!-- WARNING -->
-      <div class="warning" style="font-size:.85rem">
-        <div class="w-ico">⏳</div>
-        <div>
-          <div class="w-tag">Если не выбрать стратегию сейчас</div>
-          <div class="w-title">${warning.title}</div>
-          <div class="w-desc">${warning.desc}</div>
+      <!-- HEADER — compact -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+        <a href="result.html" style="font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:4px">← Результат</a>
+        <span style="color:var(--dim)">›</span>
+        <span style="font-size:.78rem;color:var(--text);font-weight:600">Стратегия</span>
+        <span style="color:var(--dim)">›</span>
+        <span style="font-size:.78rem;color:var(--dim)">Детальный план</span>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted)">
+          <div class="ub-dot" style="width:5px;height:5px;border-radius:50%;background:rgba(198,255,0,.7);animation:blink 1.5s infinite;display:inline-block"></div>
+          <strong id="viewer-count" style="color:var(--text)">—</strong> человек просматривают сейчас
         </div>
       </div>
 
-      <!-- PATHS -->
-      <div class="urgency-bar">
-        <div class="ub-dot"></div>
-        <span class="ub-txt">Сейчас этот прогноз просматривают <strong id="viewer-count">—</strong> человек · Твоя симуляция активна</span>
-      </div>
-      <div class="sec-lbl">Выбери способ достижения цели</div>
+      <h1 class="page-title" style="margin-bottom:6px">Выбери <em>путь</em></h1>
+      <p class="page-sub" style="margin-bottom:16px">${PLABEL[prof]||'Специалист'} · ${SCLABEL[sc]} · цель <strong style="color:var(--accent)">${inc.y2||'—'}</strong></p>
+
+      <div class="sec-lbl" style="margin-bottom:12px">Два варианта — выбери один</div>
       <div class="paths-grid">
 
         <!-- PATH A — открыт -->
@@ -578,6 +552,7 @@
     const chk = document.getElementById('chk-'+p);
     if(chk) chk.textContent = '✓';
     save('selected_path', p);
+    gtag('event','path_selected',{event_category:'funnel',path:p,sc:R.sc});
     const colors = {a:'rgba(255,140,60,.9)', b:'rgba(96,165,250,.9)'};
     miniConfetti(el, colors[p]||'rgba(198,255,0,.9)');
 
