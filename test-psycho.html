@@ -49,6 +49,14 @@
     .ib-desc{font-size:.9rem;color:var(--muted);line-height:1.65;}
     .ib-desc strong{color:rgba(240,244,255,.85);}
 
+
+    /* Multi-select mode */
+    .opt.multi-sel{border-color:rgba(167,139,250,.5);background:rgba(167,139,250,.1);}
+    .opt.multi-sel .okey{background:rgba(167,139,250,.25);color:rgba(167,139,250,1);}
+    .opt.multi-sel .oval{color:rgba(167,139,250,.95);}
+    .opt.multi-sel .ochk{border-color:rgba(167,139,250,.7);background:rgba(167,139,250,.2);color:rgba(167,139,250,1);}
+    .multi-hint{font-size:.72rem;color:rgba(167,139,250,.7);text-align:center;margin-top:8px;}
+
     @keyframes fup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
     @keyframes slideIn{from{opacity:0;transform:translateX(36px) scale(.97)}to{opacity:1;transform:translateX(0) scale(1)}}
@@ -163,9 +171,9 @@
     <div class="ib-tag">Тест 2 из 2</div>
     <div class="ib-title">Теперь определим твой психотип</div>
     <p class="ib-desc">
-      Это <strong>6 вопросов</strong> которые помогут понять твои сильные стороны,
-      стиль принятия решений и в каких сферах ты раскроешься лучше всего.
-      Ответы влияют на итоговые рекомендации.
+      Это <strong>6 вопросов</strong> о твоём стиле работы и принятия решений.
+      На каждый можно выбрать <strong>несколько ответов</strong> — выбирай всё что подходит.
+      Это влияет на рекомендации в результате.
     </p>
   </div>
 
@@ -233,13 +241,13 @@
       e:{val:'E', lbl:'Ищу нестандартный выход',                txt:'Может есть способ сделать иначе и лучше?'},
     },
     {
-      tag:'🤝 Команда', num:'05',
-      text:'Какая роль тебе ближе в командном проекте?',
-      a:{val:'A', lbl:'Аналитик — проверяю данные и факты',    txt:'Я тот кто убеждается что решения основаны на фактах'},
-      b:{val:'B', lbl:'Архитектор — проектирую структуру',     txt:'Строю систему и определяю как всё должно работать'},
-      c:{val:'C', lbl:'Коннектор — объединяю людей',           txt:'Создаю атмосферу, разрешаю конфликты, мотивирую'},
-      d:{val:'D', lbl:'Исполнитель — делаю и закрываю задачи', txt:'Мне важно чтобы вещи реально двигались вперёд'},
-      e:{val:'E', lbl:'Визионер — генерирую идеи',             txt:'Придумываю куда идти и заряжаю остальных энергией'},
+      tag:'🎯 Успех', num:'05',
+      text:'Когда ты чувствуешь что день прошёл продуктивно?',
+      a:{val:'A', lbl:'Разобрался в сложной теме до конца',  txt:'Есть понимание которого раньше не было'},
+      b:{val:'B', lbl:'Выстроил систему или процесс',        txt:'Теперь работает само, без ручного управления'},
+      c:{val:'C', lbl:'Помог кому-то или договорился',       txt:'Есть ощущение что стал нужен'},
+      d:{val:'D', lbl:'Закрыл конкретную задачу',            txt:'Список стал короче, что-то реально сделано'},
+      e:{val:'E', lbl:'Придумал что-то новое или необычное', txt:'Идея которой раньше не было'},
     },
     {
       tag:'💡 Обучение', num:'06',
@@ -309,19 +317,22 @@
 
   function build(){
     const q = PSYCHO_QS[cur];
+    const selectedSet = multiAnswers[q.num] || new Set();
     const opts = ['a','b','c','d','e'].map((l,i)=>{
       const o = q[l]; if(!o) return '';
-      const sel = answers[q.num]===o.val;
-      return `<button class="opt${sel?' s'+l:''}" onclick="pick('${q.num}','${o.val}','${l}')">
+      const isSel = selectedSet.has(o.val);
+      return `<button class="opt${isSel?' multi-sel':''}" onclick="pick('${q.num}','${o.val}','${l}')">
         <div class="okey">${['A','B','C','D','E'][i]}</div>
         <div class="obody"><div class="oval">${o.lbl}</div><div class="otxt">${o.txt}</div></div>
-        <div class="ochk">${sel?'✓':''}</div>
+        <div class="ochk" style="color:${isSel?'rgba(167,139,250,1)':'transparent'}">${isSel?'✓':''}</div>
       </button>`;
     }).join('');
+    const selCount = selectedSet.size;
     return `<div class="qcard in">
       <div class="qnum-bg">${q.num}</div>
       <div class="qtag">${q.tag}</div>
       <div class="qtext">${q.text}</div>
+      <div class="multi-hint">${selCount>0?'Выбрано: '+selCount+' · можно ещё':'Можно выбрать несколько'}</div>
       <div class="opts">${opts}</div>
     </div>`;
   }
@@ -346,34 +357,46 @@
     }
   }
 
+  // Multi-select answers storage
+  const multiAnswers = {}; // qnum -> Set of vals
+
   function pick(qnum, val, letter){
-    answers[qnum] = val;
-    // Reset all options
-    const opts = document.querySelectorAll('.opt');
-    opts.forEach(o=>{
-      o.className='opt';
-      const ck=o.querySelector('.ochk');
-      if(ck){ ck.textContent=''; ck.style.color='transparent'; }
-    });
-    // Find and highlight selected
+    // Multi-select: toggle selection
+    if(!multiAnswers[qnum]) multiAnswers[qnum] = new Set();
+    if(multiAnswers[qnum].has(val)){
+      multiAnswers[qnum].delete(val);
+    } else {
+      multiAnswers[qnum].add(val);
+    }
+    // Store as array for scoring
+    answers[qnum] = [...multiAnswers[qnum]].join(',');
+
+    // Update UI — toggle this option
     const lmap={a:0,b:1,c:2,d:3,e:4};
+    const opts = document.querySelectorAll('.opt');
     const idx = lmap[letter];
     if(idx !== undefined && opts[idx]){
       const el = opts[idx];
-      el.className = 'opt s'+letter;
-      el.style.animation = 'none';
-      requestAnimationFrame(()=>{ el.style.animation='optPop .3s ease'; });
-      const ck = el.querySelector('.ochk');
-      if(ck){ ck.textContent='✓'; ck.style.color='rgba(167,139,250,1)'; }
+      const isSelected = multiAnswers[qnum].has(val);
+      if(isSelected){
+        el.classList.add('multi-sel');
+        el.style.animation = 'none';
+        requestAnimationFrame(()=>{ el.style.animation='optPop .3s ease'; });
+        const ck = el.querySelector('.ochk');
+        if(ck){ ck.textContent='✓'; ck.style.color='rgba(167,139,250,1)'; }
+      } else {
+        el.classList.remove('multi-sel');
+        const ck = el.querySelector('.ochk');
+        if(ck){ ck.textContent=''; ck.style.color='transparent'; }
+      }
     }
     document.getElementById('hint').classList.remove('show');
-    // Auto-advance on mobile
-    if(window.innerWidth<=600) setTimeout(()=>{ if(answers[PSYCHO_QS[cur].num]) next(); },450);
   }
 
   function next(){
     const q = PSYCHO_QS[cur];
-    if(!answers[q.num]){ document.getElementById('hint').classList.add('show'); return; }
+    const hasAnswer = multiAnswers[q.num] && multiAnswers[q.num].size > 0;
+    if(!hasAnswer){ document.getElementById('hint').classList.add('show'); return; }
     if(cur===5){ finish(); return; }
     cur++; render();
   }
@@ -381,9 +404,16 @@
   function prev(){ if(cur===0)return; cur--; render(); }
 
   function finish(){
-    // Count psychotype scores
+    // Count psychotype scores from multi-select answers
     const scores = {A:0,B:0,C:0,D:0,E:0};
-    Object.values(answers).forEach(v=>{ if(scores[v]!==undefined) scores[v]++; });
+    Object.values(answers).forEach(val=>{
+      // val can be 'A' or 'A,B,C' (multi-select)
+      if(!val) return;
+      val.split(',').forEach(v=>{
+        v = v.trim();
+        if(scores[v] !== undefined) scores[v]++;
+      });
+    });
     const psychotype = Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
     const second = Object.entries(scores).sort((a,b)=>b[1]-a[1])[1][0];
 
