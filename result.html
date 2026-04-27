@@ -439,11 +439,15 @@
     if(md) md.textContent = `Ты уже видишь прогноз: ${R.income.y2} через 2 года с вероятностью ${R.prob}%. Разблокируй конкретный план — что именно делать, чтобы попасть в эту цифру.`;
     if(mf1) mf1.textContent = `Пошаговый план выхода на ${R.income.y2} за 2 года`;
     if(mf2) mf2.textContent = `Что делать в первые 90 дней — конкретно, без воды`;
+    gtag('event','result_view',{event_category:'funnel',sc:R.sc,prof:R.prof,prob:R.prob});
+    // Save to history
+    saveToHistory(R);
     buildRings();
     buildContent();
     setTimeout(()=>{
       renderRecommendedProfs();
       renderAchievements();
+      if(R.psychotype) renderPsychoDetails(R.psychotype);
     }, 50);
   }
 
@@ -514,21 +518,18 @@
             </div>
           </div>
         </div>
+        <!-- Full psychotype description -->
+        <div style="font-size:.88rem;color:var(--muted);line-height:1.7;margin-bottom:12px">${getPsychoDesc(R.psychotype)}</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="mobile-stack">
-          <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px">
-            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:6px">💪 Сильные стороны</div>
-            <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
-              ${{A:'Системное мышление · Точность · Надёжность прогнозов',B:'Стратегическое видение · Управление сложностью',C:'Построение доверия · Переговоры · Эмпатия',D:'Скорость · Результативность · Практичность',E:'Генерация идей · Адаптивность · Вдохновение',analyst:'Системное мышление и точность',doer:'Скорость и результативность',feeler:'Интуиция и адаптивность'}[R.psychotype]||'—'}
-            </div>
+          <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:12px 14px">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:8px">💪 Сильные стороны</div>
+            <div style="display:flex;flex-direction:column;gap:4px" id="psycho-strengths"></div>
           </div>
-          <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px">
-            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:6px">🎯 Роли под твой тип личности</div>
-            <div style="font-size:.78rem;color:var(--muted);line-height:1.7">
-              ${{A:'Data Analyst · PM · Стратегический консультант',B:'CTO · Operations Manager · Архитектор решений',C:'HR BP · Sales Manager · Коуч / Ментор',D:'Project Manager · Предприниматель · Технический специалист',E:'Founder · Creative Director · Продуктовый визионер',analyst:'Аналитик, исследователь, PM',doer:'Менеджер, предприниматель',feeler:'Коуч, творческая сфера, стратег'}[R.psychotype]||'Зависит от сценария'}
-            </div>
+          <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:12px 14px">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:8px">🎯 Подходящие роли</div>
+            <div style="display:flex;flex-direction:column;gap:4px" id="psycho-roles"></div>
           </div>
-        </div>
-      </div>` : ''}
+        </div>      </div>` : ''}
 
       <!-- ② ПРОГНОЗ — только цифры, никакого текста -->
       <div class="card at">
@@ -577,27 +578,25 @@
         <div id="rec-profs-list"></div>
       </div>
 
-      <!-- CTA — активный призыв с понятным следующим шагом -->
+      <!-- CTA -->
       <div style="background:linear-gradient(135deg,rgba(198,255,0,.1),rgba(198,255,0,.04));border:1.5px solid rgba(198,255,0,.3);border-radius:20px;padding:32px;text-align:center;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 70%)"></div>
-
         <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">Следующий шаг</div>
         <div style="font-family:var(--D);font-size:1.4rem;font-weight:800;letter-spacing:-.025em;margin-bottom:8px;line-height:1.2">
           Выбери один из двух путей —<br>и получи план действий
         </div>
         <p style="font-size:.9rem;color:var(--muted);margin-bottom:24px">
-          Два конкретных варианта под твою профессию. У каждого — сроки, зарплаты и шаги.
+          Два конкретных варианта под твою профессию. Сроки, зарплаты и шаги.
         </p>
-
         <a href="paths.html" class="btn" style="font-size:1.1rem;padding:18px 52px;display:inline-flex;margin-bottom:12px">
           Выбрать путь →
         </a>
-
         <p style="font-size:.78rem;color:var(--dim);margin-bottom:14px">Займёт 30 секунд</p>
-
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-          <button class="share-btn" onclick="share()">🔗 Поделиться</button>
-          <a href="choose.html" class="share-btn">↩ Начать заново</a>
+          <button class="share-btn" onclick="openShareCard()">📤 Поделиться результатом</button>
+          <button class="share-btn" onclick="openEmailCapture()">📩 Получить PDF на email</button>
+          <a href="history.html" class="share-btn">🕐 История</a>
+          <a href="choose.html" class="share-btn">↩ Заново</a>
         </div>
       </div>
     `;
@@ -974,6 +973,50 @@
       <div class="ach ${a.cls} unlocked" style="animation-delay:${0.5+i*0.15}s">
         <span>${a.ico}</span>${a.lbl}
       </div>`).join('');
+  }
+
+
+
+  // ── HISTORY ENGINE ──
+  function saveToHistory(R){
+    try{
+      const hist = JSON.parse(localStorage.getItem('tr_history')||'[]');
+      const entry = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString('ru-RU'),
+        sc: R.sc, prof: R.prof,
+        income_y2: R.income?.y2, income_y5: R.income?.y5,
+        prob: R.prob, psychotype: R.psychotype,
+        riskLvl: R.riskLvl,
+      };
+      // Avoid duplicates — don't save if same prof+sc within 10 min
+      const last = hist[0];
+      if(last && last.prof===entry.prof && last.sc===entry.sc && (Date.now()-last.id)<600000) return;
+      hist.unshift(entry);
+      if(hist.length > 10) hist.pop(); // keep last 10
+      localStorage.setItem('tr_history', JSON.stringify(hist));
+    }catch(e){}
+  }
+
+  // ── PSYCHOTYPE HELPERS ──
+  const PSYCHO_DATA = {
+    A:{desc:'Ты принимаешь решения на основе данных. Прежде чем действовать — изучаешь, сравниваешь, взвешиваешь. Это делает тебя незаменимым там, где нужна точность.',strengths:['Системное мышление','Точность в деталях','Надёжные прогнозы','Критический анализ'],roles:['Data Analyst','Product Manager','Стратег','Бизнес-аналитик']},
+    B:{desc:'Ты видишь системы там, где другие видят хаос. Умеешь выстраивать структуры, которые работают сами. Твоя сила — в управлении сложностью.',strengths:['Стратегическое видение','Управление сложностью','Долгосрочное планирование','Системное проектирование'],roles:['CTO / Tech Lead','Operations Director','Архитектор решений','Предприниматель']},
+    C:{desc:'Твоя сила — в людях. Умеешь строить доверие, убеждать и создавать атмосферу. Там где нужно договориться или объединить — ты незаменим.',strengths:['Построение доверия','Переговоры','Эмпатия','Создание коалиций'],roles:['HR Business Partner','Sales Manager','Коуч / Ментор','PR и коммуникации']},
+    D:{desc:'Ты делаешь, пока другие планируют. Высокая результативность и практичность — твоё главное преимущество на рынке труда.',strengths:['Скорость действий','Практичность','Завершение задач','Высокая продуктивность'],roles:['Project Manager','Предприниматель','Sales Lead','Технический специалист']},
+    E:{desc:'Ты мыслишь нестандартно и видишь возможности раньше других. Лучший там, где нужны новые идеи и нестандартные решения.',strengths:['Генерация идей','Нестандартное мышление','Адаптивность','Вдохновение команды'],roles:['Founder / CEO','Creative Director','Product Visionary','Контент-стратег']},
+    analyst:{desc:'Принимаешь решения через анализ данных. Точность и системность — твоё преимущество.',strengths:['Аналитика','Точность','Системность'],roles:['Аналитик','PM','Консультант']},
+    doer:{desc:'Действуешь быстро и получаешь результат. Учишься в процессе — это твоя сила.',strengths:['Скорость','Результативность','Практичность'],roles:['Менеджер','Предприниматель','Sales']},
+    feeler:{desc:'Доверяешь интуиции. Видишь возможности там, где другие не замечают.',strengths:['Интуиция','Адаптивность','Эмпатия'],roles:['Коуч','Творческие сферы','Стратег']},
+  };
+  function getPsychoDesc(pt){ return (PSYCHO_DATA[pt]||{}).desc||''; }
+  function renderPsychoDetails(pt){
+    const d = PSYCHO_DATA[pt];
+    if(!d) return;
+    const sEl = document.getElementById('psycho-strengths');
+    const rEl = document.getElementById('psycho-roles');
+    if(sEl) sEl.innerHTML = d.strengths.map(s=>`<div style="display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)"><span style="color:rgba(167,139,250,.8)">✓</span>${s}</div>`).join('');
+    if(rEl) rEl.innerHTML = d.roles.map(r=>`<div style="display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)"><span style="color:rgba(167,139,250,.8)">→</span>${r}</div>`).join('');
   }
 
   function openModal(){ document.getElementById('modal').classList.add('open'); }
