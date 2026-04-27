@@ -92,7 +92,7 @@
     .paths-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
 
     /* PATH CARD */
-    .pcard{border-radius:18px;padding:26px 22px;border:1.5px solid var(--border);background:rgba(255,255,255,.02);display:flex;flex-direction:column;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;}
+    .pcard{border-radius:18px;padding:32px 22px 26px;border:1.5px solid var(--border);background:rgba(255,255,255,.02);display:flex;flex-direction:column;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;}
     .pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
     .pcard::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
     .pcard:hover{transform:translateY(-5px);}
@@ -173,12 +173,7 @@
     .pu-av:first-child{margin-left:0;}
 
     /* Roadmap step expanded */
-    .rm-item{cursor:pointer;transition:background .2s;}
-    .rm-item:hover{background:rgba(255,255,255,.02);border-radius:10px;padding-left:8px;}
     .rm-actions{display:none;flex-direction:column;gap:5px;margin-top:8px;}
-    .rm-item.expanded .rm-actions{display:flex;}
-    .rm-item.expanded .rm-step-title::after{content:' ↑';font-size:.75rem;color:var(--muted);}
-    .rm-item:not(.expanded) .rm-step-title::after{content:' ↓';font-size:.75rem;color:var(--dim);}
 
     /* BLUR WRAP */
     .blur-wrap{position:relative;border-radius:18px;overflow:hidden;}
@@ -193,10 +188,22 @@
 
     /* ROADMAP */
     .roadmap{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px 28px;}
+    
+    /* Roadmap items — clean, no conflicts */
+    .rm-item{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;border-radius:8px;}
+    .rm-item:last-child{border-bottom:none;}
+    .rm-item:hover{background:rgba(255,255,255,.03);padding-left:8px;}
+    .rm-actions{display:none;flex-direction:column;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);}
+    .rm-item.open .rm-actions{display:flex;}
+    .rm-expand-hint{font-size:.7rem;color:var(--dim);margin-top:6px;display:flex;align-items:center;gap:4px;}
+    .rm-item.open .rm-expand-hint{display:none;}
+    .rm-action{display:flex;align-items:flex-start;gap:8px;font-size:.8rem;color:var(--muted);line-height:1.5;}
+    .rm-action::before{content:'→';color:var(--accent);flex-shrink:0;}
+    .rm-metric{margin-top:6px;display:inline-flex;align-items:center;gap:5px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:100px;}
+
     .rm-head{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
     .rm-ico{font-size:1rem;}
     .rm-title{font-family:var(--D);font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
-    .rm-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);}
     .rm-item:last-child{border-bottom:none;}
     .rm-num{width:28px;height:28px;border-radius:50%;background:var(--ad);border:1px solid var(--am);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-size:.74rem;font-weight:800;color:var(--accent);flex-shrink:0;margin-top:2px;}
     .rm-period{font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
@@ -254,14 +261,7 @@
     /* Bar fill animation override */
     .pbar-fill{transition:width 1.2s cubic-bezier(.4,0,.2,1) !important;}
 
-    /* Roadmap items stagger in */
-    .rm-item{opacity:0;transform:translateX(-16px);animation:rmSlide .4s ease forwards;}
-    .rm-item:nth-child(1){animation-delay:.3s}
-    .rm-item:nth-child(2){animation-delay:.45s}
-    .rm-item:nth-child(3){animation-delay:.6s}
-    .rm-item:nth-child(4){animation-delay:.75s}
-    .rm-item:nth-child(5){animation-delay:.9s}
-    @keyframes rmSlide{to{opacity:1;transform:translateX(0)}}
+    /* Roadmap items stagger in */}
 
     /* Check mark pop */
     .pcheck{transition:all .3s cubic-bezier(.34,1.56,.64,1);}
@@ -394,7 +394,7 @@
       <!-- HEADER -->
       <div class="badge"><span class="bdot"></span>Стратегия развития</div>
       <h1 class="page-title">Твоя стратегия <em>развития</em></h1>
-      <p class="page-sub">Два <strong>конкретных пути</strong> как достичь целевого дохода — с разными темпами, рисками и подходами. Это не список профессий, а планы действий под твой профиль. Выбери один — получи детальный roadmap.</p>
+      <p class="page-sub">Два пути к твоему целевому доходу. Выбери один — получи детальный план.</p>
 
       <!-- PROFILE BAR -->
       <div class="profile-bar">
@@ -408,7 +408,7 @@
       </div>
 
       <!-- WARNING -->
-      <div class="warning">
+      <div class="warning" style="font-size:.85rem">
         <div class="w-ico">⏳</div>
         <div>
           <div class="w-tag">Если не выбрать стратегию сейчас</div>
@@ -432,7 +432,7 @@
           <span class="pemoji">${paths.a.ico}</span>
           <div class="ptype-tag">Путь А · ${paths.a.type}</div>
           <div class="pname">${paths.a.name}</div>
-          <p class="pdesc">${paths.a.desc}</p>
+          <p class="pdesc" style="font-size:.82rem;line-height:1.55;color:var(--muted)">${paths.a.desc}</p>
           <div class="pmetrics">
             <div class="pmetric"><span class="pm-lbl">Доход через 2 года</span><span class="pm-val">${paths.a.salary}</span></div>
             <div class="pmetric"><span class="pm-lbl">Срок до результата</span><span class="pm-val">${paths.a.time}</span></div>
@@ -454,7 +454,7 @@
           <span class="pemoji">${paths.b.ico}</span>
           <div class="ptype-tag">Путь Б · ${paths.b.type}</div>
           <div class="pname">${paths.b.name}</div>
-          <p class="pdesc">${paths.b.desc}</p>
+          <p class="pdesc" style="font-size:.82rem;line-height:1.55;color:var(--muted)">${paths.b.desc}</p>
           <div class="pmetrics">
             <div class="pmetric"><span class="pm-lbl">Доход через 2 года</span><span class="pm-val">${paths.b.salary}</span></div>
             <div class="pmetric"><span class="pm-lbl">Срок до результата</span><span class="pm-val">${paths.b.time}</span></div>
