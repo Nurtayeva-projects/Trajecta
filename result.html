@@ -296,6 +296,17 @@
     /* Progress bars smooth */
     .sf,.mf{transition:width 1.4s cubic-bezier(.4,0,.2,1) !important;}
 
+
+    /* ── PRINT / PDF ── */
+    @media print {
+      header,.prog,.hbtns,.share-btn,.btn-g,#modal,#share-modal,#email-modal,.hero-orb,.bg-g,.bg-gr{display:none!important;}
+      body{background:#fff!important;color:#000!important;}
+      .card{border:1px solid #ddd!important;background:#f9f9f9!important;}
+      .rhero{background:#020617!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+      .content{padding:20px!important;}
+      @page{margin:1cm;size:A4;}
+    }
+
     @media(max-width:640px){
       header{padding:0 20px;}
       .sdots{right:20px;}
@@ -367,6 +378,10 @@
 
 <header>
   <a href="index.html" class="logo">Traject<span>a</span></a>
+  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-left:14px;white-space:nowrap">
+    <span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);display:inline-block"></span>
+    Демо-доступ
+  </div>
   <div class="hbtns">
     <button class="btn btn-g" onclick="share()" style="font-size:.82rem;padding:8px 16px">Поделиться</button>
     <a href="choose.html" class="btn btn-g" style="font-size:.82rem;padding:8px 16px">Новый сценарий</a>
@@ -447,7 +462,7 @@
     setTimeout(()=>{
       renderRecommendedProfs();
       renderAchievements();
-      if(R.psychotype) renderPsychoDetails(R.psychotype);
+      if(R.psychotype) { renderPsychoDetails(R.psychotype); renderPsychoComparison(); }
     }, 50);
   }
 
@@ -1019,7 +1034,121 @@
     if(rEl) rEl.innerHTML = d.roles.map(r=>`<div style="display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)"><span style="color:rgba(167,139,250,.8)">→</span>${r}</div>`).join('');
   }
 
+
+  // ── PSYCHOTYPE COMPARISON ──
+  function renderPsychoComparison(){
+    const pt2 = R.psychotype_second || load('psychotype_second');
+    if(!pt2 || pt2 === R.psychotype) return;
+    const d1 = PSYCHO_DATA[R.psychotype];
+    const d2 = PSYCHO_DATA[pt2];
+    if(!d1||!d2) return;
+    const pt2ico = {A:'🔬',B:'🏗️',C:'🤝',D:'⚡',E:'🚀'}[pt2]||'🧠';
+    const pt2name = {A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель',E:'Визионер'}[pt2]||pt2;
+    const el = document.getElementById('psycho-compare');
+    if(!el) return;
+    el.innerHTML = `
+      <div style="margin-top:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:8px">Второй тип — тоже ты</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.1rem">${pt2ico}</span>
+          <div>
+            <div style="font-size:.85rem;font-weight:600">${pt2name}</div>
+            <div style="font-size:.76rem;color:var(--muted)">${d2.desc.split('.')[0]}.</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
   function openModal(){ document.getElementById('modal').classList.add('open'); }
+
+  // ── SHARE CARD ──
+  function openShareCard(){
+    gtag('event','share_open',{event_category:'engagement'});
+    const profLabel = R.ans?.profLabel || {law:'Юрист',it:'IT-специалист',marketing:'Маркетолог',finance:'Финансист',design:'Дизайнер',medicine:'Медик',hr:'HR',education:'Педагог',sales:'Продажник',engineering:'Инженер',creative:'Творческая сфера',other:'Специалист'}[R.prof]||'Специалист';
+    const scLabel = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск',freelance:'Фриланс'}[R.sc]||'Прогноз';
+    const pt = {A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель',E:'Визионер',analyst:'Аналитик',doer:'Исполнитель',feeler:'Визионер'}[R.psychotype]||'';
+    const ptIco = {A:'🔬',B:'🏗️',C:'🤝',D:'⚡',E:'🚀',analyst:'🔬',doer:'⚡',feeler:'🚀'}[R.psychotype]||'🧠';
+    const box = document.createElement('div');
+    box.id='share-modal';
+    box.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.92);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:24px;';
+    box.innerHTML=`
+      <div style="background:#0d1b35;border:1.5px solid rgba(198,255,0,.25);border-radius:22px;padding:0;max-width:420px;width:100%;overflow:hidden">
+        <!-- Share card preview -->
+        <div id="share-card" style="background:linear-gradient(135deg,#0d1b35,#020617);padding:32px;border-bottom:1px solid rgba(255,255,255,.07)">
+          <div style="font-family:Syne,sans-serif;font-size:1.2rem;font-weight:800;color:#C6FF00;margin-bottom:4px;letter-spacing:-.02em">Trajecta</div>
+          <div style="font-size:.68rem;color:rgba(240,244,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:24px">Карьерный прогноз · КЗ</div>
+          <div style="font-family:Syne,sans-serif;font-size:2.8rem;font-weight:800;color:#C6FF00;letter-spacing:-.04em;line-height:1;margin-bottom:6px">${R.income.y2||'—'}</div>
+          <div style="font-size:.85rem;color:rgba(240,244,255,.55);margin-bottom:24px">возможный доход через 2 года</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(240,244,255,.75);font-size:.72rem;padding:4px 12px;border-radius:100px">${scLabel}</span>
+            <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(240,244,255,.75);font-size:.72rem;padding:4px 12px;border-radius:100px">${profLabel}</span>
+            ${pt?`<span style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:rgba(167,139,250,.9);font-size:.72rem;padding:4px 12px;border-radius:100px">${ptIco} ${pt}</span>`:''}
+          </div>
+          <div style="margin-top:20px;font-size:.72rem;color:rgba(240,244,255,.3)">trajecta.kz · Попробуй сам: bit.ly/trajecta</div>
+        </div>
+        <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
+          <button onclick="copyShareLink()" style="background:rgba(198,255,0,.9);color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.9rem;padding:12px;border-radius:8px;border:none;cursor:pointer;width:100%">🔗 Скопировать ссылку</button>
+          <button onclick="printShareCard()" style="background:rgba(255,255,255,.06);color:#f0f4ff;font-family:Space Grotesk,sans-serif;font-weight:600;font-size:.88rem;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);cursor:pointer;width:100%">🖨️ Сохранить как PDF</button>
+          <button onclick="document.getElementById('share-modal').remove()" style="background:transparent;color:rgba(240,244,255,.4);font-family:Space Grotesk,sans-serif;font-size:.82rem;padding:8px;border-radius:8px;border:none;cursor:pointer;width:100%">Закрыть</button>
+        </div>
+      </div>`;
+    document.body.appendChild(box);
+    box.addEventListener('click', e=>{ if(e.target===box) box.remove(); });
+  }
+
+  function copyShareLink(){
+    const url = 'https://nurtayeva-projects.github.io/Trajecta/';
+    const txt = `Мой прогноз дохода через 2 года: ${R.income?.y2||'—'} — узнай свой на Trajecta 👇\n${url}`;
+    navigator.clipboard?.writeText(txt).then(()=>{
+      const btn = document.querySelector('#share-modal button');
+      if(btn){ const o=btn.textContent; btn.textContent='✓ Скопировано!'; setTimeout(()=>btn.textContent=o,2000); }
+    });
+    gtag('event','share_copy',{event_category:'engagement'});
+  }
+
+  function printShareCard(){
+    gtag('event','pdf_download',{event_category:'engagement'});
+    window.print();
+  }
+
+  // ── EMAIL CAPTURE ──
+  function openEmailCapture(){
+    gtag('event','email_capture_open',{event_category:'engagement'});
+    const box = document.createElement('div');
+    box.id='email-modal';
+    box.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.92);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:24px;';
+    box.innerHTML=`
+      <div style="background:#0d1b35;border:1.5px solid rgba(96,165,250,.25);border-radius:22px;padding:36px;max-width:440px;width:100%;position:relative">
+        <button onclick="document.getElementById('email-modal').remove()" style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,.07);border:none;color:rgba(240,244,255,.4);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.9rem">✕</button>
+        <div style="font-size:2rem;margin-bottom:12px">📩</div>
+        <div style="font-family:Syne,sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:8px;letter-spacing:-.025em">Получи результат на email</div>
+        <p style="font-size:.88rem;color:rgba(240,244,255,.55);line-height:1.65;margin-bottom:20px">Отправим PDF с твоим прогнозом и кратким планом действий. Бесплатно, без спама.</p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <input id="email-input" type="email" placeholder="твой@email.com" style="background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:8px;color:#f0f4ff;font-family:Space Grotesk,sans-serif;font-size:.95rem;padding:12px 16px;outline:none;width:100%;box-sizing:border-box">
+          <button onclick="submitEmail()" style="background:rgba(96,165,250,.9);color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer">Отправить →</button>
+        </div>
+        <p style="font-size:.72rem;color:rgba(240,244,255,.28);margin-top:12px;text-align:center">Без спама. Отписка в один клик.</p>
+      </div>`;
+    document.body.appendChild(box);
+    box.addEventListener('click', e=>{ if(e.target===box) box.remove(); });
+    setTimeout(()=>{ const inp=document.getElementById('email-input'); if(inp)inp.focus(); },100);
+  }
+
+  function submitEmail(){
+    const email = document.getElementById('email-input')?.value?.trim();
+    if(!email||!email.includes('@')){ document.getElementById('email-input').style.borderColor='rgba(255,80,50,.5)'; return; }
+    gtag('event','email_submitted',{event_category:'lead',email});
+    // Send to Google Forms (replace with your form ID)
+    const formUrl = `https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse?entry.EMAIL=${encodeURIComponent(email)}&entry.SC=${R.sc}&entry.INCOME=${encodeURIComponent(R.income?.y2||'')}`;
+    fetch(formUrl,{method:'POST',mode:'no-cors'}).catch(()=>{});
+    document.getElementById('email-modal').remove();
+    // Success toast
+    const t = document.createElement('div');
+    t.style.cssText='position:fixed;bottom:28px;right:28px;background:#0d1b35;border:1px solid rgba(198,255,0,.3);border-radius:12px;padding:16px 20px;z-index:9999;animation:fup .4s ease';
+    t.innerHTML='<div style="font-weight:600;color:#f0f4ff;margin-bottom:4px">✅ Отправлено!</div><div style="font-size:.82rem;color:rgba(240,244,255,.5)">Результат придёт в течение нескольких минут.</div>';
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),4000);
+  }
   function closeModal(){ document.getElementById('modal').classList.remove('open'); }
   document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
   document.getElementById('b2bModal').addEventListener('click',function(e){ if(e.target===this) this.classList.remove('open'); });
