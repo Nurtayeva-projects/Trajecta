@@ -302,6 +302,31 @@
       .hero{padding-bottom:20px;}
     }
 
+
+    @media(max-width:640px){
+      /* Header - space between badge and button */
+      header{gap:8px;}
+      .hnav{margin-left:auto;gap:6px;}
+      .hnav .btn{font-size:.78rem;padding:7px 14px;}
+
+      /* Bottom CTA section - center everything */
+      .cta-final,.price-cta,.hero-cta,[class*="cta"]{text-align:center;}
+
+      /* Fix last CTA block centering */
+      .cta-bottom{text-align:center;}
+      .cta-bottom .btn{margin:0 auto;display:block;max-width:280px;}
+    }
+
+
+    @media(max-width:640px){
+      .cta-section{padding:0 16px 60px !important;}
+      .cta-inner{flex-direction:column !important;gap:20px !important;padding:28px 20px !important;text-align:center !important;}
+      .cta-l{text-align:center !important;}
+      .cta-l h2{font-size:1.4rem !important;}
+      .cta-r{width:100% !important;text-align:center !important;}
+      .cta-r .btn-lg{width:100% !important;justify-content:center !important;display:flex !important;}
+    }
+
   </style>
 </head>
 <body>
@@ -619,7 +644,7 @@
       </div>
       <div class="cta-r">
         <button class="btn btn-lg" onclick="openModal()">Запросить демо →</button>
-        <div class="cta-meta">
+        <div class="cta-meta" style="justify-content:center;text-align:center">
           <span>⏱ 30 минут</span>
           <span>🔒 Без обязательств</span>
           <span>📊 На вашей команде</span>
