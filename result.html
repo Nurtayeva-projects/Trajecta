@@ -521,15 +521,15 @@
       <div style="background:linear-gradient(135deg,rgba(167,139,250,.08),rgba(167,139,250,.03));border:1.5px solid rgba(167,139,250,.25);border-radius:16px;padding:20px 24px">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
           <div style="width:48px;height:48px;border-radius:12px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">
-            ${{A:'🔬',B:'🏗️',C:'🤝',D:'⚡',E:'🚀',analyst:'🔬',doer:'⚡',feeler:'🚀'}[R.psychotype]||'🧠'}
+            ${getPsychoIco(R.psychotype)}
           </div>
           <div>
             <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(167,139,250,.8);margin-bottom:3px">Твой психотип</div>
             <div style="font-family:var(--D);font-size:1.05rem;font-weight:800;letter-spacing:-.02em">
-              ${{A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель',E:'Визионер',analyst:'Аналитик',doer:'Исполнитель',feeler:'Визионер'}[R.psychotype]||R.psychotype}
+              ${getPsychoName(R.psychotype)}
             </div>
             <div style="font-size:.8rem;color:var(--muted);margin-top:2px">
-              ${{A:'Сначала анализируешь данные — потом действуешь',B:'Проектируешь структуру — видишь связи',C:'Сила в коммуникации и построении связей',D:'Делаешь — не планируешь. Учишься в процессе',E:'Мыслишь нестандартно — видишь возможности там, где другие не видят',analyst:'Сначала анализируешь — потом действуешь',doer:'Учишься в процессе и делаешь',feeler:'Доверяешь интуиции и ощущениям'}[R.psychotype]||''}
+              ${getPsychoLine(R.psychotype)}
             </div>
           </div>
         </div>
@@ -1025,6 +1025,9 @@
     feeler:{desc:'Доверяешь интуиции. Видишь возможности там, где другие не замечают.',strengths:['Интуиция','Адаптивность','Эмпатия'],roles:['Коуч','Творческие сферы','Стратег']},
   };
   function getPsychoDesc(pt){ return (PSYCHO_DATA[pt]||{}).desc||''; }
+  function getPsychoIco(pt){ return {A:'🔬',B:'🏗️',C:'🤝',D:'⚡',E:'🚀',analyst:'🔬',doer:'⚡',feeler:'🚀'}[pt]||'🧠'; }
+  function getPsychoName(pt){ return {A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель',E:'Визионер',analyst:'Аналитик',doer:'Исполнитель',feeler:'Визионер'}[pt]||pt||'—'; }
+  function getPsychoLine(pt){ return {A:'Сначала анализируешь данные — потом действуешь',B:'Проектируешь структуру — видишь связи',C:'Сила в коммуникации и построении связей',D:'Делаешь — не планируешь. Учишься в процессе',E:'Мыслишь нестандартно — видишь возможности',analyst:'Сначала анализируешь — потом действуешь',doer:'Учишься в процессе и делаешь',feeler:'Доверяешь интуиции и ощущениям'}[pt]||''; }
   function renderPsychoDetails(pt){
     const d = PSYCHO_DATA[pt];
     if(!d) return;
@@ -1479,5 +1482,3 @@
     else if(navigator.clipboard){ navigator.clipboard.writeText(txt+url).then(()=>{ const b=document.querySelector('.share-btn'); if(b){const o=b.textContent;b.textContent='✓ Скопировано!';setTimeout(()=>b.textContent=o,2000);} }); }
   }
 </script>
-</body>
-</html>
