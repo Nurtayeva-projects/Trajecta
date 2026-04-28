@@ -328,20 +328,28 @@
     }
   
     @media(max-width:640px){
-      .rhero{padding:76px 16px 0;}
-      #hero-income{font-size:clamp(1.6rem,8vw,3rem) !important;}
-      #stat-pills{gap:6px;}
-      #stat-pills>*{min-width:90px;padding:8px 10px;}
-      .content{padding:24px 16px 60px;gap:14px;}
-      .card{padding:16px 14px;}
-      .ig{grid-template-columns:1fr 1fr !important;}
-      .ig .ib:last-child{grid-column:1/-1;}
-      .mobile-stack{grid-template-columns:1fr !important;}
-      .share-btn{font-size:.74rem;padding:6px 12px;}
-      .insight{padding:18px 16px;}
-      .insight-title{font-size:clamp(1rem,3.5vw,1.4rem) !important;}
-      .achievements{justify-content:center;}
-      .ach{font-size:.68rem;}
+      .rhero{padding:70px 14px 0;}
+      #hero-income{font-size:clamp(1.4rem,7vw,2.4rem) !important;line-height:1.1;}
+      #stat-pills{gap:6px;justify-content:center;}
+      #stat-pills>*{min-width:80px;padding:8px 10px;font-size:.8rem;}
+      #stat-pills>* div:first-child{font-size:.6rem;}
+      .content{padding:20px 12px 60px;gap:12px;}
+      .card{padding:14px 12px;}
+      .ch{margin-bottom:10px;}
+      .ct{font-size:.7rem;}
+      .ig{grid-template-columns:1fr !important;gap:8px;}
+      .ib{padding:10px 12px;border-radius:10px;}
+      .ip{font-size:.62rem;}
+      .iv{font-size:1.1rem;}
+      .mobile-stack{grid-template-columns:1fr !important;gap:8px;}
+      .share-btn{font-size:.72rem;padding:6px 10px;}
+      .insight{padding:14px 12px;}
+      .insight-tag{font-size:.65rem;}
+      .insight-title{font-size:clamp(.95rem,3.5vw,1.3rem) !important;}
+      .achievements{justify-content:center;gap:6px;}
+      .ach{font-size:.65rem;padding:4px 8px;}
+      .at .ig{display:flex;flex-direction:column;}
+      header .btn-g:not(:last-child){display:none;}
     }
   
     @media(min-width:641px) and (max-width:900px){
@@ -402,10 +410,7 @@
 
 <header>
   <a href="index.html" class="logo">Traject<span>a</span></a>
-  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-left:14px;white-space:nowrap">
-    <span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);display:inline-block"></span>
-    Демо-доступ
-  </div>
+  <div class="demo-badge" style="display:inline-flex;align-items:center;gap:5px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;margin-left:8px;white-space:nowrap;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);flex-shrink:0;display:inline-block"></span><span class="badge-txt">Демо</span></div>
   <div class="hbtns">
     <button class="btn btn-g" onclick="share()" style="font-size:.82rem;padding:8px 16px">Поделиться</button>
     <a href="choose.html" class="btn btn-g" style="font-size:.82rem;padding:8px 16px">Новый сценарий</a>

@@ -696,6 +696,21 @@
       .how-grid{grid-template-columns:1fr 1fr;}
       section{padding:60px 32px;}
     }
+
+    /* Header mobile fixes */
+    @media(max-width:420px){
+      .badge-txt{display:none;}
+      .demo-badge{padding:4px 8px;}
+    }
+    /* Steps grid responsive */
+    .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
+    @media(max-width:900px){
+      .steps{grid-template-columns:1fr 1fr !important;}
+    }
+    @media(max-width:480px){
+      .steps{grid-template-columns:1fr !important;}
+    }
+
   </style>
 </head>
 <body>
@@ -706,16 +721,13 @@
 <!-- ══ HEADER ══ -->
 <header id="hdr">
   <a href="index.html" class="logo">Traject<span>a</span></a>
-  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-left:14px;white-space:nowrap">
-    <span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);display:inline-block"></span>
-    Демо-доступ
-  </div>
+  <div class="demo-badge" style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-left:10px;white-space:nowrap"><span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);flex-shrink:0;display:inline-block"></span><span class="badge-txt">Демо-доступ</span></div>
   <nav>
     <a href="#how" class="hide-mob">Как работает</a>
     <a href="#scenarios" class="hide-mob">Сценарии</a>
     <a href="#b2b" class="hide-mob">B2B</a>
     <a href="b2b.html" class="btn btn-b2b hide-mob">Для работодателей</a>
-    <a href="choose.html" class="btn btn-sm">Смоделировать →</a>
+    <a href="choose.html" class="btn btn-sm" style="white-space:nowrap;font-size:.82rem;padding:8px 14px">Начать →</a>
   </nav>
 </header>
 
@@ -875,7 +887,7 @@
       <h2 class="section-title">Алгоритм за <em>5 шагов</em></h2>
       <p class="section-sub">От выбора сценария до персонального прогноза.</p>
     </div>
-    <div class="steps reveal d1" style="grid-template-columns:repeat(5,1fr)">
+    <div class="steps reveal d1" style="grid-template-columns:repeat(5,1fr)" class="steps-grid">
       <div class="step" style="min-width:0">
         <div class="step-n">01</div><div class="step-ico">🎯</div>
         <h3>Выбор сценария</h3>
