@@ -286,6 +286,27 @@
     }
 
     /* ══ ГЕЙМИФИКАЦИЯ ══ */
+  
+    @media(max-width:640px){
+      .page{padding:76px 12px 60px;}
+      .page-title{font-size:clamp(1.5rem,6vw,2rem);}
+      .paths-grid{grid-template-columns:1fr !important;}
+      .pcard{padding:22px 16px;}
+      .pmetrics{grid-template-columns:1fr 1fr;}
+      .pbars{gap:6px;}
+      .roadmap{padding:16px 14px;}
+      .rm-item{padding:12px 6px;}
+      .final-cta{padding:20px 16px;}
+      .fc-btns{flex-direction:column;}
+      .fc-btns .btn{text-align:center;justify-content:center;}
+      .profile-bar{gap:8px;padding:10px 14px;}
+      .pb-sep{display:none;}
+    }
+  
+    @media(min-width:641px) and (max-width:1024px){
+      .page{padding:76px 24px 60px;}
+      .paths-grid{grid-template-columns:1fr 1fr;}
+    }
   </style>
 </head>
 <body>

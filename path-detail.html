@@ -218,6 +218,27 @@
       .pb-sep{display:none;}
       .path-metrics{gap:10px;}
     }
+  
+    @media(max-width:640px){
+      .page{padding:80px 12px 60px;gap:12px;}
+      .hero-title{font-size:clamp(1.4rem,5vw,1.8rem) !important;}
+      .profile-bar{flex-wrap:wrap;gap:8px;}
+      .pb-sep{display:none;}
+      .path-card{padding:18px 14px;}
+      .path-metrics{flex-direction:column;gap:8px;}
+      .salary-timeline{grid-template-columns:1fr 1fr;}
+      .days-grid{grid-template-columns:1fr;}
+      .skills-grid{grid-template-columns:1fr;}
+      .cta-btns{flex-direction:column;}
+      .cta-btns .btn{justify-content:center;}
+      .step-item{gap:10px;}
+    }
+  
+    @media(min-width:641px) and (max-width:1024px){
+      .page{padding:80px 24px 60px;}
+      .days-grid{grid-template-columns:1fr 1fr;}
+      .skills-grid{grid-template-columns:1fr 1fr;}
+    }
   </style>
 </head>
 <body>

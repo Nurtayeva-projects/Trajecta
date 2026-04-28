@@ -151,6 +151,19 @@
       .psycho-grid{grid-template-columns:repeat(3,1fr);}
       .bottom-cta{flex-direction:column;gap:20px;}
     }
+  
+    @media(max-width:768px){
+      header{padding:0 16px;}
+      .wrap{padding:20px 12px 60px;}
+      .inv-banner{flex-direction:column;gap:10px;}
+      .db-header{flex-direction:column;gap:12px;align-items:flex-start;}
+      .metrics{grid-template-columns:1fr 1fr;}
+      .two-col,.three-col{grid-template-columns:1fr !important;}
+      .team-table th:nth-child(3),.team-table td:nth-child(3){display:none;}
+      .psycho-grid{grid-template-columns:repeat(3,1fr);}
+      .bottom-cta{flex-direction:column;gap:16px;padding:20px;}
+      .chart-bars{height:60px;}
+    }
   </style>
 </head>
 <body>

@@ -672,6 +672,30 @@
       /* New blocks responsive */
       .model-grid { grid-template-columns: 1fr !important; }
     }
+  
+    @media(max-width:768px){
+      header{padding:0 16px;height:60px;}
+      .logo{font-size:1.3rem;}
+      .nav-links{display:none;}
+      .hero-h1{font-size:clamp(2rem,8vw,3rem);}
+      .hero-sub{font-size:.95rem;}
+      .hero-actions{flex-direction:column;align-items:stretch;}
+      .hero-actions .btn{text-align:center;justify-content:center;}
+      .stats-bar{gap:16px;flex-wrap:wrap;justify-content:center;}
+      .sc-grid{grid-template-columns:1fr !important;}
+      .step-grid,.steps-grid{grid-template-columns:1fr;}
+      .section-title{font-size:clamp(1.5rem,5vw,2.2rem);}
+      .how-grid,.use-grid,.proof-grid{grid-template-columns:1fr;}
+      .b2b-cta{flex-direction:column;text-align:center;}
+      section{padding:48px 16px;}
+    }
+  
+    @media(min-width:641px) and (max-width:1024px){
+      .hero-h1{font-size:clamp(2.4rem,5vw,3.5rem);}
+      .sc-grid{grid-template-columns:1fr 1fr !important;}
+      .how-grid{grid-template-columns:1fr 1fr;}
+      section{padding:60px 32px;}
+    }
   </style>
 </head>
 <body>

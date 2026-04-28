@@ -217,6 +217,22 @@
     @keyframes completeBurst{0%{box-shadow:0 0 0 0 rgba(198,255,0,.5)}50%{box-shadow:0 0 0 20px rgba(198,255,0,0)}100%{box-shadow:0 0 0 0 rgba(198,255,0,0)}}
     .btn-next.complete{animation:completeBurst .6s ease;}
 
+  
+    @media(max-width:640px){
+      main{padding:80px 12px 40px;}
+      .qcard{padding:20px 16px 18px;}
+      .qtext{font-size:clamp(1rem,4vw,1.3rem);padding-right:30px;}
+      .opts{gap:8px;}
+      .opt{padding:12px 14px;gap:10px;}
+      .oval{font-size:.9rem;}
+      .otxt{font-size:.75rem;}
+      .okey{width:26px;height:26px;font-size:.7rem;}
+      .qnav{gap:8px;}
+      .btn-next{font-size:.9rem;height:48px;}
+      .xp-wrap{margin-bottom:10px;}
+      .profile-bar-wrap{padding:10px 14px;}
+      .prof-grid{grid-template-columns:1fr 1fr !important;}
+    }
   </style>
 </head>
 <body>

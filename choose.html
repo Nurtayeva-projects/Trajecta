@@ -152,6 +152,18 @@
     /* Count-up tag */
     .cuser-tag{position:absolute;top:16px;right:52px;font-size:.68rem;font-weight:700;color:var(--muted);background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:100px;padding:3px 10px;}
 
+  
+    @media(max-width:640px){
+      .page{padding:80px 16px 40px;}
+      .ptitle{font-size:clamp(1.6rem,6vw,2.2rem);}
+      .cards{grid-template-columns:1fr !important;max-width:100%;}
+      .sc-card{padding:20px 16px;}
+      .cstats{grid-template-columns:1fr 1fr;}
+    }
+  
+    @media(min-width:641px) and (max-width:900px){
+      .cards{grid-template-columns:1fr 1fr !important;}
+    }
   </style>
 </head>
 <body>
