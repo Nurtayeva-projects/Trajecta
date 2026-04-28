@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trajecta — AI-платформа сценарного анализа</title>
+  <meta name="description" content="Смоделируй последствия своих решений заранее. AI-платформа прогнозирования карьеры и дохода.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Yandex Metrika -->
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+    ym(107245981,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/107245981" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMXPMT81Y5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BMXPMT81Y5');
+  </script>
+
+  <style>
+    /* ══ RESET ══ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ══ VARIABLES ══ */
+    :root {
+      --bg:         #020617;
+      --bg2:        #060f24;
+      --card:       #0d1b35;
+      --card2:      #111f3a;
+      --accent:     #C6FF00;
+      --accent-glow:rgba(198,255,0,0.45);
+      --accent-dim: rgba(198,255,0,0.1);
+      --accent-mid: rgba(198,255,0,0.22);
+      --blue:       rgba(96,165,250,0.9);
+      --blue-dim:   rgba(96,165,250,0.12);
+      --border:     rgba(255,255,255,0.07);
+      --border2:    rgba(255,255,255,0.13);
+      --text:       #f0f4ff;
+      --muted:      rgba(240,244,255,0.48);
+      --dim:        rgba(240,244,255,0.22);
+      --display:    'Syne', sans-serif;
+      --body:       'Space Grotesk', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ══ BACKGROUNDS ══ */
+    .bg-gradient {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 90% 60% at 65% 5%,  rgba(198,255,0,0.07)  0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 10% 85%, rgba(96,165,250,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 90% 70%, rgba(167,139,250,0.04) 0%, transparent 55%);
+    }
+    .bg-grid {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(198,255,0,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(198,255,0,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 75% 75% at 50% 40%, black 20%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 75% 75% at 50% 40%, black 20%, transparent 100%);
+    }
+
+    .wrap { position: relative; z-index: 1; }
+
+    /* ══ HEADER ══ */
+    header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 48px;
+      height: 72px;
+      border-bottom: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      background: rgba(2,6,23,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    header.scrolled {
+      background: rgba(2,6,23,0.97);
+      border-color: var(--border2);
+    }
+
+    .logo {
+      font-family: var(--display);
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    .logo span {
+      color: var(--accent);
+      text-shadow: 0 0 18px var(--accent-glow);
+    }
+
+    nav {
+      margin-left: auto;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.2s;
+      position: relative;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -3px;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.25s;
+    }
+    nav a:hover { color: var(--text); }
+    nav a:hover::after { width: 100%; }
+    nav a.hide-mob { }
+    .btn-b2b {
+      background: transparent;
+      color: var(--blue);
+      border: 1.5px solid rgba(96,165,250,.35);
+      font-size: 0.85rem;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+    .btn-b2b:hover {
+      background: rgba(96,165,250,.1);
+      border-color: var(--blue);
+      box-shadow: 0 6px 20px rgba(96,165,250,.2);
+      transform: translateY(-2px);
+    }
+
+    /* ══ BUTTONS ══ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #020617;
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 13px 30px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(198,255,0,0.4);
+    }
+    .btn:active { transform: scale(0.99); }
+    .btn-lg { font-size: 1.05rem; padding: 17px 44px; }
+    .btn-sm { font-size: 0.85rem; padding: 10px 22px; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid rgba(198,255,0,0.35);
+    }
+    .btn-outline:hover {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      box-shadow: 0 8px 28px rgba(198,255,0,0.15);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border2);
+    }
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: none;
+      transform: translateY(-2px);
+    }
+
+    /* ══ BADGE ══ */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-mid);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+    }
+    .badge-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    /* ══ SCROLL REVEAL ══ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.on { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+
+    /* ══ HERO ══ */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 80px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 140px 48px 80px;
+    }
+
+    .hero-eyebrow {
+      margin-bottom: 28px;
+      animation: fadeUp 0.5s 0.05s ease both;
+    }
+
+    .hero-h1 {
+      font-family: var(--display);
+      font-size: clamp(2.8rem, 5.5vw, 5.6rem);
+      font-weight: 800;
+      line-height: 0.93;
+      letter-spacing: -0.04em;
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero-h1 em { font-style: normal; color: var(--accent); text-shadow: 0 0 40px rgba(198,255,0,0.3); }
+    .hero-h1 .ghost { color: var(--dim); }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.72;
+      max-width: 460px;
+      margin-bottom: 44px;
+      animation: fadeUp 0.6s 0.18s ease both;
+    }
+    .hero-sub strong { color: rgba(240,244,255,0.82); font-weight: 600; }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.26s ease both;
+    }
+
+    .hero-proof {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 32px;
+      animation: fadeUp 0.6s 0.34s ease both;
+    }
+    .proof-avs { display: flex; }
+    .proof-av {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      background: var(--card2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.88rem;
+      margin-left: -8px;
+    }
+    .proof-av:first-child { margin-left: 0; }
+    .proof-txt { font-size: 0.8rem; color: var(--muted); }
+    .proof-txt strong { color: var(--accent); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ══ SIM PREVIEW (right side) ══ */
+    .hero-right {
+      animation: fadeInRight 0.8s 0.2s ease both;
+    }
+    @keyframes fadeInRight {
+      from { opacity:0; transform: translateX(40px); }
+      to   { opacity:1; transform: translateX(0); }
+    }
+
+    .preview-wrap {
+      position: relative;
+      padding: 20px 32px 20px 20px;
+    }
+
+    /* floating cards */
+    .float {
+      position: absolute;
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 10px 14px;
+      white-space: nowrap;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .float-1 { right: 0; top: 52px; animation: bob 4s ease-in-out infinite; }
+    .float-2 { left: 0; bottom: 72px; animation: bob 5s ease-in-out infinite 1.2s reverse; }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+    .fl-label { font-size: 0.64rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.09em; }
+    .fl-val { font-family: var(--display); font-size: 0.9rem; font-weight: 800; color: var(--accent); margin-top: 2px; }
+
+    /* main card */
+    .sim-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    .sim-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent 65%);
+    }
+
+    .sim-top {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px; padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sim-status {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--accent-dim); border: 1px solid var(--accent-mid);
+      color: var(--accent); font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 100px;
+    }
+    .sim-dot { width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 1.5s infinite; }
+    .sim-title { font-family:var(--display);font-size:0.88rem;font-weight:700;color:var(--muted);margin-left:auto; }
+
+    .sim-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--blue-dim); border: 1px solid rgba(96,165,250,0.25);
+      color: var(--blue); font-size: 0.72rem; font-weight: 600;
+      padding: 4px 12px; border-radius: 100px; margin-bottom: 18px;
+    }
+
+    .sim-metrics {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 10px; margin-bottom: 20px;
+    }
+    .sm-box {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 10px; padding: 13px 10px; text-align: center;
+    }
+    .sm-val { font-family:var(--display);font-size:1.05rem;font-weight:800;color:var(--accent);letter-spacing:-0.02em; }
+    .sm-lbl { font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-top:3px; }
+
+    .sim-bar { margin-bottom: 11px; }
+    .sb-head { display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.77rem; }
+    .sb-name { color:var(--muted); }
+    .sb-val  { font-weight:700;color:var(--accent);font-family:var(--display); }
+    .sb-track { height:5px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden; }
+    .sb-fill  { height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);border-radius:3px;transition:width 1.5s cubic-bezier(0.4,0,0.2,1); }
+
+    /* ══ STATS BAR ══ */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.012);
+      padding: 28px 48px;
+      display: flex;
+      justify-content: center;
+    }
+    .stat {
+      flex: 1; text-align: center; padding: 0 32px;
+      position: relative;
+    }
+    .stat + .stat::before {
+      content: ''; position: absolute;
+      left: 0; top: 10%; bottom: 10%;
+      width: 1px; background: var(--border);
+    }
+    .stat-n {
+      font-family: var(--display); font-size: 2.4rem; font-weight: 800;
+      color: var(--accent); letter-spacing: -0.04em; display: block;
+    }
+    .stat-l {
+      font-size: 0.76rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-top: 5px; display: block;
+    }
+
+    /* ══ TICKER ══ */
+    .ticker-outer {
+      overflow: hidden; padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      background: rgba(198,255,0,0.015);
+      position: relative;
+    }
+    .ticker-outer::before, .ticker-outer::after {
+      content: ''; position: absolute; top: 0; bottom: 0;
+      width: 100px; z-index: 1; pointer-events: none;
+    }
+    .ticker-outer::before { left:0; background:linear-gradient(90deg,var(--bg),transparent); }
+    .ticker-outer::after  { right:0; background:linear-gradient(-90deg,var(--bg),transparent); }
+    .ticker-track { display:flex;width:max-content;animation:ticker 30s linear infinite; }
+    .ticker-track:hover { animation-play-state:paused; }
+    .t-item {
+      display:flex;align-items:center;gap:10px;padding:0 40px;
+      white-space:nowrap;font-size:0.76rem;font-weight:600;
+      color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;
+    }
+    .t-sep { color:rgba(198,255,0,0.3); }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ══ SECTIONS ══ */
+    .section { max-width:1200px;margin:0 auto;padding:100px 48px; }
+    .section-sm { max-width:1200px;margin:0 auto;padding:0 48px 100px; }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 14px;
+    }
+    .section-label::before { content:'';width:18px;height:1px;background:var(--accent);opacity:0.5; }
+
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+    .section-title em { font-style:normal;color:var(--accent); }
+
+    .section-sub {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.72; max-width: 500px;
+    }
+
+    /* ══ HOW IT WORKS ══ */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 2px;
+      background: var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      margin-top: 48px;
+    }
+    .step {
+      background: var(--card);
+      padding: 36px 28px;
+      transition: background 0.22s;
+    }
+    .step:hover { background: var(--card2); }
+    .step-n {
+      font-family: var(--display); font-size: 2.6rem; font-weight: 800;
+      color: rgba(198,255,0,0.09); line-height: 1; margin-bottom: 18px;
+    }
+    .step-ico {
+      width: 44px; height: 44px;
+      background: var(--accent-dim); border: 1px solid var(--accent-mid);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; margin-bottom: 16px;
+    }
+    .step h3 { font-family:var(--display);font-size:1rem;font-weight:700;margin-bottom:10px; }
+    .step p  { font-size:0.86rem;color:var(--muted);line-height:1.65; }
+
+    /* ══ SCENARIOS ══ */
+    .sc-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+    .sc-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      text-decoration: none; display: block;
+      position: relative; overflow: hidden;
+    }
+    .sc-card::after {
+      content: ''; position: absolute; inset: 0;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .sc-card:hover { transform: translateY(-6px); }
+    .sc-card:hover::after { opacity: 1; }
+
+    .sc-c1 { border-color: rgba(198,255,0,0.2); }
+    .sc-c1::after { background: radial-gradient(circle at 30% 20%,rgba(198,255,0,0.07),transparent 65%); }
+    .sc-c1:hover { border-color:rgba(198,255,0,0.55);box-shadow:0 24px 60px rgba(0,0,0,0.4); }
+
+    .sc-c2 { border-color: rgba(96,165,250,0.18); }
+    .sc-c2::after { background: radial-gradient(circle at 30% 20%,rgba(96,165,250,0.07),transparent 65%); }
+    .sc-c2:hover { border-color:rgba(96,165,250,0.45);box-shadow:0 24px 60px rgba(0,0,0,0.4); }
+
+    .sc-c3 { border-color: rgba(167,139,250,0.18); }
+    .sc-c3::after { background: radial-gradient(circle at 30% 20%,rgba(167,139,250,0.07),transparent 65%); }
+    .sc-c3:hover { border-color:rgba(167,139,250,0.45);box-shadow:0 24px 60px rgba(0,0,0,0.4); }
+
+    .sc-emoji { font-size:2.4rem;margin-bottom:18px;display:block; }
+    .sc-badge {
+      display: inline-block; font-size: 0.67rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 100px; margin-bottom: 10px;
+    }
+    .sc-c1 .sc-badge { background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-mid); }
+    .sc-c2 .sc-badge { background:var(--blue-dim);color:var(--blue);border:1px solid rgba(96,165,250,0.25); }
+    .sc-c3 .sc-badge { background:rgba(167,139,250,0.1);color:rgba(167,139,250,0.9);border:1px solid rgba(167,139,250,0.25); }
+
+    .sc-name { font-family:var(--display);font-size:1.25rem;font-weight:800;margin-bottom:10px;letter-spacing:-0.02em; }
+    .sc-desc { font-size:0.875rem;color:var(--muted);line-height:1.65;margin-bottom:20px; }
+    .sc-go {
+      font-size: 0.85rem; color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+      transition: gap 0.2s, color 0.2s;
+    }
+    .sc-card:hover .sc-go { gap: 12px; color: var(--text); }
+
+    /* ══ B2B ══ */
+    .b2b-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+    .b2b-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      transition: border-color 0.22s, transform 0.22s;
+    }
+    .b2b-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+    .b2b-ico { font-size: 2rem; margin-bottom: 14px; }
+    .b2b-card h3 { font-family:var(--display);font-size:1rem;font-weight:700;margin-bottom:8px; }
+    .b2b-card p  { font-size:0.86rem;color:var(--muted);line-height:1.65; }
+
+    /* ══ CTA ══ */
+    .cta-outer { padding: 0 48px 100px; }
+    .cta-inner {
+      max-width: 1200px; margin: 0 auto;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 28px; padding: 80px 60px;
+      display: flex; align-items: center; gap: 60px;
+      position: relative; overflow: hidden;
+    }
+    .cta-inner::before {
+      content: ''; position: absolute; inset: -1px;
+      background: linear-gradient(135deg,rgba(198,255,0,0.14),transparent 55%);
+      border-radius: 29px; z-index: 0; pointer-events: none;
+    }
+    .cta-inner::after {
+      content: ''; position: absolute; top: -120px; right: -120px;
+      width: 440px; height: 440px; border-radius: 50%;
+      background: radial-gradient(circle,rgba(198,255,0,0.06),transparent 70%);
+      pointer-events: none;
+    }
+    .cta-l { flex: 1; position: relative; z-index: 1; }
+    .cta-l h2 {
+      font-family: var(--display); font-size: clamp(2rem,3.5vw,3rem);
+      font-weight: 800; letter-spacing: -0.035em; line-height: 1.05; margin-bottom: 14px;
+    }
+    .cta-l p { font-size: 1rem; color: var(--muted); line-height: 1.7; }
+    .cta-r { flex-shrink: 0; text-align: center; position: relative; z-index: 1; }
+    .cta-r .btn-lg { display: block; margin-bottom: 14px; }
+    .cta-meta {
+      font-size: 0.76rem; color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+
+    /* ══ FOOTER ══ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+    }
+    .f-logo { font-family:var(--display);font-size:1.15rem;font-weight:800; }
+    .f-logo span { color:var(--accent); }
+    .f-links { display:flex;gap:24px; }
+    .f-links a { font-size:0.82rem;color:var(--muted);transition:color 0.2s; }
+    .f-links a:hover { color:var(--text); }
+    .f-copy { font-size:0.76rem;color:var(--muted);margin-left:auto; }
+
+    /* ══ SCROLLBAR ══ */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(198,255,0,0.2); border-radius: 3px; }
+
+    /* ══ RESPONSIVE ══ */
+    @media (max-width: 1024px) {
+      header { padding: 0 32px; }
+      .hero { grid-template-columns: 1fr; gap: 40px; padding: 130px 32px 60px; }
+      .hero-right { display: none; }
+      .steps { grid-template-columns: repeat(2,1fr); }
+      .sc-grid { grid-template-columns: 1fr; gap: 12px; }
+      .b2b-grid { grid-template-columns: 1fr 1fr; }
+      .cta-inner { flex-direction: column; gap: 32px; padding: 52px 40px; text-align: center; }
+      .cta-meta { justify-content: center; }
+      .section, .section-sm { padding: 72px 32px; }
+      .section-sm { padding-top: 0; }
+    }
+    @media (max-width: 640px) {
+      header { padding: 0 20px; }
+      nav a.hide-mob { display: none; }
+      .hero { padding: 110px 20px 52px; }
+      .hero-h1 { font-size: clamp(2.6rem, 11vw, 4rem); }
+      .stats-bar { padding: 20px; flex-wrap: wrap; }
+      .stat { flex: 1 1 50%; padding: 12px 16px; }
+      .stat + .stat::before { display: none; }
+      .steps {
+        grid-template-columns: 1fr;
+        background: transparent; gap: 10px; border-radius: 0;
+      }
+      .step { border-radius: 16px; border: 1px solid var(--border); }
+      .b2b-grid { grid-template-columns: 1fr; }
+      .cta-outer { padding: 0 20px 60px; }
+      .cta-inner { padding: 40px 24px; }
+      footer { padding: 24px 20px; }
+      .f-copy { margin-left: 0; width: 100%; }
+      .f-links { display: none; }
+      .section, .section-sm { padding: 56px 20px; }
+      .section-sm { padding-top: 0; }
+      /* New blocks responsive */
+      .model-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-grid"></div>
+
+<!-- ══ HEADER ══ -->
+<header id="hdr">
+  <a href="index.html" class="logo">Traject<span>a</span></a>
+  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-left:14px;white-space:nowrap">
+    <span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);display:inline-block"></span>
+    Демо-доступ
+  </div>
+  <nav>
+    <a href="#how" class="hide-mob">Как работает</a>
+    <a href="#scenarios" class="hide-mob">Сценарии</a>
+    <a href="#b2b" class="hide-mob">B2B</a>
+    <a href="b2b.html" class="btn btn-b2b hide-mob">Для работодателей</a>
+    <a href="choose.html" class="btn btn-sm">Смоделировать →</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+
+    <!-- LEFT -->
+    <div>
+      <div class="hero-eyebrow">
+        <span class="badge"><span class="badge-dot"></span>AI‑платформа сценарного анализа</span>
+      </div>
+
+      <!-- Что это такое — одна строка -->
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:20px">
+        📊 Карьерный прогноз · КЗ рынок 2025
+      </div>
+
+      <h1 class="hero-h1">
+        Узнай сколько ты<br>
+        будешь <em>зарабатывать</em><br>
+        <span class="ghost">через 2 года</span>
+      </h1>
+
+      <p class="hero-sub" style="margin-bottom:8px">
+        Ответь на 7 вопросов о своей карьере — получи персональный прогноз дохода,
+        главные риски и конкретный план действий.
+      </p>
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:20px;line-height:1.6">
+        Подходит для <strong style="color:var(--text)">наёмных сотрудников, фрилансеров и самозанятых</strong> в Казахстане.
+      </p>
+
+      <!-- URGENCY -->
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,140,60,.1);border:1px solid rgba(255,140,60,.25);color:rgba(255,160,80,.9);font-size:.75rem;font-weight:600;padding:5px 14px;border-radius:100px;margin-bottom:20px;letter-spacing:.08em">
+        ⚡ Займёт 5 минут
+      </div>
+
+      <div class="hero-actions">
+        <a href="choose.html" class="btn btn-lg">Узнать свой прогноз →</a>
+        <a href="#how" class="btn btn-outline">Как это работает</a>
+      </div>
+
+      <div class="hero-proof">
+        <div class="proof-avs">
+          <div class="proof-av">👨‍💻</div>
+          <div class="proof-av">👩‍🎨</div>
+          <div class="proof-av">👨‍🔬</div>
+          <div class="proof-av">👩‍💼</div>
+        </div>
+        <div>
+          <p class="proof-txt">Уже <strong>3 200+</strong> сценариев смоделировано</p>
+          <p style="font-size:.74rem;color:var(--muted);margin-top:3px">87% пользователей отметили совпадение с реальной ситуацией</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT — simulator preview -->
+    <div class="hero-right">
+      <div class="preview-wrap">
+        <div class="float float-1">
+          <div class="fl-label">Вероятность</div>
+          <div class="fl-val">78% ↑</div>
+        </div>
+        <div class="float float-2">
+          <div class="fl-label">Алгоритм</div>
+          <div class="fl-val">Активен ✓</div>
+        </div>
+
+        <div class="sim-card">
+          <div class="sim-top">
+            <div class="sim-status"><span class="sim-dot"></span>Симуляция</div>
+            <div class="sim-title">Прогноз · 2025–2030</div>
+          </div>
+
+          <div class="sim-tag">🔄 Смена профессии</div>
+
+          <div class="sim-metrics">
+            <div class="sm-box">
+              <div class="sm-val">800к</div>
+              <div class="sm-lbl">Через 2 года</div>
+            </div>
+            <div class="sm-box">
+              <div class="sm-val">78%</div>
+              <div class="sm-lbl">Вероятность</div>
+            </div>
+            <div class="sm-box">
+              <div class="sm-val">Средний</div>
+              <div class="sm-lbl">Риск</div>
+            </div>
+          </div>
+
+          <div class="sim-bar">
+            <div class="sb-head">
+              <span class="sb-name">Потенциал роста</span>
+              <span class="sb-val">88%</span>
+            </div>
+            <div class="sb-track"><div class="sb-fill" id="bar1" style="width:0%"></div></div>
+          </div>
+          <div class="sim-bar">
+            <div class="sb-head">
+              <span class="sb-name">Вероятность успеха</span>
+              <span class="sb-val">78%</span>
+            </div>
+            <div class="sb-track"><div class="sb-fill" id="bar2" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══ STATS BAR ══ -->
+  <div class="stats-bar">
+    <div class="stat reveal">
+      <span class="stat-n">120+</span>
+      <span class="stat-l">Пользователей</span>
+    </div>
+    <div class="stat reveal d1">
+      <span class="stat-n">8+</span>
+      <span class="stat-l">Параметров</span>
+    </div>
+    <div class="stat reveal d2">
+      <span class="stat-n">87%</span>
+      <span class="stat-l">Совпадение</span>
+    </div>
+    <div class="stat reveal d3">
+      <span class="stat-n">5 мин</span>
+      <span class="stat-l">Настройка</span>
+    </div>
+  </div>
+
+  <!-- ══ TICKER ══ -->
+  <div class="ticker-outer">
+    <div class="ticker-track">
+      <span class="t-item"><span>🔄</span>Смена профессии<span class="t-sep">·</span></span>
+      <span class="t-item"><span>📈</span>Рост дохода<span class="t-sep">·</span></span>
+      <span class="t-item"><span>🔁</span>Перезапуск<span class="t-sep">·</span></span>
+      <span class="t-item"><span>🧠</span>Поведенческая модель<span class="t-sep">·</span></span>
+      <span class="t-item"><span>🎯</span>Алгоритм прогнозирования<span class="t-sep">·</span></span>
+      <span class="t-item"><span>🔮</span>Цифровой двойник<span class="t-sep">·</span></span>
+      <span class="t-item"><span>📊</span>Вероятность успеха<span class="t-sep">·</span></span>
+      <span class="t-item"><span>🔄</span>Смена профессии<span class="t-sep">·</span></span>
+      <span class="t-item"><span>📈</span>Рост дохода<span class="t-sep">·</span></span>
+      <span class="t-item"><span>🔁</span>Перезапуск<span class="t-sep">·</span></span>
+      <span class="t-item"><span>🧠</span>Поведенческая модель<span class="t-sep">·</span></span>
+      <span class="t-item"><span>🎯</span>Алгоритм прогнозирования<span class="t-sep">·</span></span>
+      <span class="t-item"><span>🔮</span>Цифровой двойник<span class="t-sep">·</span></span>
+      <span class="t-item"><span>📊</span>Вероятность успеха<span class="t-sep">·</span></span>
+    </div>
+  </div>
+
+  <!-- ══ HOW IT WORKS ══ -->
+  <section class="section" id="how">
+    <div class="reveal">
+      <span class="section-label">Как работает</span>
+      <h2 class="section-title">Алгоритм за <em>5 шагов</em></h2>
+      <p class="section-sub">От выбора сценария до персонального прогноза.</p>
+    </div>
+    <div class="steps reveal d1" style="grid-template-columns:repeat(5,1fr)">
+      <div class="step" style="min-width:0">
+        <div class="step-n">01</div><div class="step-ico">🎯</div>
+        <h3>Выбор сценария</h3>
+        <p>Смена профессии, рост дохода, перезапуск или фриланс. Каждый сценарий — своя модель.</p>
+      </div>
+      <div class="step" style="min-width:0">
+        <div class="step-n">02</div><div class="step-ico">👤</div>
+        <h3>Профиль</h3>
+        <p>Текущая профессия и желаемое направление. Вопросы адаптируются под твой контекст.</p>
+      </div>
+      <div class="step" style="min-width:0">
+        <div class="step-n">03</div><div class="step-ico">🧠</div>
+        <h3>Настройка модели</h3>
+        <p>6–7 параметров: риск, горизонт, приоритеты, тип роста. Каждый влияет на расчёт дохода.</p>
+      </div>
+      <div class="step" style="min-width:0">
+        <div class="step-n">04</div><div class="step-ico">📊</div>
+        <h3>Прогноз</h3>
+        <p>Прогноз дохода на 2–5 лет, вероятность успеха, главный риск и варианты развития.</p>
+      </div>
+      <div class="step" style="min-width:0">
+        <div class="step-n">05</div><div class="step-ico">🗺️</div>
+        <h3>Стратегия</h3>
+        <p>Два персональных пути с зарплатами КЗ, сроками входа и дорожной картой.</p>
+      </div>
+    </div>
+
+    <!-- КАК РАБОТАЕТ МОДЕЛЬ -->
+    <div class="reveal d2 model-grid" style="margin-top:32px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:18px;padding:28px 32px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center">
+      <div>
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Как работает модель</div>
+        <div style="font-family:var(--display);font-size:1.15rem;font-weight:800;letter-spacing:-.025em;margin-bottom:12px;line-height:1.3"><span style="color:var(--accent)">Прогностическая модель.</span></div>
+        <p style="font-size:.875rem;color:var(--muted);line-height:1.7">Каждый ответ изменяет расчёт. 8 параметров × данные рынка КЗ = персональный прогноз дохода с вероятностью успеха.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+          <div style="font-size:1.1rem;margin-bottom:6px">🧠</div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:4px">Поведенческая модель</div>
+          <div style="font-size:.75rem;color:var(--muted)">Как ты принимаешь решения</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+          <div style="font-size:1.1rem;margin-bottom:6px">⚡</div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:4px">Толерантность к риску</div>
+          <div style="font-size:.75rem;color:var(--muted)">Готовность к неопределённости</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+          <div style="font-size:1.1rem;margin-bottom:6px">⏱</div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:4px">Скорость решений</div>
+          <div style="font-size:.75rem;color:var(--muted)">Темп и горизонт планирования</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+          <div style="font-size:1.1rem;margin-bottom:6px">📈</div>
+          <div style="font-size:.82rem;font-weight:600;margin-bottom:4px">Карьерные траектории</div>
+          <div style="font-size:.75rem;color:var(--muted)">История рынка КЗ 2024–2026</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SCENARIOS ══ -->
+  <section class="section-sm" id="scenarios">
+    <div class="reveal">
+      <span class="section-label">Сценарии</span>
+      <h2 class="section-title">Выбери свою <em>ситуацию</em></h2>
+      <p class="section-sub">Каждый сценарий — отдельная модель. Выбери тот, что ближе к тебе прямо сейчас.</p>
+    </div>
+    <div class="sc-grid reveal d1" style="grid-template-columns:repeat(2,1fr)">
+
+      <a href="choose.html" class="sc-card sc-c1">
+        <span class="sc-emoji">🔄</span>
+        <div class="sc-badge">Смена профессии</div>
+        <div class="sc-name">Карьерный свитч</div>
+        <p class="sc-desc">Хочешь уйти из текущей сферы? Прогноз дохода и план перехода.</p>
+        <div class="sc-go">Запустить <span>→</span></div>
+      </a>
+
+      <a href="choose.html" class="sc-card sc-c2">
+        <span class="sc-emoji">📈</span>
+        <div class="sc-badge">Рост дохода</div>
+        <div class="sc-name">Увеличение дохода</div>
+        <p class="sc-desc">Ты на своём месте, но хочешь зарабатывать больше. Строим путь роста.</p>
+        <div class="sc-go">Запустить <span>→</span></div>
+      </a>
+
+      <a href="choose.html" class="sc-card sc-c3">
+        <span class="sc-emoji">🔁</span>
+        <div class="sc-badge">Перезапуск</div>
+        <div class="sc-name">Выход из кризиса</div>
+        <p class="sc-desc">Выгорание или потеря работы? Сценарий восстановления и нового старта.</p>
+        <div class="sc-go">Запустить <span>→</span></div>
+      </a>
+
+      <a href="choose.html" class="sc-card" style="border-color:rgba(251,191,36,.2);background:rgba(251,191,36,.04)">
+        <span class="sc-emoji">💼</span>
+        <div class="sc-badge" style="background:rgba(251,191,36,.1);color:rgba(251,191,36,.85);border-color:rgba(251,191,36,.2)">Фриланс / Своё дело</div>
+        <div class="sc-name">Масштаб и рост</div>
+        <p class="sc-desc">Ты уже фрилансер или предприниматель? Масштабируем доход и выстраиваем систему.</p>
+        <div class="sc-go" style="color:rgba(251,191,36,.8)">Запустить <span>→</span></div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ══ B2B ══ -->
+  <section class="section-sm" id="b2b">
+    <div class="reveal">
+      <span class="section-label">B2B решение</span>
+      <h2 class="section-title">Для бизнеса и <em>HR</em></h2>
+      <p class="section-sub">Trajecta — корпоративный инструмент оценки и развития людей. Также используется для оценки кандидатов на интервью.</p>
+    </div>
+    <div class="b2b-grid reveal d1">
+      <div class="b2b-card">
+        <div class="b2b-ico">🔍</div>
+        <h3>HR и найм</h3>
+        <p>Алгоритм оценивает поведенческий профиль кандидата на интервью и прогнозирует потенциал роста в конкретной роли.</p>
+      </div>
+      <div class="b2b-card">
+        <div class="b2b-ico">🗺️</div>
+        <h3>Карьерные треки</h3>
+        <p>Персональные траектории развития для каждого сотрудника — кто готов к повышению, кому нужна поддержка или смена роли.</p>
+      </div>
+      <div class="b2b-card">
+        <div class="b2b-ico">📚</div>
+        <h3>Корп. обучение</h3>
+        <p>Выявляет мотивацию и поведенческую модель сотрудников, формирует персональные программы развития.</p>
+      </div>
+      <div class="b2b-card">
+        <div class="b2b-ico">🛡️</div>
+        <h3>Риск выгорания</h3>
+        <p>Выявляет сотрудников в зоне риска до того, как они подадут заявление об уходе. Снижает текучку на 30–40%.</p>
+      </div>
+      <div class="b2b-card">
+        <div class="b2b-ico">🚀</div>
+        <h3>Развитие команды</h3>
+        <p>Помогает руководителям видеть кто готов к росту, кто в риске выгорания, кому нужна смена роли.</p>
+      </div>
+      <div class="b2b-card" style="background:rgba(96,165,250,.05);border-color:rgba(96,165,250,.2)">
+        <div class="b2b-ico">🏢</div>
+        <h3>Демо для бизнеса</h3>
+        <p>30-минутное демо на вашей команде. <a href="b2b.html" style="color:rgba(96,165,250,.9);font-weight:600">Запросить демо →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA ══ -->
+  <div class="cta-outer">
+    <div class="cta-inner reveal">
+      <div class="cta-l">
+        <h2>Готов увидеть свою<br><span style="color:var(--accent)">траекторию?</span></h2>
+        <p>Настройка займёт 5 минут. Прогноз персональный — не шаблонный. Данные хранятся только в твоём браузере.</p>
+      </div>
+      <div class="cta-r">
+        <a href="choose.html" class="btn btn-lg">Смоделировать сценарий →</a>
+        <div class="cta-meta">
+          <span>⏱ 5 минут</span>
+          <span>🔒 Без регистрации</span>
+          <span>🧠 AI‑алгоритм</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ INVESTOR BLOCK ══ -->
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 60px">
+    <div class="reveal" style="background:linear-gradient(135deg,rgba(96,165,250,.07),rgba(96,165,250,.02));border:1px solid rgba(96,165,250,.2);border-radius:24px;padding:40px 52px;display:flex;align-items:center;gap:48px;flex-wrap:wrap">
+      <div style="flex:1;min-width:260px">
+        <div style="font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(96,165,250,.8);margin-bottom:10px">Для инвесторов и партнёров</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;line-height:1.2">
+          Trajecta — первая в КЗ платформа<br>сценарного анализа карьеры
+        </div>
+        <p style="font-size:.9rem;color:var(--muted);line-height:1.7;max-width:420px">
+          Поведенческая модель + алгоритм прогнозирования + B2B для HR. Ищем партнёров для масштабирования и пилотов в корпоративном сегменте.
+        </p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;flex-shrink:0">
+        <a href="b2b.html" class="btn" style="background:rgba(96,165,250,.9);color:#020617;padding:14px 32px;font-size:.95rem;justify-content:center">Запросить демо →</a>
+        <div style="font-size:.75rem;color:var(--muted);text-align:center">MVP готов · КЗ рынок · B2B + B2C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <div class="f-logo">Traject<span>a</span></div>
+    <div class="f-links">
+      <a href="#how">Как работает</a>
+      <a href="#scenarios">Сценарии</a>
+      <a href="#b2b">B2B</a>
+      <a href="choose.html">Запустить</a>
+    </div>
+    <span class="f-copy">© 2025 Trajecta · AI‑платформа сценарного анализа</span>
+  </footer>
+
+</div><!-- /wrap -->
+
+<script>
+  // ── HEADER SCROLL ──
+  const hdr = document.getElementById('hdr');
+  window.addEventListener('scroll', () => {
+    hdr.classList.toggle('scrolled', window.scrollY > 24);
+  }, { passive: true });
+
+  // ── SCROLL REVEAL ──
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  // ── COUNTERS ──
+  const cntObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const to = parseInt(el.dataset.to);
+      if (isNaN(to)) return;
+      let n = 0;
+      const step = Math.ceil(to / 35);
+      const t = setInterval(() => {
+        n = Math.min(n + step, to);
+        el.textContent = n;
+        if (n >= to) clearInterval(t);
+      }, 35);
+      cntObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-to]').forEach(el => cntObs.observe(el));
+
+  // ── PREVIEW BARS ──
+  setTimeout(() => {
+    const b1 = document.getElementById('bar1');
+    const b2 = document.getElementById('bar2');
+    if (b1) b1.style.width = '88%';
+    if (b2) b2.style.width = '78%';
+  }, 900);
+
+  // ── PARALLAX on mouse ──
+  if (window.innerWidth > 1024) {
+    document.addEventListener('mousemove', e => {
+      const mx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const my = (e.clientY / window.innerHeight - 0.5) * 2;
+      const bg = document.querySelector('.bg-gradient');
+      if (bg) bg.style.transform = `translate(${mx * 14}px, ${my * 9}px)`;
+    }, { passive: true });
+  }
+</script>
+
+</body>
+</html>

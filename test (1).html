@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Настройка сценария — Trajecta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(107245981,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMXPMT81Y5"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BMXPMT81Y5');</script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#020617;--card:#0d1b35;--card2:#111f3a;
+      --accent:#C6FF00;--ag:rgba(198,255,0,0.45);--ad:rgba(198,255,0,0.1);--am:rgba(198,255,0,0.22);
+      --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+      --text:#f0f4ff;--muted:rgba(240,244,255,0.48);--dim:rgba(240,244,255,0.22);
+      --D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;
+    }
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+    .bg-g{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(198,255,0,0.04) 0%,transparent 55%);}
+    .bg-gr{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(198,255,0,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(198,255,0,0.018) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,black 10%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,black 10%,transparent 100%);}
+
+    header{display:flex;justify-content:flex-start;align-items:center;padding:0 48px;height:72px;border-bottom:1px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(2,6,23,0.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+    .logo{font-family:var(--D);font-size:1.55rem;font-weight:800;color:var(--text);letter-spacing:-0.02em;text-decoration:none;}
+    .logo span{color:var(--accent);text-shadow:0 0 16px var(--ag);}
+
+    .hright{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted);}
+    .tdot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 1.5s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+    .prog{position:fixed;top:72px;left:0;right:0;height:2px;background:rgba(255,255,255,0.06);z-index:99;}
+    .prog-f{height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);box-shadow:0 0 8px var(--ag);transition:width .6s cubic-bezier(.4,0,.2,1);}
+
+    .sdots{position:fixed;top:82px;right:48px;display:flex;gap:6px;align-items:center;z-index:99;}
+    .sd{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all .3s;}
+    .sd.done{background:rgba(198,255,0,.35);}
+    .sd.active{background:var(--accent);box-shadow:0 0 6px var(--ag);width:18px;border-radius:3px;}
+
+    main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:108px 24px 64px;}
+
+    /* SCENARIO BADGE */
+    .sc-badge{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border2);border-radius:100px;padding:8px 18px;font-size:.82rem;color:var(--muted);margin-bottom:28px;}
+    .sc-badge strong{color:var(--text);font-weight:600;}
+
+    /* Q HEADER */
+    .q-top{width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+    .q-counter{font-size:.76rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+
+    /* Q DOTS */
+    .qdots{display:flex;gap:5px;}
+    .qd{width:28px;height:4px;border-radius:2px;background:var(--border);transition:all .4s ease;}
+    .qd.done{background:rgba(198,255,0,.4);}
+    .qd.active{background:var(--accent);box-shadow:0 0 8px var(--ag);}
+
+    /* Q CARD */
+    .qcard{width:100%;max-width:680px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px 40px 32px;position:relative;overflow:hidden;}
+    .qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 60%);}
+
+    .qcard.in{animation:slideIn .4s cubic-bezier(.34,1.2,.64,1) both;}
+    .qcard.out{animation:slideOut .25s ease forwards;}
+    @keyframes slideIn{from{opacity:0;transform:translateX(36px) scale(.97)}to{opacity:1;transform:translateX(0) scale(1)}}
+    @keyframes slideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-36px)}}
+
+    .qnum-bg{position:absolute;top:24px;right:32px;font-family:var(--D);font-size:4rem;font-weight:800;color:rgba(198,255,0,.05);line-height:1;pointer-events:none;}
+    .qtag{display:inline-flex;align-items:center;gap:6px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:18px;}
+    .qtext{font-family:var(--D);font-size:clamp(1.3rem,3vw,1.7rem);font-weight:800;line-height:1.2;letter-spacing:-.025em;margin-bottom:28px;padding-right:60px;}
+
+    /* OPTIONS */
+    .opts{display:flex;flex-direction:column;gap:10px;}
+    .opt{display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;cursor:pointer;transition:all .2s;text-align:left;width:100%;font-family:var(--B);}
+    .opt:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.05);transform:translateY(-1px);}
+
+    .okey{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-weight:800;font-size:.82rem;flex-shrink:0;transition:all .2s;}
+    .obody{flex:1;}
+    .oval{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;transition:color .2s;}
+    /* OPTION CARDS — упрощённые, без длинного текста */
+    .opts{display:flex;flex-direction:column;gap:10px;}
+    .opt{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;transition:all .2s;text-align:left;width:100%;}
+    .opt:hover{border-color:var(--border2);background:rgba(255,255,255,.05);}
+    .okey{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-size:.75rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .2s;}
+    .obody{flex:1;}
+    .oval{font-size:1rem;font-weight:600;color:var(--text);transition:color .2s;}
+    .otxt{font-size:.82rem;line-height:1.5;color:var(--muted);margin-top:3px;transition:color .2s;}
+    .ochk{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;transition:all .2s;color:transparent;}
+
+    /* A = blue */
+    .opt.sa{border-color:rgba(96,165,250,.45);background:rgba(96,165,250,.07);}
+    .opt.sa .okey{background:rgba(96,165,250,.2);color:rgba(96,165,250,1);}
+    .opt.sa .oval{color:rgba(96,165,250,.9);}
+    .opt.sa .ochk{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.15);color:rgba(96,165,250,1);}
+
+    /* D = orange */
+    .opt.sd{border-color:rgba(255,140,60,.4);background:rgba(255,140,60,.07);}
+    .opt.sd .okey{background:rgba(255,140,60,.2);color:rgba(255,140,60,.95);}
+    .opt.sd .oval{color:rgba(255,140,60,.9);}
+    .opt.sd .ochk{border-color:rgba(255,140,60,.6);background:rgba(255,140,60,.15);color:rgba(255,140,60,.95);}
+
+    /* E = pink */
+    .opt.se{border-color:rgba(244,114,182,.4);background:rgba(244,114,182,.07);}
+    .opt.se .okey{background:rgba(244,114,182,.2);color:rgba(244,114,182,.95);}
+    .opt.se .oval{color:rgba(244,114,182,.9);}
+    .opt.se .ochk{border-color:rgba(244,114,182,.6);background:rgba(244,114,182,.15);color:rgba(244,114,182,.95);}
+    .opt.sa .okey{background:rgba(96,165,250,.2);color:rgba(96,165,250,1);}
+    .opt.sa .oval{color:rgba(96,165,250,.9);}
+    .opt.sa .ochk{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.15);color:rgba(96,165,250,1);}
+
+    /* B = green */
+    .opt.sb{border-color:rgba(198,255,0,.4);background:var(--ad);}
+    .opt.sb .okey{background:rgba(198,255,0,.18);color:var(--accent);}
+    .opt.sb .oval{color:var(--accent);}
+    .opt.sb .ochk{border-color:var(--accent);background:rgba(198,255,0,.15);color:var(--accent);}
+
+    /* C = purple */
+    .opt.sc{border-color:rgba(167,139,250,.4);background:rgba(167,139,250,.07);}
+    .opt.sc .okey{background:rgba(167,139,250,.2);color:rgba(167,139,250,1);}
+    .opt.sc .oval{color:rgba(167,139,250,.9);}
+    .opt.sc .ochk{border-color:rgba(167,139,250,.7);background:rgba(167,139,250,.15);color:rgba(167,139,250,1);}
+
+    .hint{font-size:.78rem;color:rgba(255,100,100,.7);text-align:center;min-height:20px;margin-top:10px;opacity:0;transition:opacity .3s;}
+    .hint.show{opacity:1;}
+
+    /* NAV */
+    .qnav{width:100%;max-width:680px;display:flex;gap:10px;margin-top:14px;align-items:center;}
+    .btn-back{width:52px;height:52px;background:var(--card);border:1px solid var(--border2);border-radius:10px;color:var(--muted);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+    .btn-back:hover:not(:disabled){border-color:rgba(255,255,255,.22);color:var(--text);}
+    .btn-back:disabled{opacity:.25;cursor:not-allowed;}
+    .btn-next{flex:1;height:52px;background:var(--accent);color:#020617;font-family:var(--B);font-weight:700;font-size:.975rem;border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;}
+    .btn-next:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(198,255,0,.4);}
+
+    /* CALC OVERLAY */
+    .cov{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;opacity:0;pointer-events:none;transition:opacity .4s;}
+    .cov.show{opacity:1;pointer-events:all;}
+    .cov-logo{font-family:var(--D);font-size:2rem;font-weight:800;}
+    .cov-logo span{color:var(--accent);}
+    .cov-ring{position:relative;width:80px;height:80px;}
+    .cov-ring svg{transform:rotate(-90deg);}
+    .cr-bg{fill:none;stroke:rgba(255,255,255,.07);stroke-width:5;}
+    .cr-fill{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220;transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1);filter:drop-shadow(0 0 6px rgba(198,255,0,.5));}
+    .cr-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--D);font-size:.9rem;font-weight:800;color:var(--accent);}
+    .cov-steps{display:flex;flex-direction:column;gap:8px;width:260px;}
+    .cov-step{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--muted);transition:color .3s;}
+    .cov-step.done{color:var(--text);}
+    .cov-step-ico{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0;transition:all .3s;}
+    .cov-step.done .cov-step-ico{background:var(--ad);border-color:var(--accent);color:var(--accent);}
+
+    @media(max-width:600px){
+      header{padding:0 20px;}
+      .sdots{right:20px;}
+      main{padding:92px 16px 48px;}
+      .qcard{padding:28px 20px 24px;}
+      .qtext{font-size:1.2rem;padding-right:40px;}
+      .qnum-bg{font-size:3rem;}
+      .prof-grid{grid-template-columns:1fr;}
+    }
+
+    /* Profession grid */
+    .prof-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+    .prof-chip{background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--B);font-size:.9rem;color:var(--muted);}
+    .prof-chip:hover{border-color:rgba(255,255,255,.2);color:var(--text);background:rgba(255,255,255,.05);}
+    .prof-chip.picked{border-color:rgba(198,255,0,.5);background:var(--ad);color:var(--accent);}
+
+    /* ── ГЕЙМИФИКАЦИЯ test.html ── */
+
+    /* XP / прогресс-бар с числом */
+    .xp-wrap{width:100%;max-width:680px;display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+    .xp-bar-track{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+    .xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);border-radius:4px;transition:width .8s cubic-bezier(.34,1.2,.64,1);box-shadow:0 0 8px var(--ag);}
+    .xp-label{font-family:var(--D);font-size:.75rem;font-weight:800;color:var(--accent);white-space:nowrap;}
+
+    /* Answer pop animation */
+    @keyframes optPop{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
+    @keyframes checkBounce{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+    .opt.sa .ochk,
+    .opt.sb .ochk,
+    .opt.sc .ochk{animation:checkBounce .35s cubic-bezier(.34,1.56,.64,1) both;}
+
+    /* Opt hover lift */
+    .opt:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.3);}
+    .opt.sa:hover{box-shadow:0 4px 20px rgba(96,165,250,.15);}
+    .opt.sb:hover{box-shadow:0 4px 20px rgba(198,255,0,.15);}
+    .opt.sc:hover{box-shadow:0 4px 20px rgba(167,139,250,.15);}
+
+    /* Streak badge */
+    .streak-badge{display:none;align-items:center;gap:6px;background:rgba(255,140,60,.12);border:1px solid rgba(255,140,60,.3);color:rgba(255,160,80,.9);font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:100px;animation:fup .4s ease both;}
+    .streak-badge.show{display:inline-flex;}
+    @keyframes streakPop{0%{transform:scale(0) rotate(-10deg)}60%{transform:scale(1.2) rotate(3deg)}100%{transform:scale(1) rotate(0)}}
+    .streak-badge.pop{animation:streakPop .5s cubic-bezier(.34,1.56,.64,1) both;}
+
+    /* Prof chips hover */
+    .prof-chip{transition:all .18s cubic-bezier(.34,1.2,.64,1);}
+    .prof-chip:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3);}
+    .prof-chip.picked{transform:scale(1.04);}
+
+
+    /* ══ ГЕЙМИФИКАЦИЯ test.html ══ */
+
+    /* Profile completion bar */
+    .profile-bar-wrap{width:100%;max-width:680px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:16px;animation:fup .5s ease both;}
+    .pb-label{display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:8px;}
+    .pb-pct{font-family:var(--D);font-size:.9rem;font-weight:800;color:var(--accent);}
+    .pb-track{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+    .pb-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);border-radius:3px;transition:width .8s cubic-bezier(.34,1.2,.64,1);}
+
+    /* Answer pop feedback */
+    .answer-feedback{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:var(--card);border:1.5px solid var(--am);border-radius:16px;padding:16px 24px;font-family:var(--D);font-size:1.1rem;font-weight:800;color:var(--accent);pointer-events:none;z-index:999;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+    .answer-feedback.show{transform:translate(-50%,-50%) scale(1);}
+    .answer-feedback.hide{transform:translate(-50%,-60%) scale(0);opacity:0;}
+
+    /* Options micro-lift on hover */
+    .opt:active{transform:scale(.97);}
+
+    /* Completion burst */
+    @keyframes completeBurst{0%{box-shadow:0 0 0 0 rgba(198,255,0,.5)}50%{box-shadow:0 0 0 20px rgba(198,255,0,0)}100%{box-shadow:0 0 0 0 rgba(198,255,0,0)}}
+    .btn-next.complete{animation:completeBurst .6s ease;}
+
+  </style>
+</head>
+<body>
+
+<!-- Calc overlay -->
+<div class="cov" id="cov">
+  <div class="cov-logo">Traject<span>a</span></div>
+  <div class="cov-ring">
+    <svg viewBox="0 0 80 80" width="80" height="80">
+      <circle class="cr-bg" cx="40" cy="40" r="35"/>
+      <circle class="cr-fill" id="cr-fill" cx="40" cy="40" r="35"/>
+    </svg>
+    <div class="cr-pct" id="cr-pct">0%</div>
+  </div>
+  <div class="cov-steps" id="cov-steps">
+    <div class="cov-step" id="cs1"><div class="cov-step-ico">○</div>Анализ поведенческой модели</div>
+    <div class="cov-step" id="cs2"><div class="cov-step-ico">○</div>Расчёт вероятностей</div>
+    <div class="cov-step" id="cs3"><div class="cov-step-ico">○</div>Построение траектории</div>
+    <div class="cov-step" id="cs4"><div class="cov-step-ico">○</div>Генерация прогноза</div>
+  </div>
+</div>
+
+<div class="bg-g"></div>
+<div class="bg-gr"></div>
+
+<header>
+  <a href="index.html" class="logo">Traject<span>a</span></a>
+  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-left:14px;white-space:nowrap">
+    <span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);display:inline-block"></span>
+    Демо-доступ
+  </div>
+  <div class="hright">
+    <span class="tdot"></span>
+    <span id="timer">0:00</span>
+  </div>
+</header>
+<div class="prog"><div class="prog-f" id="prog-f" style="width:50%"></div></div>
+<div class="sdots">
+  <div class="sd done"></div>
+  <div class="sd active"></div>
+  <div class="sd"></div>
+</div>
+
+<main>
+  <div class="sc-badge" id="sc-badge">
+    ⚙️ Настройка модели: <strong id="sc-label">Смена профессии</strong>
+  </div>
+
+  <div class="q-top" style="width:100%;max-width:680px">
+    <div class="q-counter">Параметр <span id="qnum">1</span> из 8</div>
+    <div class="xp-wrap" id="xp-wrap">
+    <div class="xp-bar-track"><div class="xp-bar-fill" id="xp-fill" style="width:0%"></div></div>
+    <span class="xp-label" id="xp-label">0 XP</span>
+  </div>
+  <div style="width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <div class="qdots" id="qdots"></div>
+    <span class="streak-badge" id="streak-badge">🔥 Серия!</span>
+  </div>
+  </div>
+
+  <div id="qwrap" style="width:100%;max-width:680px"></div>
+
+  <p class="hint" id="hint">👆 Выбери один из вариантов</p>
+
+  <div class="qnav">
+    <button class="btn-back" id="btn-back" onclick="prev()" disabled>←</button>
+    <button class="btn-next" id="btn-next" onclick="next()">Следующий параметр →</button>
+  </div>
+</main>
+
+<script>
+  function save(k,v){try{localStorage.setItem('tr_'+k,JSON.stringify(v));}catch(e){}}
+  function load(k){try{return JSON.parse(localStorage.getItem('tr_'+k));}catch(e){return null;}}
+
+  const scenario = load('scenario') || 'switch';  // fallback to 'switch' if no scenario
+
+  const LABELS = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск'};
+  const scLabel = document.getElementById('sc-label');
+  if(scLabel) scLabel.textContent = LABELS[scenario]||'Смена профессии';
+
+  // ── ВОПРОСЫ — короткие и понятные ──
+
+  const Q_PROFESSION = {
+    tag:'👤 Профессия', isSelect:true, key:'profession',
+    text:'Кем ты работаешь сейчас?',
+    options:[
+      {val:'law',       lbl:'Юрист / Нотариус'},
+      {val:'finance',   lbl:'Финансист / Бухгалтер'},
+      {val:'it',        lbl:'IT / Разработчик / Аналитик'},
+      {val:'marketing', lbl:'Маркетолог / SMM'},
+      {val:'design',    lbl:'Дизайнер'},
+      {val:'medicine',  lbl:'Медик / Фармацевт'},
+      {val:'hr',        lbl:'HR / Рекрутер'},
+      {val:'education', lbl:'Педагог / Тренер'},
+      {val:'sales',     lbl:'Продажи / Менеджер'},
+      {val:'engineering',lbl:'Инженер / Технолог'},
+      {val:'creative',  lbl:'Творческая сфера (флорист, повар, фотограф)'},
+      {val:'freelance', lbl:'Фриланс / Самозанятый / Предприниматель'},
+      {val:'other',     lbl:'Другая сфера (укажи свою)'},
+    ]
+  };
+
+  // Психотип — один вопрос который многое говорит
+  const Q_PSYCHOTYPE = {
+    tag:'🧠 Психотип', key:'psychotype',
+    text:'Как ты обычно принимаешь решения?',
+    a:{val:'analyst',  lbl:'Анализирую данные',       txt:'Сначала изучаю, считаю, сравниваю — потом действую'},
+    b:{val:'doer',     lbl:'Действую и смотрю',       txt:'Пробую на практике, учусь в процессе'},
+    c:{val:'feeler',   lbl:'Слушаю интуицию',          txt:'Доверяю ощущениям и внутренним сигналам'},
+  };
+
+  // CSS for other input
+  const otherStyle = document.createElement('style');
+  otherStyle.textContent = `.other-input-wrap{margin-top:10px;display:none;}.other-input-wrap.show{display:block;}.other-input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--am);border-radius:10px;color:var(--text);font-family:var(--B);font-size:.95rem;padding:12px 16px;outline:none;transition:border-color .2s;}.other-input:focus{border-color:var(--accent);}.other-input::placeholder{color:var(--dim);}`;
+  document.head.appendChild(otherStyle);
+
+  const Q_DIRECTION = {
+    tag:'🧭 Приоритет', key:'direction',
+    text:'Что важнее всего в новой жизни?',
+    a:{val:'income', lbl:'Больше денег',    txt:'Хочу зарабатывать значительно больше'},
+    b:{val:'stable', lbl:'Стабильность',    txt:'Хочу уверенности и предсказуемости'},
+    c:{val:'new',    lbl:'Свобода и смысл', txt:'Хочу заниматься тем, что нравится'},
+  };
+
+  // Новый вопрос: текущий доход (для логики прогноза — не ниже текущего)
+  const Q_CURRENT_SALARY = {
+    tag:'💰 Доход сейчас', key:'currentSalary',
+    text:'Сколько примерно ты зарабатываешь сейчас?',
+    a:{val:'below200',  lbl:'До 200 000 тг',         txt:''},
+    b:{val:'200to400',  lbl:'200 000 – 400 000 тг',  txt:''},
+    c:{val:'400to700',  lbl:'400 000 – 700 000 тг',  txt:''},
+    d:{val:'700to1000', lbl:'700 000 – 1 000 000 тг',txt:''},
+    e:{val:'above1000', lbl:'Свыше 1 000 000 тг',    txt:''},
+  };
+
+  // Новый вопрос: формат работы
+  const Q_WORK_FORMAT = {
+    tag:'🏢 Формат работы', key:'workFormat',
+    text:'Как ты хочешь работать?',
+    a:{val:'office',  lbl:'В офисе',     txt:'Важна структура, коллеги и разделение работы и дома'},
+    b:{val:'remote',  lbl:'Удалённо',    txt:'Свобода выбора места, нет привязки к городу'},
+    c:{val:'hybrid',  lbl:'Гибрид',      txt:'Лучшее из двух — офис когда нужно, дома когда хочу'},
+  };
+
+  const QS_SWITCH = [
+    Q_PROFESSION,
+    Q_DIRECTION,
+    { tag:'⚡ Риск', key:'risk',
+      text:'Готов ли ты временно зарабатывать меньше?',
+      a:{val:'low',   lbl:'Нет, нужна стабильность', txt:'Хочу перейти без потери дохода'},
+      b:{val:'medium',lbl:'Немного, 2–3 месяца',      txt:'Могу потерпеть ради результата'},
+      c:{val:'high',  lbl:'Да, готов рискнуть',       txt:'Понимаю риски, хочу быстрый скачок'},
+    },
+    { tag:'⏱ Темп', key:'speed',
+      text:'Как быстро хочешь сделать переход?',
+      a:{val:'slow',  lbl:'Постепенно, 1–2 года', txt:'Без спешки, основательно'},
+      b:{val:'medium',lbl:'За 6–12 месяцев',       txt:'Параллельно с работой'},
+      c:{val:'fast',  lbl:'Как можно быстрее',     txt:'Хочу уйти уже сейчас'},
+    },
+    { tag:'💪 Опыт', key:'skills',
+      text:'Есть ли опыт в желаемой сфере?',
+      a:{val:'low',   lbl:'Нет, с нуля',              txt:'Всему буду учиться заново'},
+      b:{val:'medium',lbl:'Базовое понимание есть',    txt:'Немного знаю, опыта мало'},
+      c:{val:'high',  lbl:'Есть переносимые навыки',   txt:'Мои навыки частично подходят'},
+    },
+    { tag:'📅 Цель', key:'horizon',
+      text:'Чего хочешь достичь через 2 года?',
+      a:{val:'short',lbl:'Закрепиться на новом месте', txt:'Стабильно работать в новой сфере'},
+      b:{val:'mid',  lbl:'Зарабатывать не меньше',     txt:'Доход не ниже текущего'},
+      c:{val:'long', lbl:'Стать экспертом',             txt:'Репутация, клиенты или свой проект'},
+    },
+    { tag:'🚀 Стратегия', key:'growthType',
+      text:'Как планируешь двигаться?',
+      a:{val:'fast',  lbl:'Уволюсь и займусь полностью', txt:'Чёткий разрыв со старым'},
+      b:{val:'stable',lbl:'Буду совмещать до первого дохода', txt:'Пока не появится заработок'},
+      c:{val:'new',   lbl:'Сначала обучусь, потом уйду', txt:'Получу навык, потом сменю работу'},
+    },
+    Q_CURRENT_SALARY,
+    Q_WORK_FORMAT,
+  ];
+
+  const QS_GROW = [
+    Q_PROFESSION,
+    { tag:'💰 Ситуация', key:'currentLevel',
+      text:'Как оцениваешь свой доход сейчас?',
+      a:{val:'low',   lbl:'Сильно ниже рынка', txt:'Знаю что недооценён'},
+      b:{val:'medium',lbl:'На уровне рынка',    txt:'Нормально, но хочу больше'},
+      c:{val:'high',  lbl:'Выше рынка',         txt:'Хочу нелинейного роста'},
+    },
+    { tag:'🎯 Путь', key:'growStrategy',
+      text:'Через что хочешь вырасти?',
+      a:{val:'money',    lbl:'Найти работу с зарплатой выше', txt:'Сменить работодателя'},
+      b:{val:'interest', lbl:'Повышение или новая роль',       txt:'Остаться и вырасти'},
+      c:{val:'stability',lbl:'Свой бизнес или фриланс',        txt:'Выйти из найма'},
+    },
+    { tag:'⚡ Готовность', key:'risk',
+      text:'На что готов ради роста дохода?',
+      a:{val:'low',   lbl:'Безопасный рост',       txt:'Без потери стабильности'},
+      b:{val:'medium',lbl:'Готов сменить работу',  txt:'Разумный шаг вперёд'},
+      c:{val:'high',  lbl:'Готов на радикальные шаги', txt:'Уволиться, запустить своё'},
+    },
+    { tag:'💪 Уровень', key:'skills',
+      text:'Как оцениваешь себя как специалиста?',
+      a:{val:'low',   lbl:'Есть навыки, но плохо себя продаю', txt:'Не умею позиционировать'},
+      b:{val:'medium',lbl:'Хороший специалист',                 txt:'Нужно прокачать навыки'},
+      c:{val:'high',  lbl:'Эксперт с портфолио',                txt:'Вопрос в позиционировании'},
+    },
+    { tag:'📅 Срок', key:'horizon',
+      text:'За сколько хочешь вырасти в доходе?',
+      a:{val:'short',lbl:'3–6 месяцев', txt:'Хочу быстрый результат'},
+      b:{val:'mid',  lbl:'6–12 месяцев',txt:'Готов инвестировать год'},
+      c:{val:'long', lbl:'1–2 года',    txt:'Строю долгосрочно'},
+    },
+    { tag:'🏆 Зачем', key:'priority',
+      text:'Зачем тебе больше денег?',
+      a:{val:'money',    lbl:'Финансовая свобода',    txt:'Не зависеть от работодателя'},
+      b:{val:'stability',lbl:'Лучше жить',            txt:'Жильё, путешествия, семья'},
+      c:{val:'interest', lbl:'Статус и признание',    txt:'Стать лучшим в своей области'},
+    },
+    { tag:'🚀 Действие', key:'growthType',
+      text:'Как будешь расти?',
+      a:{val:'fast',  lbl:'Ищу новую работу прямо сейчас', txt:'Активный поиск идёт'},
+      b:{val:'stable',lbl:'Планомерно прокачиваюсь',       txt:'Системный рост'},
+      c:{val:'new',   lbl:'Хочу выйти из найма',           txt:'Фриланс или своё дело'},
+    },
+    Q_CURRENT_SALARY,
+    Q_WORK_FORMAT,
+  ];
+
+  const QS_RESTART = [
+    Q_PROFESSION,
+    { tag:'🔁 Причина', key:'restartReason',
+      text:'Почему хочешь начать заново?',
+      a:{val:'low',   lbl:'Выгорел, устал',        txt:'Нужен свежий старт'},
+      b:{val:'medium',lbl:'Потерял работу',          txt:'Обстоятельства вынуждают'},
+      c:{val:'high',  lbl:'Хочу кардинально иначе', txt:'Осознанное решение'},
+    },
+    Q_DIRECTION,
+    { tag:'⚡ Ресурс', key:'risk',
+      text:'Сколько времени есть на перезапуск?',
+      a:{val:'low',   lbl:'Нужно зарабатывать быстро', txt:'Подушка маленькая'},
+      b:{val:'medium',lbl:'3–6 месяцев',                txt:'Время на подготовку есть'},
+      c:{val:'high',  lbl:'Год и больше',               txt:'Готов вложить в себя'},
+    },
+    { tag:'💼 Опыт', key:'skills',
+      text:'Что хочешь взять из прошлого?',
+      a:{val:'low',   lbl:'Ничего, с нуля',              txt:'Полный разрыв'},
+      b:{val:'medium',lbl:'Часть навыков применима',      txt:'Есть что перенести'},
+      c:{val:'high',  lbl:'Мой опыт — моё преимущество', txt:'Уникальное сочетание'},
+    },
+    { tag:'🎯 Главное', key:'priority',
+      text:'Что важнее всего в новом старте?',
+      a:{val:'money',    lbl:'Зарабатывать больше',    txt:'Доход выше прежнего'},
+      b:{val:'stability',lbl:'Стабильность',           txt:'Уверенность в завтрашнем дне'},
+      c:{val:'interest', lbl:'Удовольствие от работы', txt:'Делать то, что нравится'},
+    },
+    { tag:'📅 Результат', key:'horizon',
+      text:'Что ожидаешь через 2 года?',
+      a:{val:'short',lbl:'Восстановить прежний доход', txt:'Минимальная цель'},
+      b:{val:'mid',  lbl:'Выйти на новый уровень',     txt:'Новая профессия и рост'},
+      c:{val:'long', lbl:'Запустить своё дело',         txt:'Свой проект или экспертиза'},
+    },
+    { tag:'🚀 Темп', key:'growthType',
+      text:'Как будешь стартовать?',
+      a:{val:'fast',  lbl:'Начинаю прямо сейчас',  txt:'Учусь в процессе'},
+      b:{val:'stable',lbl:'Сначала подготовлюсь',   txt:'Правильно, без спешки'},
+      c:{val:'new',   lbl:'Пробую параллельно',      txt:'Пока не уволился'},
+    },
+  ];
+
+
+  // Вопросы для фрилансеров и самозанятых
+  const QS_FREELANCE = [
+    Q_PROFESSION,
+    { tag:'💰 Доход', key:'currentLevel',
+      text:'Как ты оцениваешь свой доход сейчас?',
+      a:{val:'low',   lbl:'Нестабильный, хочу больше',   txt:'Доход скачет, хочу стабильность'},
+      b:{val:'medium',lbl:'Нормально, но хочу масштаб',   txt:'Есть база, хочу x2–x3'},
+      c:{val:'high',  lbl:'Хороший, хочу систему',         txt:'Зарабатываю, но хаотично'},
+    },
+    { tag:'🎯 Задача', key:'growStrategy',
+      text:'Что для тебя важнее прямо сейчас?',
+      a:{val:'money',    lbl:'Найти больше клиентов',      txt:'Нужен поток заявок'},
+      b:{val:'interest', lbl:'Поднять чек / ставку',       txt:'Те же усилия — больше денег'},
+      c:{val:'stability',lbl:'Создать стабильный доход',   txt:'Без скачков, предсказуемо'},
+    },
+    { tag:'⚡ Риск', key:'risk',
+      text:'Готов ли рискнуть ради роста?',
+      a:{val:'low',   lbl:'Нет, сначала стабильность',  txt:'Нужна предсказуемость'},
+      b:{val:'medium',lbl:'Умеренный риск',              txt:'Разумные шаги'},
+      c:{val:'high',  lbl:'Готов инвестировать в себя',  txt:'Курсы, реклама, найм'},
+    },
+    Q_DIRECTION,
+    { tag:'💪 Ниша', key:'skills',
+      text:'Насколько ты известен в своей нише?',
+      a:{val:'low',   lbl:'Только начинаю',            txt:'Портфолио небольшое'},
+      b:{val:'medium',lbl:'Есть постоянные клиенты',   txt:'Сарафан работает'},
+      c:{val:'high',  lbl:'Меня знают и рекомендуют',  txt:'Репутация есть'},
+    },
+    { tag:'📅 Горизонт', key:'horizon',
+      text:'Чего хочешь достичь через 2 года?',
+      a:{val:'short',lbl:'Стабильный доход без скачков',  txt:'Предсказуемость важнее максимума'},
+      b:{val:'mid',  lbl:'Вырасти в 2–3 раза',            txt:'Масштаб через нишу или команду'},
+      c:{val:'long', lbl:'Выйти на пассивный доход',       txt:'Продукты, курсы, агентство'},
+    },
+    { tag:'🚀 Стратегия', key:'growthType',
+      text:'Как планируешь расти?',
+      a:{val:'fast',  lbl:'Агрессивный маркетинг',     txt:'Реклама, контент, партнёрства'},
+      b:{val:'stable',lbl:'Системно — чек и качество', txt:'Меньше клиентов, дороже'},
+      c:{val:'new',   lbl:'Новый продукт или формат',  txt:'Курс, агентство, партнёрство'},
+    },
+    Q_CURRENT_SALARY,
+    Q_WORK_FORMAT,
+  ];
+
+  const QS = scenario==='freelance' ? QS_FREELANCE : scenario==='grow' ? QS_GROW : scenario==='restart' ? QS_RESTART : QS_SWITCH;
+
+  let cur = 0;
+  let answers = {};
+  let answeredCount = 0;
+  let timerSec = 0;
+
+  // Timer
+  const timerInt = setInterval(()=>{
+    timerSec++;
+    const el = document.getElementById('timer');
+    if(el) el.textContent = Math.floor(timerSec/60)+':'+(timerSec%60<10?'0':'')+timerSec%60;
+  },1000);
+
+  const TOTAL_Q = QS.length;
+
+  // Init Q dots
+  const dotsEl = document.getElementById('qdots');
+  for(let i=0;i<TOTAL_Q;i++){
+    const d=document.createElement('div');
+    d.className='qd';d.id='qd'+i;
+    dotsEl.appendChild(d);
+  }
+
+  function render(dir){
+    const wrap = document.getElementById('qwrap');
+    const old  = wrap.querySelector('.qcard');
+    if(old){
+      old.classList.remove('in');
+      old.classList.add('out');
+      setTimeout(()=>{ wrap.innerHTML=build(); }, 240);
+    } else {
+      wrap.innerHTML = build();
+    }
+    document.getElementById('qnum').textContent = cur+1;
+    const total = document.querySelector('.q-counter');
+    if(total) total.innerHTML = `Параметр <span id="qnum">${cur+1}</span> из ${TOTAL_Q}`;
+    for(let i=0;i<TOTAL_Q;i++){
+      const d=document.getElementById('qd'+i);
+      if(d) d.className='qd'+(i<cur?' done':i===cur?' active':'');
+    }
+    const pct = 50 + Math.round((cur/TOTAL_Q)*20);
+    document.getElementById('prog-f').style.width = pct+'%';
+    document.getElementById('btn-back').disabled = cur===0;
+    document.getElementById('btn-next').textContent = cur===TOTAL_Q-1 ? '🎯 Рассчитать прогноз' : 'Следующий →';
+    document.getElementById('hint').classList.remove('show');
+    // XP bar
+    const xpPct = Math.round((cur/TOTAL_Q)*100);
+    const xpEl = document.getElementById('xp-fill');
+    const xpLbl = document.getElementById('xp-label');
+    if(xpEl) xpEl.style.width = xpPct+'%';
+    if(xpLbl) xpLbl.textContent = (cur*12)+' XP';
+    // Profile completion bar
+    const pctFilled = Math.round((Object.keys(answers).filter(k=>answers[k]).length / TOTAL_Q)*100);
+    const pbFill = document.getElementById('pb-fill');
+    const pbPct  = document.getElementById('pb-pct');
+    if(pbFill) pbFill.style.width = pctFilled+'%';
+    if(pbPct)  pbPct.textContent = pctFilled+'%';
+  }
+
+  function build(){
+    const q = QS[cur];
+    // Profession: grid of chip buttons
+    if(q.isSelect){
+      const sel = answers[q.key]||'';
+      const chips = q.options.map(o=>`<button class="prof-chip${sel===o.val?' picked':''}" onclick="pickProf('${o.val}',this)">${o.lbl}</button>`).join('');
+      return `<div class="qcard in">
+        <div class="qnum-bg">01</div>
+        <div class="qtag">${q.tag}</div>
+        <div class="qtext">${q.text}</div>
+        <div class="prof-grid">${chips}</div>
+        <div class="other-input-wrap${sel==='other'?' show':''}" id="other-wrap">
+          <input class="other-input" id="other-text" type="text" placeholder="Например: архитектор, логист, повар…" value="${answers.otherText||''}" oninput="onOtherInput(this.value)">
+        </div>
+      </div>`;
+    }
+    const sel = answers[q.key];
+    const LETTERS = ['a','b','c','d','e'];
+    const KEYS    = ['A','B','C','D','E'];
+    const CLS_MAP = {a:' sa', b:' sb', c:' sc', d:' sd', e:' se'};
+    const cls = (v)=> sel===v ? (CLS_MAP[LETTERS.find(l=>q[l]&&q[l].val===v)]||' sb') : '';
+    const chk = (v)=> sel===v ? '✓':'';
+
+    const opts = LETTERS
+      .filter(l => q[l])
+      .map((l,i) => `
+        <button class="opt${cls(q[l].val)}" onclick="pick('${q.key}','${q[l].val}','${l}')">
+          <div class="okey">${KEYS[i]}</div>
+          <div class="obody"><div class="oval">${q[l].lbl}</div>${q[l].txt?`<div class="otxt">${q[l].txt}</div>`:''}</div>
+          <div class="ochk">${chk(q[l].val)}</div>
+        </button>`).join('');
+
+    return `<div class="qcard in">
+      <div class="qnum-bg">0${cur+1}</div>
+      <div class="qtag">${q.tag}</div>
+      <div class="qtext">${q.text}</div>
+      <div class="opts">${opts}</div>
+    </div>`;
+  }
+
+  function onOtherInput(val){
+    answers.otherText = val;
+    answers.profLabel = val; // save for display in result
+    // Show hint to proceed if text entered
+    const hint = document.getElementById('hint');
+    if(val.trim().length > 1 && hint) hint.classList.remove('show');
+  }
+
+  function pickProf(val, el){
+    answers['profession'] = val;
+    document.querySelectorAll('.prof-chip').forEach(c=>c.classList.remove('picked'));
+    el.classList.add('picked');
+    document.getElementById('hint').classList.remove('show');
+    // Show input for 'other'
+    const wrap = document.getElementById('other-wrap');
+    if(wrap){
+      if(val === 'other'){
+        wrap.classList.add('show');
+        setTimeout(()=>{ const inp=document.getElementById('other-text'); if(inp) inp.focus(); }, 100);
+        return; // don't auto-advance — user needs to type
+      } else {
+        wrap.classList.remove('show');
+      }
+    }
+    setTimeout(()=>next(), 380);
+  }
+
+  function pick(key,val,letter){
+    answers[key]=val;
+    const wrap=document.getElementById('qwrap');
+    const opts=wrap.querySelectorAll('.opt');
+    opts.forEach(o=>{
+      o.className='opt';
+      const ck=o.querySelector('.ochk');
+      if(ck) ck.textContent='';
+    });
+    const lmap={a:0,b:1,c:2,d:3,e:4};
+    const el=opts[lmap[letter]];
+    if(el){
+      el.className='opt s'+letter;
+      el.style.animation='none';
+      requestAnimationFrame(()=>{ el.style.animation='optPop .35s ease'; });
+      const ck=el.querySelector('.ochk');
+      if(ck) ck.textContent='✓';
+    }
+    document.getElementById('hint').classList.remove('show');
+    // Answer feedback flash
+    const fb = document.getElementById('ans-feedback');
+    if(fb){
+      const msgs = ['✓ Записано','✓ Учтено','✓ Понял','✓ Принято','✓ Ок'];
+      fb.textContent = msgs[Math.floor(Math.random()*msgs.length)];
+      fb.classList.add('show');
+      setTimeout(()=>{ fb.classList.remove('show'); fb.classList.add('hide'); setTimeout(()=>fb.classList.remove('hide'),300); }, 600);
+    }
+    // Streak
+    answeredCount++;
+    if(answeredCount>1 && answeredCount%3===0){
+      const sb=document.getElementById('streak-badge');
+      if(sb){ sb.textContent='🔥 Серия '+answeredCount+'!'; sb.classList.add('show','pop'); setTimeout(()=>sb.classList.remove('pop'),500); setTimeout(()=>sb.classList.remove('show'),2500); }
+    }
+    // Auto-advance on mobile
+    if(window.innerWidth<=600) setTimeout(()=>{ if(answers[QS[cur].key]) next(); },500);
+  }
+
+  function next(){
+    const q=QS[cur];
+    if(!answers[q.key]){
+      document.getElementById('hint').classList.add('show');
+      shake(); return;
+    }
+    if(cur===TOTAL_Q-1){ finish(); return; }
+    cur++; render(1);
+  }
+
+  function prev(){
+    if(cur===0) return; cur--; render(-1);
+  }
+
+  function shake(){
+    const c=document.querySelector('.qcard');
+    if(!c) return;
+    const m=[-7,7,-5,5,-2,2,0]; let i=0;
+    c.style.transition='transform .07s ease';
+    const t=setInterval(()=>{
+      c.style.transform=`translateX(${m[i]}px)`;i++;
+      if(i>=m.length){clearInterval(t);c.style.transform='';}
+    },70);
+  }
+
+  function finish(){
+    clearInterval(timerInt);
+    // Validate: if 'other' selected, need text
+    if(answers.profession === 'other' && !answers.otherText?.trim()){
+      document.getElementById('hint').classList.add('show');
+      document.getElementById('hint').textContent = '👆 Укажи свою сферу выше';
+      cur = 0; render(0); return;
+    }
+    // Normalize keys across scenarios
+    if(!answers.priority && answers.growStrategy) answers.priority = answers.growStrategy;
+    if(!answers.priority && answers.motivation)   answers.priority = answers.motivation;
+    if(!answers.speed)    answers.speed = 'medium';
+    if(!answers.horizon && answers.currentLevel) {
+      answers.horizon = answers.currentLevel==='low'?'short':answers.currentLevel==='high'?'long':'mid';
+    }
+    // Save profLabel for display
+    if(!answers.profLabel){
+      const PROF_LABELS = {law:'Юрист',finance:'Финансист',it:'IT-специалист',marketing:'Маркетолог',design:'Дизайнер',medicine:'Медик',hr:'HR',education:'Педагог',sales:'Продажник',engineering:'Инженер',creative:'Творческая сфера'};
+      answers.profLabel = PROF_LABELS[answers.profession] || 'Специалист';
+    }
+    save('answers', answers);
+    save('time', timerSec);
+
+    // Run forecast engine inline
+    const result = calcForecast(scenario, answers);
+    save('result', result);
+
+    // Show calc overlay
+    const cov=document.getElementById('cov');
+    const crFill=document.getElementById('cr-fill');
+    const crPct=document.getElementById('cr-pct');
+    cov.classList.add('show');
+
+    const steps=[
+      {id:'cs1',pct:25},
+      {id:'cs2',pct:55},
+      {id:'cs3',pct:80},
+      {id:'cs4',pct:100},
+    ];
+    let si=0;
+    const t=setInterval(()=>{
+      const s=steps[si];
+      crFill.style.strokeDashoffset = 220 - (s.pct/100)*220;
+      crPct.textContent = s.pct+'%';
+      const el=document.getElementById(s.id);
+      if(el){
+        el.classList.add('done');
+        el.querySelector('.cov-step-ico').textContent='✓';
+      }
+      si++;
+      if(si>=steps.length){
+        clearInterval(t);
+        setTimeout(()=>{ gtag('event','test_complete',{event_category:'funnel',prof:answers.profession,sc:scenario});
+        window.location.href='test-psycho.html'; },500);
+      }
+    },550);
+  }
+
+  // ── FORECAST ENGINE — реальные зарплаты КЗ 2025–2026 ──
+  function calcForecast(sc, ans){
+    const prof = ans.profession || 'other';
+
+    // Base salaries по профессии (тысяч тенге/мес, КЗ рынок 2025-2026)
+    // Диапазон = типичная точка входа после перехода / для начинающих в сфере
+    const PROF_BASE = {
+      law:        {min:250, max:450, growth:.18, risk:.72},
+      finance:    {min:300, max:550, growth:.17, risk:.78},
+      it:         {min:450, max:750, growth:.28, risk:.82},
+      marketing:  {min:280, max:480, growth:.21, risk:.75},
+      design:     {min:260, max:450, growth:.20, risk:.72},
+      medicine:   {min:300, max:500, growth:.15, risk:.80},
+      hr:         {min:250, max:420, growth:.16, risk:.76},
+      education:  {min:200, max:380, growth:.14, risk:.82},
+      sales:      {min:280, max:500, growth:.23, risk:.70},
+      engineering:{min:280, max:480, growth:.17, risk:.78},
+      creative:   {min:250, max:450, growth:.22, risk:.65},
+      other:      {min:260, max:450, growth:.17, risk:.72},
+      freelance:  {min:300, max:600, growth:.28, risk:.65},
+    };
+
+    // Scenario modifiers
+    const SC_MOD = {
+      switch: {incomeMul:1.15, growthMul:1.2, riskMul:0.92},
+      grow:   {incomeMul:1.0,  growthMul:1.0, riskMul:1.05},
+      restart:{incomeMul:0.85, growthMul:1.3,  riskMul:0.88},
+    };
+
+    const b = PROF_BASE[prof];
+    const sm = SC_MOD[sc]||SC_MOD.switch;
+
+    const rM={low:{im:.82,pm:1.1,tm:1.25},medium:{im:1,pm:1,tm:1},high:{im:1.28,pm:.87,tm:.78}};
+    const spM={slow:{im:.9,pm:1.05,tm:1.4},medium:{im:1,pm:1,tm:1},fast:{im:1.15,pm:.92,tm:.75}};
+    const prM={money:{im:1.18,pm:.9},stability:{im:.88,pm:1.1},interest:{im:1.04,pm:1}};
+    const hM={short:{im:.72,gm:.8},mid:{im:1,gm:1},long:{im:1.32,gm:1.25}};
+    const skM={low:{im:.75,pm:.84},medium:{im:1,pm:1},high:{im:1.32,pm:1.15}};
+    // growthType modifier
+    const gtM={fast:{im:1.18,pm:.88,timeLoss:0},stable:{im:.95,pm:1.08,timeLoss:0},new:{im:1.05,pm:.9,timeLoss:8}};
+
+    const r=rM[ans.risk]||rM.medium;
+    const sp=spM[ans.speed]||spM.medium;
+    const pr=prM[ans.priority]||prM.interest;
+    const h=hM[ans.horizon]||hM.mid;
+    const sk=skM[ans.skills]||skM.medium;
+    const gt=gtM[ans.growthType]||gtM.stable;
+
+    const im = r.im*sp.im*pr.im*h.im*sk.im*sm.incomeMul*gt.im;
+    const pm = r.pm*sp.pm*sk.pm*sm.riskMul*gt.pm;
+    const tm = r.tm*sp.tm;
+    const gm = b.growth*h.gm*sm.growthMul;
+
+    const n0  = Math.round(b.min*im/10)*10;
+    const n0x = Math.round(b.max*im/10)*10;
+    let n2  = Math.round(n0*(1+gm*2*tm)/10)*10;
+    let n2x = Math.round(n0x*(1+gm*2*tm)/10)*10;
+    let n5  = Math.round(n0*(1+gm*5*tm)/10)*10;
+    let n5x = Math.round(n0x*(1+gm*5*tm)/10)*10;
+
+    // Floor: прогноз не ниже текущей зарплаты пользователя
+    const salaryFloorMap = {
+      below200:0, '200to400':200, '400to700':400, '700to1000':700, above1000:1000
+    };
+    const salaryFloor = salaryFloorMap[ans.currentSalary] || 0;
+    if(salaryFloor > 0){
+      // Старт не ниже текущей зарплаты
+      const nFloor = Math.max(n0, Math.round(salaryFloor * 0.9 / 10) * 10);
+      const nxFloor = Math.max(n0x, Math.round(salaryFloor * 1.1 / 10) * 10);
+      // Y2 должен быть выше текущей зарплаты минимум на 15%
+      const y2Floor = Math.round(salaryFloor * 1.15 / 10) * 10;
+      if(n2 < y2Floor) n2 = y2Floor;
+      if(n2x < Math.round(y2Floor * 1.3 / 10) * 10) n2x = Math.round(y2Floor * 1.3 / 10) * 10;
+      // Y5 ещё выше
+      const y5Floor = Math.round(salaryFloor * 1.4 / 10) * 10;
+      if(n5 < y5Floor) n5 = y5Floor;
+      if(n5x < Math.round(y5Floor * 1.35 / 10) * 10) n5x = Math.round(y5Floor * 1.35 / 10) * 10;
+    }
+
+    const prob = Math.round(Math.min(Math.max(b.risk*pm,.42),.96)*100);
+    const riskLvl = ans.risk==='high'?'Высокий':ans.risk==='low'?'Низкий':'Средний';
+    const riskCls = ans.risk==='high'?'red':ans.risk==='low'?'green':'yellow';
+
+    const fmt = v => {
+      // v is in thousands of tenge (e.g. 250 = 250 000 tg)
+      const full = v * 1000;
+      if(full >= 1000000) return (full/1000000).toFixed(1).replace('.0','') + ' млн';
+      return full.toLocaleString('ru-RU');
+    };
+    const fmtRange = (lo, hi) => `${fmt(lo)} – ${fmt(hi)} тг`;
+
+    // Skills profile
+    const baseSkills={
+      it:         {an:80,cm:55,cr:60,st:70},
+      law:        {an:75,cm:65,cr:45,st:72},
+      finance:    {an:78,cm:60,cr:42,st:75},
+      marketing:  {an:62,cm:78,cr:72,st:65},
+      design:     {an:55,cm:65,cr:85,st:52},
+      medicine:   {an:70,cm:68,cr:50,st:65},
+      hr:         {an:62,cm:82,cr:58,st:68},
+      education:  {an:65,cm:80,cr:62,st:62},
+      sales:      {an:55,cm:85,cr:60,st:62},
+      engineering:{an:78,cm:52,cr:55,st:72},
+      creative:   {an:48,cm:65,cr:88,st:50},
+      other:      {an:60,cm:65,cr:60,st:62},
+    }[prof]||{an:60,cm:65,cr:60,st:62};
+
+    const sb=ans.skills==='high'?12:ans.skills==='low'?-12:0;
+    const skills={
+      analytics:    Math.min(baseSkills.an+sb,98),
+      communication:Math.min(baseSkills.cm+(ans.risk==='high'?7:0),98),
+      creativity:   Math.min(baseSkills.cr+(ans.priority==='interest'?10:0),98),
+      strategy:     Math.min(baseSkills.st+(ans.horizon==='long'?10:0),98),
+    };
+
+    const pp=ans.priority||'interest';
+    const motivation={
+      money:    pp==='money'?85:50,
+      freedom:  ans.risk==='high'?82:52,
+      interest: pp==='interest'?88:55,
+      stability:pp==='stability'?75:42,
+    };
+
+    const all=[
+      {id:'analytical',lbl:'Аналитическое мышление',ico:'🔬'},
+      {id:'strategic', lbl:'Стратегическое видение', ico:'🧭'},
+      {id:'adaptive',  lbl:'Адаптивность',            ico:'🌊'},
+      {id:'creative',  lbl:'Творческий подход',       ico:'✨'},
+      {id:'decisive',  lbl:'Решительность',           ico:'⚡'},
+      {id:'resilient', lbl:'Устойчивость к стрессу',  ico:'🛡️'},
+      {id:'communicator',lbl:'Коммуникабельность',    ico:'🤝'},
+      {id:'expert',    lbl:'Глубокая экспертиза',     ico:'🎓'},
+    ];
+    const profStrPicks={
+      it:['analytical','strategic','adaptive','decisive'],
+      law:['analytical','expert','decisive','resilient'],
+      finance:['analytical','strategic','expert','resilient'],
+      marketing:['creative','communicator','adaptive','strategic'],
+      design:['creative','adaptive','expert','communicator'],
+      medicine:['expert','resilient','communicator','decisive'],
+      hr:['communicator','adaptive','strategic','resilient'],
+      education:['communicator','expert','creative','adaptive'],
+      sales:['communicator','decisive','adaptive','resilient'],
+      engineering:['analytical','expert','strategic','decisive'],
+      creative:['creative','adaptive','communicator','resilient'],
+      other:['adaptive','strategic','creative','decisive'],
+    };
+    const picks = profStrPicks[prof]||profStrPicks.other;
+    if(ans.risk==='high'&&!picks.includes('decisive')) picks[3]='decisive';
+    if(ans.skills==='high'&&!picks.includes('expert')) picks[2]='expert';
+    const strengths=all.filter(s=>picks.includes(s.id)).slice(0,4);
+
+    const chart=[];
+    for(let i=0;i<=9;i++) chart.push(Math.round(n0*(1+gm*(i*.55)*tm)));
+
+    return {
+      sc, ans, prof, prob, riskLvl, riskCls,
+      psychotype: ans.psychotype || 'analyst',
+      growthType: ans.growthType || 'stable',
+      direction:  ans.direction  || null,
+      timeLoss: gt.timeLoss,
+      income:{
+        now: fmtRange(n0, n0x),
+        y2:  fmtRange(n2, n2x),
+        y5:  fmtRange(n5, n5x),
+        nowVal:n0, y2Val:n2, y5Val:n5,
+      },
+      skills, motivation, strengths, chart,
+    };
+  }
+
+  render(1);
+</script>
+</body>
+</html>
