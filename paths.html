@@ -441,8 +441,18 @@
         </div>
       </div>
 
-      <h1 class="page-title" style="margin-bottom:6px">Выбери <em>путь</em></h1>
-      <p class="page-sub" style="margin-bottom:16px">${PLABEL[prof]||'Специалист'} · ${SCLABEL[sc]} · цель <strong style="color:var(--accent)">${inc.y2||'—'}</strong></p>
+      <h1 class="page-title" style="margin-bottom:12px">Выбери <em>путь</em></h1>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center">
+        <span style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.8rem;display:flex;align-items:center;gap:5px">
+          <span style="color:var(--muted);font-size:.65rem">👤</span> ${PLABEL[prof]||'Специалист'}
+        </span>
+        <span style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.8rem;display:flex;align-items:center;gap:5px">
+          <span style="color:var(--muted);font-size:.65rem">🎯</span> ${SCLABEL[sc]}
+        </span>
+        <span style="background:var(--ad);border:1px solid var(--am);border-radius:8px;padding:6px 12px;font-size:.8rem;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:5px">
+          <span style="font-size:.65rem">💰</span> ${inc.y2||'—'}
+        </span>
+      </div>
 
       <div class="sec-lbl" style="margin-bottom:12px">Два варианта — выбери один</div>
       <div class="paths-grid">

@@ -262,6 +262,15 @@
       .cta-title{font-size:1.1rem;}
     }
 
+
+    /* Uniform resource items */
+    .res-item{min-height:48px;align-items:center;}
+    .res-name{font-size:.84rem;}
+    @media(max-width:640px){
+      .res-tag{min-width:72px !important;font-size:.6rem;padding:2px 6px;}
+      .res-name{font-size:.78rem;}
+    }
+
   </style>
 </head>
 <body>
@@ -437,10 +446,10 @@
         <div class="ch"><span class="ci">📚</span><span class="ct">Ресурсы и инструменты для старта</span></div>
         <div class="resources-list">
           ${resources.map(r=>`
-          <a class="res-item" href="${r.url||'#'}" target="${r.url?'_blank':'_self'}" rel="noopener noreferrer" style="text-decoration:none;cursor:${r.url?'pointer':'default'}">
-            <span class="res-tag ${r.type==='free'?'rt-free':r.type==='paid'?'rt-paid':'rt-community'}">${r.type==='free'?'Бесплатно':r.type==='paid'?'Платно':'Сообщество'}</span>
-            <span class="res-name">${r.name}</span>
-            <span class="res-desc" style="margin-left:auto;display:flex;align-items:center;gap:4px">${r.desc}${r.url?' <span style="color:var(--accent);font-size:.72rem">↗</span>':''}</span>
+          <a class="res-item" href="${r.url||'#'}" target="${r.url?'_blank':'_self'}" rel="noopener noreferrer" style="text-decoration:none;">
+            <span class="res-tag ${r.type==='free'?'rt-free':r.type==='paid'?'rt-paid':'rt-community'}" style="flex-shrink:0;min-width:88px;text-align:center">${r.type==='free'?'Бесплатно':r.type==='paid'?'Платно':'Сообщество'}</span>
+            <span class="res-name" style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</span>
+            ${r.url?'<span style="color:var(--accent);font-size:.8rem;flex-shrink:0">↗</span>':''}
           </a>`).join('')}
         </div>
       </div>

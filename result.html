@@ -590,11 +590,11 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" class="mobile-stack">
           <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:12px 14px">
             <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:8px">💪 Сильные стороны</div>
-            <div style="display:flex;flex-direction:column;gap:4px" id="psycho-strengths"></div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center" id="psycho-strengths"></div>
           </div>
           <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:12px 14px">
             <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:8px">🎯 Подходящие роли</div>
-            <div style="display:flex;flex-direction:column;gap:4px" id="psycho-roles"></div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center" id="psycho-roles"></div>
           </div>
         </div>      </div>` : ''}
 
@@ -987,8 +987,14 @@
     if(!d) return;
     const sEl = document.getElementById('psycho-strengths');
     const rEl = document.getElementById('psycho-roles');
-    if(sEl) sEl.innerHTML = d.strengths.map(s=>`<div style="display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)"><span style="color:rgba(167,139,250,.8)">✓</span>${s}</div>`).join('');
-    if(rEl) rEl.innerHTML = d.roles.map(r=>`<div style="display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)"><span style="color:rgba(167,139,250,.8)">→</span>${r}</div>`).join('');
+    if(sEl) sEl.innerHTML = d.strengths.map(s=>`
+      <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:100px;padding:4px 12px;font-size:.76rem;color:rgba(167,139,250,.9);font-weight:600">
+        <span style="color:rgba(167,139,250,.8);font-size:.7rem">✓</span>${s}
+      </div>`).join('');
+    if(rEl) rEl.innerHTML = d.roles.map(r=>`
+      <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:.76rem;color:var(--muted)">
+        <span style="color:rgba(167,139,250,.8);font-size:.7rem">→</span>${r}
+      </div>`).join('');
   }
 
 
