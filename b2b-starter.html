@@ -164,6 +164,49 @@
       .bottom-cta{flex-direction:column;gap:16px;padding:20px;}
       .chart-bars{height:60px;}
     }
+
+    /* B2B Starter mobile fixes */
+    @media(max-width:640px){
+      /* Header - more space between badge and back button */
+      header{padding:0 12px;gap:8px;flex-wrap:wrap;height:auto;min-height:60px;padding-top:10px;padding-bottom:10px;}
+      .logo-tag{margin-left:4px;}
+      .hbtns{margin-left:auto;gap:6px;}
+      .hbtns .btn{font-size:.75rem;padding:7px 12px;}
+
+      /* Team table - fix emoji+name spacing */
+      .team-table td{padding:10px 4px;font-size:.8rem;}
+      .t-av{width:26px;height:26px;font-size:.75rem;margin-right:6px;flex-shrink:0;}
+      .t-name{font-size:.82rem;line-height:1.3;}
+      .t-role{font-size:.68rem;}
+      .score-track{width:48px;}
+      .score-num{font-size:.72rem;}
+      .status{font-size:.6rem;padding:2px 7px;}
+
+      /* Chart bars - more height and spacing */
+      .chart-bars{height:100px !important;gap:12px;padding:0 4px;}
+      .cb-label{font-size:.62rem;margin-top:4px;}
+      .cb-bar{border-radius:4px 4px 0 0;}
+      .cb{gap:3px;}
+
+      /* Two col layout */
+      .two-col{grid-template-columns:1fr !important;}
+      .three-col{grid-template-columns:1fr !important;}
+
+      /* Metrics */
+      .metrics{grid-template-columns:1fr 1fr;gap:10px;}
+      .metric{padding:14px 12px;}
+      .metric-val{font-size:1.4rem;}
+
+      /* Wrap */
+      .wrap{padding:20px 12px 60px;}
+      .db-header{flex-direction:column;gap:10px;align-items:flex-start;}
+      .db-header h1{font-size:1.2rem;}
+
+      /* Bottom CTA */
+      .bottom-cta{flex-direction:column;gap:16px;padding:20px 16px;}
+      .bc-title{font-size:1.1rem;}
+    }
+
   </style>
 </head>
 <body>
@@ -171,13 +214,10 @@
 
 <header>
   <a href="index.html" class="logo">Traject<span>a</span> <span class="logo-tag">B2B</span></a>
-  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-left:14px;white-space:nowrap">
-    <span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);display:inline-block"></span>
-    Демо-доступ
-  </div>
-  <div class="hbtns">
-    <a href="b2b.html" class="btn btn-g" style="font-size:.8rem">← Вернуться</a>
-    <a href="b2b.html" class="btn" onclick="event.preventDefault();document.getElementById('demo-toast').style.display='flex'">Запросить полный доступ</a>
+  <div class="demo-badge" style="display:inline-flex;align-items:center;gap:5px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;margin-left:8px;white-space:nowrap;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);flex-shrink:0;display:inline-block"></span><span class="badge-txt">Демо</span></div>
+  <div class="hbtns" style="margin-left:auto;display:flex;gap:8px;align-items:center">
+    <a href="b2b.html" class="btn btn-g" style="font-size:.78rem;padding:7px 14px;white-space:nowrap">← Назад</a>
+    <a href="b2b.html" class="btn" style="font-size:.78rem;padding:7px 14px;white-space:nowrap" onclick="event.preventDefault();document.getElementById('demo-toast').style.display='flex'">Полный доступ</a>
   </div>
 </header>
 
@@ -409,9 +449,9 @@
     const scoreColor = m.score >= 75 ? 'sf-accent' : m.score >= 55 ? 'sf-blue' : 'sf-red';
     tbody.innerHTML += `
       <tr>
-        <td><div class="t-av">${m.av}</div></td>
-        <td><div class="t-name">${m.name}</div><div class="t-role">${m.role}</div></td>
-        <td style="font-size:.78rem">${m.psycho}</td>
+        <td style="width:36px"><div class="t-av">${m.av}</div></td>
+        <td style="padding-left:8px"><div class="t-name">${m.name}</div><div class="t-role">${m.role.split(' · ')[0]}</div></td>
+        <td style="font-size:.75rem;display:none" class="hide-sm">${m.psycho}</td>
         <td>
           <div class="score-bar">
             <div class="score-track"><div class="score-fill ${scoreColor}" data-w="${m.score}" style="width:0%"></div></div>
