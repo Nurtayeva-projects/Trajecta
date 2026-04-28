@@ -280,6 +280,28 @@
       .price-grid{grid-template-columns:1fr 1fr;}
       .use-grid{grid-template-columns:1fr 1fr;}
     }
+
+    /* B2B mobile fixes */
+    @media(max-width:640px){
+      /* Hide nav links, show only demo button */
+      .hnav a{display:none;}
+      .hnav .btn{font-size:.8rem;padding:8px 16px;}
+
+      /* Stats - center and 3 in a row */
+      .hero-stats{display:flex;flex-direction:row;justify-content:center;gap:16px;flex-wrap:wrap;}
+      .hs{text-align:center;min-width:80px;}
+      .hs-n{font-size:1.4rem;}
+      .hs-l{font-size:.65rem;}
+
+      /* Hero actions - center */
+      .hero-actions{flex-direction:column;align-items:stretch;}
+      .hero-actions .btn{text-align:center;justify-content:center;}
+
+      /* Remove gap between stats and next section */
+      .hero-stats{margin-top:16px;margin-bottom:0;}
+      .hero{padding-bottom:20px;}
+    }
+
   </style>
 </head>
 <body>
@@ -325,10 +347,7 @@
 <!-- HEADER -->
 <header>
   <a href="index.html" class="logo">Traject<span>a</span> <span class="logo-tag">B2B</span></a>
-  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-left:14px;white-space:nowrap">
-    <span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);display:inline-block"></span>
-    Демо-доступ
-  </div>
+  <div class="demo-badge" style="display:inline-flex;align-items:center;gap:5px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.85);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;margin-left:8px;white-space:nowrap;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:rgba(251,191,36,.8);flex-shrink:0;display:inline-block"></span><span class="badge-txt">Демо</span></div>
   <nav class="hnav">
     <a href="#usecases">Применение</a>
     <a href="#how">Как работает</a>

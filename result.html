@@ -357,6 +357,17 @@
       .ig{grid-template-columns:repeat(3,1fr);}
       .mobile-stack{grid-template-columns:1fr 1fr;}
     }
+
+    /* Psychotype block mobile - center */
+    @media(max-width:640px){
+      #psycho-strengths div, #psycho-roles div{
+        justify-content:center;
+      }
+      #psycho-strengths, #psycho-roles{
+        align-items:center;
+      }
+    }
+
   </style>
   <script src="data.js"></script>
 </head>
