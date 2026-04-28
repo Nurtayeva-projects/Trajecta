@@ -328,10 +328,10 @@
     }
   
     @media(max-width:640px){
-      .rhero{padding:70px 14px 0;}
+      .rhero{padding:88px 14px 20px;}
       #hero-income{font-size:clamp(1.4rem,7vw,2.4rem) !important;line-height:1.1;}
-      #stat-pills{gap:6px;justify-content:center;}
-      #stat-pills>*{min-width:80px;padding:8px 10px;font-size:.8rem;}
+      #stat-pills{gap:6px;justify-content:center;flex-wrap:wrap;}
+      #stat-pills>*{min-width:calc(50% - 6px);flex:1;padding:8px 10px;font-size:.8rem;box-sizing:border-box;}
       #stat-pills>* div:first-child{font-size:.6rem;}
       .content{padding:20px 12px 60px;gap:12px;}
       .card{padding:14px 12px;}
