@@ -912,7 +912,17 @@
   }
 
   function buildRings(){
-    // Вместо колец — простые факты в пилюлях
+    // Set hero income display
+    const incEl = document.getElementById('hero-income');
+    if(incEl && R.income?.y2){
+      countUp(incEl, R.income.y2, '', 1200);
+    }
+    // Set scenario label
+    const scEl = document.getElementById('hsc');
+    if(scEl) scEl.textContent = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск',freelance:'Фриланс / Своё дело'}[R.sc]||'';
+    // Set subtitle
+    const subEl = document.getElementById('hsub');
+    if(subEl) subEl.textContent = (R.prof ? ({law:'Юрист',finance:'Финансист',it:'IT-специалист',marketing:'Маркетолог',design:'Дизайнер',medicine:'Медик',hr:'HR',education:'Педагог',sales:'Продажник',engineering:'Инженер',creative:'Творческая сфера',other:'Специалист'}[R.prof]||'Специалист') : '') + ' · вероятность '+R.prob+'% · риск '+R.riskLvl;
     const pills = [
       { ico:'📊', val: R.prob+'%',    lbl:'вероятность успеха' },
       { ico:'⏱',  val: (() => { const m={short:'3–6 мес.',mid:'6–12 мес.',long:'12–18 мес.'}; return m[R.ans?.horizon]||'6–12 мес.'; })(), lbl:'до первого результата' },
