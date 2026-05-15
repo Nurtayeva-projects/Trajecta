@@ -581,11 +581,7 @@
       document.querySelectorAll('.pbar-fill[data-w]').forEach(b=>{ b.style.width = b.dataset.w+'%'; });
     }, 300);
 
-    // Auto-select based on growthType
-    if(gt === 'fast'){
-      const el = document.getElementById('pa');
-      if(el) selectPath('a', el, false);
-    }
+    // No auto-select - user must choose manually
   }
 
   // ── PATH SELECTION — ведёт на детальную страницу ──
@@ -675,8 +671,12 @@
       titleEl.textContent = `Дорожная карта · ${pdata.name}`;
     }
 
-    // Navigate to detail page after brief delay
-    setTimeout(()=>{ window.location.href = 'path-detail.html'; }, 600);
+    // Show paywall instead of redirecting
+    setTimeout(()=>{
+      // Scroll to paywall
+      const pw = document.querySelector('.paywall-wrap');
+      if(pw) pw.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 400);
   }
 
   // ── DATA ──
