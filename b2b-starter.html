@@ -223,6 +223,7 @@
 
 <header>
   <a href="index.html" class="logo">Traject<span>a</span> <span class="logo-tag">B2B</span></a>
+  
   <div class="hbtns" style="margin-left:auto;display:flex;gap:8px;align-items:center">
     <a href="b2b.html" class="btn btn-g" style="font-size:.78rem;padding:7px 14px;white-space:nowrap">← Назад</a>
     <button class="btn" style="font-size:.78rem;padding:7px 14px;white-space:nowrap;border:none;cursor:pointer;" onclick="openPlanSelector()">Оформить →</button>
@@ -519,11 +520,20 @@
   }, 400);
 
   function exportDemo(){
-    const blob = new Blob(['Имя,Психотип,Потенциал,Статус\n' + team.map(m=>`${m.name},${m.psycho},${m.score}%,${m.statusTxt}`).join('\n')], {type:'text/csv;charset=utf-8;'});
+    if(!window.team || !team.length){ alert('Нет данных для экспорта'); return; }
+    // BOM для корректного отображения кириллицы в Excel
+    const BOM = '\uFEFF';
+    const headers = 'Имя,Роль,Психотип,Потенциал (%),Статус,Стаж';
+    const rows = team.map(m=>`"${m.name}","${m.role}","${m.psycho}","${m.score}","${m.statusTxt}","${m.role.split(' · ')[1]||''}"`);
+    const csv = BOM + headers + '\n' + rows.join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'trajecta_team_demo.csv';
+    a.download = 'trajecta_team_' + new Date().toISOString().slice(0,10) + '.csv';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
   }
 
   async function sendToTelegram(data){
