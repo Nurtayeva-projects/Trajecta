@@ -394,7 +394,7 @@
     <a href="#how">Как работает</a>
     <a href="#pricing">Цены</a>
     <a href="index.html" style="color:var(--muted)">← Для частных лиц</a>
-    <button class="btn" onclick="openModal()">Запросить демо</button>
+    <button class="btn" onclick="openLeadForm('B2B Команда · 10 человек','24 900 ₸')">Запросить демо</button>
   </nav>
 </header>
 
@@ -413,7 +413,7 @@
         <strong>Trajecta B2B</strong> — инструмент для HR и руководителей. Выявляет сотрудников, готовых к росту, тех, кто в риске выгорания, и строит персональные карьерные треки. <strong>Также используется для объективной оценки кандидатов на интервью.</strong>
       </p>
       <div class="hero-actions">
-        <button class="btn btn-lg" onclick="openModal()">Запросить демо →</button>
+        <button class="btn btn-lg" onclick="openLeadForm('B2B Команда · 10 человек','24 900 ₸')">Запросить демо →</button>
         <a href="#usecases" class="btn btn-g btn-lg">Как это работает</a>
       </div>
       <div class="hero-stats">
@@ -587,7 +587,7 @@
           <div class="p-feat"><span class="p-feat-ico acc">✓</span>Приоритетная поддержка</div>
           <div class="p-feat"><span class="p-feat-ico acc">✓</span>Онбординг HR-команды</div>
         </div>
-        <button class="btn" style="width:100%;justify-content:center" onclick="openModal()">Запросить демо →</button>
+        <button class="btn" style="width:100%;justify-content:center" onclick="openLeadForm('B2B Команда · 10 человек','24 900 ₸')">Запросить демо →</button>
       </div>
 
       <!-- ENTERPRISE -->
@@ -605,7 +605,7 @@
           <div class="p-feat"><span class="p-feat-ico">✓</span>Выделенный менеджер</div>
           <div class="p-feat"><span class="p-feat-ico">✓</span>SLA и приоритет</div>
         </div>
-        <button class="btn btn-g" style="width:100%;justify-content:center" onclick="openModal()">Связаться →</button>
+        <button class="btn btn-g" style="width:100%;justify-content:center" onclick="openLeadForm('B2B Команда · 10 человек','24 900 ₸')">Связаться →</button>
       </div>
 
     </div>
@@ -659,7 +659,7 @@
         <p>30-минутное демо на вашей команде. Никакого давления, никаких обязательств. Просто покажем, как это работает.</p>
       </div>
       <div class="cta-r">
-        <button class="btn btn-lg" onclick="openModal()">Запросить демо →</button>
+        <button class="btn btn-lg" onclick="openLeadForm('B2B Команда · 10 человек','24 900 ₸')">Запросить демо →</button>
         <div class="cta-meta" style="justify-content:center;text-align:center">
           <span>⏱ 30 минут</span>
           <span>🔒 Без обязательств</span>
@@ -707,6 +707,75 @@
     document.body.appendChild(box);
     setTimeout(()=>box.remove(), 5000);
   }
+
+  // ── LEAD FORM + TELEGRAM ──
+  async function sendToTelegram(data){
+    const text = '🎯 Новая заявка Trajecta!\n\n' +
+      '👤 Имя: ' + data.name + '\n' +
+      '📞 Телефон: ' + data.phone + '\n' +
+      '📧 Email: ' + data.email + '\n' +
+      '💼 Тариф: ' + data.plan + '\n' +
+      '💰 Сумма: ' + data.price + '\n' +
+      '🕐 ' + new Date().toLocaleString('ru-RU', {timeZone:'Asia/Almaty'});
+    try{
+      await fetch('https://api.telegram.org/bot8906343439:AAG44Z9tXzYf3FvN2XXfhgJxGzNayvaT_Tk/sendMessage', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({chat_id:'8424626474', text})
+      });
+    } catch(e){}
+  }
+
+  function openLeadForm(plan, price){
+    const existing = document.getElementById('lead-modal');
+    if(existing) existing.remove();
+    const modal = document.createElement('div');
+    modal.id = 'lead-modal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.93);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;';
+    const FLD = 'width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:8px;color:#f0f4ff;font-family:Space Grotesk,sans-serif;font-size:.92rem;padding:11px 14px;outline:none;margin-bottom:10px;box-sizing:border-box;';
+    modal.innerHTML = `<div style="background:#0d1b35;border:1.5px solid rgba(198,255,0,.3);border-radius:22px;padding:32px 28px;max-width:420px;width:100%;position:relative;">
+      <button onclick="document.getElementById('lead-modal').remove()" style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,.07);border:none;color:rgba(240,244,255,.5);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem">✕</button>
+      <div style="font-size:1.4rem;margin-bottom:10px">🎯</div>
+      <h3 style="font-family:Syne,sans-serif;font-size:1.15rem;font-weight:800;margin-bottom:6px">Оформить доступ</h3>
+      <div style="background:rgba(198,255,0,.1);border:1px solid rgba(198,255,0,.22);border-radius:8px;padding:8px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:rgba(240,244,255,.55)">${plan}</span>
+        <span style="font-family:Syne,sans-serif;font-size:1rem;font-weight:800;color:#C6FF00">${price}</span>
+      </div>
+      <input id="lf-name" placeholder="Имя и фамилия *" style="${FLD}">
+      <input id="lf-phone" placeholder="Номер телефона * (+7...)" type="tel" style="${FLD}">
+      <input id="lf-email" placeholder="Email *" type="email" style="${FLD}margin-bottom:16px;">
+      <button id="lf-btn" onclick="submitLeadForm('${plan}','${price}')" style="width:100%;background:#C6FF00;color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;margin-bottom:12px;">Отправить заявку →</button>
+      <div style="display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,.04);border-radius:10px;padding:10px 14px;font-size:.78rem;color:rgba(240,244,255,.5);">
+        <span style="flex-shrink:0">📲</span>
+        <span>Мы свяжемся в течение 2 часов и пришлём ссылку на оплату через Kaspi</span>
+      </div>
+    </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
+    setTimeout(()=>document.getElementById('lf-name')?.focus(), 100);
+  }
+
+  async function submitLeadForm(plan, price){
+    const name=document.getElementById('lf-name')?.value?.trim();
+    const phone=document.getElementById('lf-phone')?.value?.trim();
+    const email=document.getElementById('lf-email')?.value?.trim();
+    if(!name||!phone||!email){
+      ['lf-name','lf-phone','lf-email'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el&&!el.value.trim()) el.style.borderColor='rgba(255,80,50,.5)';
+      });
+      return;
+    }
+    const btn=document.getElementById('lf-btn');
+    if(btn){btn.textContent='Отправляем...';btn.disabled=true;}
+    await sendToTelegram({name,phone,email,plan,price});
+    document.getElementById('lead-modal').remove();
+    const t=document.createElement('div');
+    t.style.cssText='position:fixed;bottom:28px;left:16px;right:16px;background:#0d1b35;border:1.5px solid rgba(198,255,0,.3);border-radius:14px;padding:18px 20px;z-index:9999;max-width:380px;margin:0 auto;';
+    t.innerHTML='<div style="font-weight:700;color:#f0f4ff;margin-bottom:4px">✅ Заявка принята!</div><div style="font-size:.82rem;color:rgba(240,244,255,.55)">Свяжемся в течение 2 часов. Ожидайте сообщения в Telegram или WhatsApp.</div>';
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),5000);
+  }
+
 </script>
 </body>
 </html>
