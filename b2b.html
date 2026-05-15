@@ -394,7 +394,7 @@
     <a href="#how">Как работает</a>
     <a href="#pricing">Цены</a>
     <a href="index.html" style="color:var(--muted)">← Для частных лиц</a>
-    <button class="btn" onclick="openLeadForm('Бесплатное демо · 30 минут','Бесплатно')" style="font-size:.82rem;padding:8px 16px">Запросить демо</button>
+    <button class="btn" onclick="openLeadForm('Бесплатное демо · 30 минут','Бесплатно')" style="font-size:.82rem;padding:8px 16px">Запросить бесплатное демо</button>
   </nav>
 </header>
 
@@ -413,7 +413,7 @@
         <strong>Trajecta B2B</strong> — инструмент для HR и руководителей. Выявляет сотрудников, готовых к росту, тех, кто в риске выгорания, и строит персональные карьерные треки. <strong>Также используется для объективной оценки кандидатов на интервью.</strong>
       </p>
       <div class="hero-actions">
-        <button class="btn btn-lg" onclick="openLeadForm('Бесплатное демо · 30 минут','Бесплатно')">Запросить демо →</button>
+        <button class="btn btn-lg" onclick="openLeadForm('Бесплатное демо · 30 минут','Бесплатно')">Запросить бесплатное демо →</button>
         <a href="#usecases" class="btn btn-g btn-lg">Как это работает</a>
       </div>
       <div class="hero-stats">
@@ -660,7 +660,7 @@
         <p>30-минутное демо на вашей команде. Никакого давления, никаких обязательств. Просто покажем, как это работает.</p>
       </div>
       <div class="cta-r">
-        <button class="btn btn-lg" onclick="openLeadForm('Бесплатное демо · 30 минут','Бесплатно')">Запросить демо →</button>
+        <button class="btn btn-lg" onclick="openLeadForm('Бесплатное демо · 30 минут','Бесплатно')">Запросить бесплатное демо →</button>
         <div class="cta-meta" style="justify-content:center;text-align:center">
           <span>⏱ 30 минут</span>
           <span>🔒 Без обязательств</span>
@@ -727,6 +727,7 @@
   }
 
   function openLeadForm(plan, price){
+    const isFree = price === 'Бесплатно';
     const existing = document.getElementById('lead-modal');
     if(existing) existing.remove();
     const modal = document.createElement('div');
@@ -745,12 +746,21 @@
       <input id="lf-phone" placeholder="Номер телефона * (+7...)" type="tel" style="${FLD}">
       <input id="lf-email" placeholder="Email *" type="email" style="${FLD}margin-bottom:16px;">
       <button id="lf-btn" onclick="submitLeadForm('${plan}','${price}')" style="width:100%;background:#C6FF00;color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;margin-bottom:12px;">Отправить заявку →</button>
-      <div style="display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,.04);border-radius:10px;padding:10px 14px;font-size:.78rem;color:rgba(240,244,255,.5);">
+      <div id="lf-note" style="display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,.04);border-radius:10px;padding:10px 14px;font-size:.78rem;color:rgba(240,244,255,.5);">
         <span style="flex-shrink:0">📲</span>
-        <span>Мы свяжемся в течение 2 часов и пришлём ссылку на оплату через Kaspi</span>
+        <span id="lf-note-text">Свяжемся в течение 2 часов</span>
       </div>
     </div>`;
     document.body.appendChild(modal);
+    // Update note based on free vs paid
+    const noteEl = document.getElementById('lf-note-text');
+    if(noteEl){
+      if(price === 'Бесплатно'){
+        noteEl.textContent = 'Свяжемся в течение 2 часов и договоримся об удобном времени для демо-звонка (30 минут)';
+      } else {
+        noteEl.textContent = 'Свяжемся в течение 2 часов и пришлём ссылку на оплату через Kaspi';
+      }
+    }
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
     setTimeout(()=>document.getElementById('lf-name')?.focus(), 100);
   }
