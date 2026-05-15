@@ -485,30 +485,118 @@
   const SLABELS={switch:'🔄 Смена профессии',grow:'📈 Рост дохода',restart:'🔁 Перезапуск',freelance:'💼 Фриланс / Своё дело'};
 
   if(!R){
-    document.getElementById('content').innerHTML=`<div style="text-align:center;padding:80px 20px"><div style="font-size:3rem;margin-bottom:16px">🔍</div><h2 style="font-family:var(--D);font-size:1.8rem;margin-bottom:12px">Нет данных</h2><p style="color:var(--muted);margin-bottom:28px">Пройди настройку сценария</p><a href="choose.html" class="btn">Запустить симуляцию →</a></div>`;
-  } else {
-    const PLABELS2 = {law:'Юрист',finance:'Финансист',it:'IT-специалист',marketing:'Маркетолог',design:'Дизайнер',medicine:'Медик',hr:'HR',education:'Педагог',sales:'Продажник',engineering:'Инженер',creative:'Творческая сфера',other:'Специалист'};
-    const profLabel = R.ans?.profLabel || PLABELS2[R.prof] || 'Специалист';
-    const scShort = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск',freelance:'Фриланс / Своё дело'}[R.sc]||'Карьерный прогноз';
-    const hscEl = document.getElementById('hsc');
-    if(hscEl) hscEl.textContent = scShort;
-    const heroIncome = document.getElementById('hero-income');
-    if(heroIncome){
-      // Animate income number appearing
-      setTimeout(()=>{ countUp(heroIncome, R.income.y2||'—', '', 800); }, 400);
-    }
-    const hsubEl = document.getElementById('hsub');
-    if(hsubEl) hsubEl.textContent = `${profLabel} · вероятность ${R.prob}% · риск ${R.riskLvl.toLowerCase()}`;
-    // Personalize modal
-    const md = document.getElementById('modal-desc');
-    const mf1 = document.getElementById('mf1');
-    const mf2 = document.getElementById('mf2');
-    if(md) md.textContent = `Ты уже видишь прогноз: ${R.income.y2} через 2 года с вероятностью ${R.prob}%. Разблокируй конкретный план — что именно делать, чтобы попасть в эту цифру.`;
-    if(mf1) mf1.textContent = `Пошаговый план выхода на ${R.income.y2} за 2 года`;
-    if(mf2) mf2.textContent = `Что делать в первые 90 дней — конкретно, без воды`;
-    gtag('event','result_view',{event_category:'funnel',sc:R.sc,prof:R.prof,prob:R.prob});
-    // Save to history
-    saveToHistory(R);
+    document.getElementById('content').innerHTML=`
+
+      <!-- STEP INDICATOR -->
+      <div style="display:flex;align-items:center;gap:0;margin-bottom:16px;flex-wrap:wrap;gap:4px">
+        <div style="display:flex;align-items:center;gap:6px;background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.72rem;font-weight:600;padding:4px 12px;border-radius:100px">✓ Тест пройден</div>
+        <span style="color:var(--dim);font-size:.7rem;margin:0 4px">›</span>
+        <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid var(--border2);color:var(--text);font-size:.72rem;font-weight:600;padding:4px 12px;border-radius:100px">📊 Твой результат</div>
+        <span style="color:var(--dim);font-size:.7rem;margin:0 4px">›</span>
+        <div style="color:var(--dim);font-size:.72rem;padding:4px 12px">Выбор стратегии</div>
+      </div>
+
+      <!-- БЛОК 1: КТО ТЫ — профиль одной карточкой -->
+      <div class="card" style="background:linear-gradient(135deg,rgba(167,139,250,.08),rgba(167,139,250,.03));border-color:rgba(167,139,250,.25)">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+          <div style="width:52px;height:52px;border-radius:14px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0">
+            ${getPsychoIco(R.psychotype)}
+          </div>
+          <div>
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(167,139,250,.8);margin-bottom:3px">Твой психотип</div>
+            <div style="font-family:var(--D);font-size:1.1rem;font-weight:800;letter-spacing:-.02em">${getPsychoName(R.psychotype)}</div>
+            <div style="font-size:.82rem;color:var(--muted);margin-top:2px">${getPsychoLine(R.psychotype)}</div>
+          </div>
+        </div>
+        <div style="font-size:.88rem;color:var(--muted);line-height:1.7;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+          ${getPsychoDesc(R.psychotype)}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:12px">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:8px">💪 Сильные стороны</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px" id="psycho-strengths"></div>
+          </div>
+          <div style="background:rgba(255,255,255,.03);border-radius:10px;padding:12px">
+            <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(167,139,250,.7);margin-bottom:8px">🎯 Подходящие роли</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px" id="psycho-roles"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- БЛОК 2: ПРОГНОЗ ДОХОДА -->
+      <div class="card at">
+        <div class="ch"><span class="ci">💰</span><span class="ct">Прогноз дохода · 2–5 лет</span></div>
+        <div class="ig">
+          <div class="ib">
+            <div class="ip">Старт</div>
+            <div class="iv">${R.income.now}</div>
+            <div class="is">Первые 3–6 мес.</div>
+          </div>
+          <div class="ib" style="background:rgba(198,255,0,.06);border-color:rgba(198,255,0,.2)">
+            <div class="ip">Через 2 года</div>
+            <div class="iv" style="color:var(--accent)">${R.income.y2}</div>
+            <div class="is">${R.prob}% вероятность</div>
+          </div>
+          <div class="ib">
+            <div class="ip">Через 5 лет</div>
+            <div class="iv">${R.income.y5}</div>
+            <div class="is">При выбранной стратегии</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- БЛОК 3: ГЛАВНЫЙ ИНСАЙТ -->
+      <div class="insight">
+        <div class="insight-tag">⚡ Главный вывод</div>
+        <div class="insight-title">${insightData.title}</div>
+      </div>
+
+      <!-- БЛОК 4: РИСК + ПОТЕРИ -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" class="mobile-stack">
+        <div style="background:rgba(255,80,50,.05);border:1px solid rgba(255,80,50,.2);border-radius:14px;padding:16px">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,120,80,.8);margin-bottom:8px">⚠️ Главный риск</div>
+          <div style="font-family:var(--D);font-size:.9rem;font-weight:800;line-height:1.3;margin-bottom:6px">${mainRisk.title}</div>
+          <div style="font-size:.78rem;color:var(--muted);line-height:1.5">${mainRisk.desc}</div>
+        </div>
+        <div style="background:rgba(255,80,50,.05);border:1px solid rgba(255,80,50,.2);border-radius:14px;padding:16px;text-align:center">
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,120,80,.8);margin-bottom:8px">⏳ Если не действовать</div>
+          <div style="font-family:var(--D);font-size:1.6rem;font-weight:800;color:#ff8060;line-height:1">${calcMoneyLoss(R)}</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-top:4px">потеря за 2 года</div>
+        </div>
+      </div>
+
+      <!-- БЛОК 5: КУДА ПЕРЕЙТИ -->
+      <div class="card" id="rec-profs-card">
+        <div class="ch">
+          <span class="ci">${R.sc==='grow' ? '📈' : R.sc==='restart' ? '🔁' : R.sc==='freelance' ? '💼' : '🎯'}</span>
+          <span class="ct">${R.sc==='grow' ? 'Варианты роста дохода' : R.sc==='restart' ? 'С чего начать заново' : R.sc==='freelance' ? 'Как масштабировать доход' : 'Куда можно перейти'}</span>
+        </div>
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:12px">Ориентиры для сравнения — не финальный выбор. Конкретный план — на следующем шаге.</div>
+        <div id="rec-profs-list"></div>
+      </div>
+
+      <!-- БЛОК 6: CTA -->
+      <div style="background:linear-gradient(135deg,rgba(198,255,0,.1),rgba(198,255,0,.04));border:1.5px solid rgba(198,255,0,.3);border-radius:20px;padding:28px;text-align:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 70%)"></div>
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px">Следующий шаг</div>
+        <div style="font-family:var(--D);font-size:1.2rem;font-weight:800;letter-spacing:-.025em;margin-bottom:6px;line-height:1.2">
+          Выбери один из двух путей
+        </div>
+        <p style="font-size:.88rem;color:var(--muted);margin-bottom:20px">Два конкретных варианта под твою профессию. У каждого — сроки, зарплаты и шаги.</p>
+        <a href="paths.html" class="btn" style="font-size:1rem;padding:15px 44px;display:inline-flex;margin-bottom:10px">
+          Выбрать путь →
+        </a>
+        <p style="font-size:.75rem;color:var(--dim);margin-bottom:14px">Займёт 30 секунд</p>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <button class="share-btn" onclick="openShareCard()">📤 Поделиться</button>
+          <button class="share-btn" onclick="openEmailCapture()">📩 PDF на email</button>
+          <a href="history.html" class="share-btn">🕐 История</a>
+          <a href="choose.html" class="share-btn">↩ Заново</a>
+        </div>
+      </div>
+
+    `;
+
     buildRings();
     buildContent();
     setTimeout(()=>{
