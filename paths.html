@@ -333,6 +333,17 @@
       .w-desc{font-size:.75rem;display:none;}
     }
 
+
+    /* Paywall */
+    .paywall-wrap{background:linear-gradient(135deg,rgba(198,255,0,.08),rgba(198,255,0,.03));border:1.5px solid rgba(198,255,0,.3);border-radius:20px;padding:28px 24px;text-align:center;margin-top:20px;}
+    .paywall-wrap h3{font-family:var(--D);font-size:1.15rem;font-weight:800;margin-bottom:6px;letter-spacing:-.025em;}
+    .paywall-wrap p{font-size:.88rem;color:var(--muted);margin-bottom:14px;line-height:1.6;}
+    .pw-price{font-family:var(--D);font-size:2rem;font-weight:800;color:var(--accent);margin-bottom:2px;}
+    .pw-note{font-size:.72rem;color:var(--dim);margin-bottom:18px;}
+    .pw-features{display:flex;flex-direction:column;gap:6px;margin-bottom:18px;text-align:left;}
+    .pw-feat{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);}
+    .pw-feat::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0;}
+
   </style>
 </head>
 <body>
@@ -535,6 +546,25 @@
         </div>
       </div>
 
+
+      <!-- PAYWALL -->
+      <div class="paywall-wrap reveal">
+        <div style="font-size:2rem;margin-bottom:12px">🔒</div>
+        <h3>Детальный план действий закрыт</h3>
+        <p>Пошаговый roadmap, конкретные ресурсы и инструменты, разбор рисков — доступны после оплаты.</p>
+        <div class="pw-price">4 900 ₸</div>
+        <div class="pw-note">единоразово · полный доступ навсегда</div>
+        <div class="pw-features">
+          <div class="pw-feat">Детальный план на 90 дней</div>
+          <div class="pw-feat">Roadmap с конкретными шагами</div>
+          <div class="pw-feat">Ресурсы и инструменты под профессию</div>
+          <div class="pw-feat">Анализ рисков и как их избежать</div>
+        </div>
+        <button class="btn" onclick="openLeadForm('Полный план · B2C','4 900 ₸')" style="font-size:.95rem;padding:14px 36px;display:inline-flex">
+          Получить доступ →
+        </button>
+        <div style="margin-top:12px;font-size:.75rem;color:var(--dim)">📲 После заявки пришлём ссылку на Kaspi оплату</div>
+      </div>
       <!-- FINAL CTA -->
       <div class="final-cta">
         <div class="fc-title">Выбери стратегию — и получи <em>детальный план</em></div>
@@ -1015,6 +1045,75 @@
       }
     }, 450);
   }
+
+  // ── LEAD FORM + TELEGRAM ──
+  async function sendToTelegram(data){
+    const text = '🎯 Новая заявка Trajecta!\n\n' +
+      '👤 Имя: ' + data.name + '\n' +
+      '📞 Телефон: ' + data.phone + '\n' +
+      '📧 Email: ' + data.email + '\n' +
+      '💼 Тариф: ' + data.plan + '\n' +
+      '💰 Сумма: ' + data.price + '\n' +
+      '🕐 ' + new Date().toLocaleString('ru-RU', {timeZone:'Asia/Almaty'});
+    try{
+      await fetch('https://api.telegram.org/bot8906343439:AAG44Z9tXzYf3FvN2XXfhgJxGzNayvaT_Tk/sendMessage', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({chat_id:'8424626474', text})
+      });
+    } catch(e){}
+  }
+
+  function openLeadForm(plan, price){
+    const existing = document.getElementById('lead-modal');
+    if(existing) existing.remove();
+    const modal = document.createElement('div');
+    modal.id = 'lead-modal';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.93);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;';
+    const FLD = 'width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:8px;color:#f0f4ff;font-family:Space Grotesk,sans-serif;font-size:.92rem;padding:11px 14px;outline:none;margin-bottom:10px;box-sizing:border-box;';
+    modal.innerHTML = `<div style="background:#0d1b35;border:1.5px solid rgba(198,255,0,.3);border-radius:22px;padding:32px 28px;max-width:420px;width:100%;position:relative;">
+      <button onclick="document.getElementById('lead-modal').remove()" style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,.07);border:none;color:rgba(240,244,255,.5);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem">✕</button>
+      <div style="font-size:1.4rem;margin-bottom:10px">🎯</div>
+      <h3 style="font-family:Syne,sans-serif;font-size:1.15rem;font-weight:800;margin-bottom:6px">Оформить доступ</h3>
+      <div style="background:rgba(198,255,0,.1);border:1px solid rgba(198,255,0,.22);border-radius:8px;padding:8px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.85rem;color:rgba(240,244,255,.55)">${plan}</span>
+        <span style="font-family:Syne,sans-serif;font-size:1rem;font-weight:800;color:#C6FF00">${price}</span>
+      </div>
+      <input id="lf-name" placeholder="Имя и фамилия *" style="${FLD}">
+      <input id="lf-phone" placeholder="Номер телефона * (+7...)" type="tel" style="${FLD}">
+      <input id="lf-email" placeholder="Email *" type="email" style="${FLD}margin-bottom:16px;">
+      <button id="lf-btn" onclick="submitLeadForm('${plan}','${price}')" style="width:100%;background:#C6FF00;color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;margin-bottom:12px;">Отправить заявку →</button>
+      <div style="display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,.04);border-radius:10px;padding:10px 14px;font-size:.78rem;color:rgba(240,244,255,.5);">
+        <span style="flex-shrink:0">📲</span>
+        <span>Мы свяжемся в течение 2 часов и пришлём ссылку на оплату через Kaspi</span>
+      </div>
+    </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
+    setTimeout(()=>document.getElementById('lf-name')?.focus(), 100);
+  }
+
+  async function submitLeadForm(plan, price){
+    const name=document.getElementById('lf-name')?.value?.trim();
+    const phone=document.getElementById('lf-phone')?.value?.trim();
+    const email=document.getElementById('lf-email')?.value?.trim();
+    if(!name||!phone||!email){
+      ['lf-name','lf-phone','lf-email'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el&&!el.value.trim()) el.style.borderColor='rgba(255,80,50,.5)';
+      });
+      return;
+    }
+    const btn=document.getElementById('lf-btn');
+    if(btn){btn.textContent='Отправляем...';btn.disabled=true;}
+    await sendToTelegram({name,phone,email,plan,price});
+    document.getElementById('lead-modal').remove();
+    const t=document.createElement('div');
+    t.style.cssText='position:fixed;bottom:28px;left:16px;right:16px;background:#0d1b35;border:1.5px solid rgba(198,255,0,.3);border-radius:14px;padding:18px 20px;z-index:9999;max-width:380px;margin:0 auto;';
+    t.innerHTML='<div style="font-weight:700;color:#f0f4ff;margin-bottom:4px">✅ Заявка принята!</div><div style="font-size:.82rem;color:rgba(240,244,255,.55)">Свяжемся в течение 2 часов. Ожидайте сообщения в Telegram или WhatsApp.</div>';
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),5000);
+  }
+
 </script>
 </body>
 </html>
