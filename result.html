@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Прогноз1 — Trajecta</title>
+  <title>Прогноз — Trajecta</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -804,6 +804,68 @@
     doer:{desc:'Действуешь быстро и получаешь результат. Учишься в процессе — это твоя сила.',strengths:['Скорость','Результативность','Практичность'],roles:['Менеджер','Предприниматель','Sales']},
     feeler:{desc:'Доверяешь интуиции. Видишь возможности там, где другие не замечают.',strengths:['Интуиция','Адаптивность','Эмпатия'],roles:['Коуч','Творческие сферы','Стратег']},
   }
+
+  // ── PSYCHOTYPE HELPERS ──
+  function getPsychoIco(pt){ return {A:'🔬',B:'🏗️',C:'🤝',D:'⚡',E:'🚀',analyst:'🔬',doer:'⚡',feeler:'🚀'}[pt]||'🧠'; }
+  function getPsychoName(pt){ return {A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель',E:'Визионер',analyst:'Аналитик',doer:'Исполнитель',feeler:'Визионер'}[pt]||pt||'—'; }
+  function getPsychoLine(pt){ return {A:'Сначала анализируешь данные — потом действуешь',B:'Проектируешь структуру — видишь связи',C:'Сила в коммуникации и построении связей',D:'Делаешь — не планируешь. Учишься в процессе',E:'Мыслишь нестандартно — видишь возможности',analyst:'Сначала анализируешь — потом действуешь',doer:'Учишься в процессе и делаешь',feeler:'Доверяешь интуиции и ощущениям'}[pt]||''; }
+  function getPsychoDesc(pt){ return (PSYCHO_DATA[pt]||{}).desc||''; }
+
+  function renderPsychoDetails(pt){
+    const d = PSYCHO_DATA[pt];
+    if(!d) return;
+    const sEl = document.getElementById('psycho-strengths');
+    const rEl = document.getElementById('psycho-roles');
+    if(sEl) sEl.innerHTML = d.strengths.map(s=>`<div style="display:inline-flex;align-items:center;gap:5px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:100px;padding:4px 12px;font-size:.76rem;color:rgba(167,139,250,.9);font-weight:600"><span style="font-size:.7rem">✓</span>${s}</div>`).join('');
+    if(rEl) rEl.innerHTML = d.roles.map(r=>`<div style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:100px;padding:4px 12px;font-size:.76rem;color:var(--muted)"><span style="color:rgba(167,139,250,.8);font-size:.7rem">→</span>${r}</div>`).join('');
+  }
+
+  function renderPsychoComparison(){
+    const pt2 = R.psychotype_second || load('psychotype_second');
+    if(!pt2 || pt2 === R.psychotype) return;
+    const d2 = PSYCHO_DATA[pt2];
+    if(!d2) return;
+    const el = document.getElementById('psycho-compare');
+    if(!el) return;
+    el.innerHTML = '<div style="margin-top:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px"><div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:8px">Второй тип — тоже ты</div><div style="display:flex;align-items:center;gap:10px"><span style="font-size:1.1rem">' + getPsychoIco(pt2) + '</span><div><div style="font-size:.85rem;font-weight:600">' + getPsychoName(pt2) + '</div><div style="font-size:.76rem;color:var(--muted)">' + d2.desc.split('.')[0] + '.</div></div></div></div>';
+  }
+
+  function saveToHistory(R){
+    try{
+      const hist = JSON.parse(localStorage.getItem('tr_history')||'[]');
+      const entry = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString('ru-RU'),
+        sc: R.sc, prof: R.prof,
+        income_y2: R.income?.y2, income_y5: R.income?.y5,
+        prob: R.prob, psychotype: R.psychotype,
+        riskLvl: R.riskLvl,
+      };
+      const last = hist[0];
+      if(last && last.prof===entry.prof && last.sc===entry.sc && (Date.now()-last.id)<600000) return;
+      hist.unshift(entry);
+      if(hist.length > 10) hist.pop();
+      localStorage.setItem('tr_history', JSON.stringify(hist));
+    }catch(e){}
+  }
+
+  function renderAchievements(){
+    const el = document.getElementById('achievements');
+    if(!el || !R) return;
+    const ach = [];
+    const sc = R.sc, ans = R.ans||{}, prob = R.prob||0;
+    if(prob >= 75) ach.push({ico:'🎯', lbl:'Высокий потенциал', cls:'green'});
+    if(ans.risk === 'high') ach.push({ico:'⚡', lbl:'Смельчак', cls:'gold'});
+    if(ans.risk === 'low') ach.push({ico:'🛡️', lbl:'Стратег', cls:'blue'});
+    if(sc === 'switch') ach.push({ico:'🔄', lbl:'Готов к переменам', cls:'blue'});
+    if(sc === 'restart') ach.push({ico:'🌱', lbl:'Новый старт', cls:'green'});
+    if(sc === 'freelance') ach.push({ico:'💼', lbl:'Свободный агент', cls:'gold'});
+    el.innerHTML = ach.slice(0,3).map((a,i)=>`
+      <div class="ach ${a.cls} unlocked" style="animation-delay:${0.5+i*0.15}s">
+        <span>${a.ico}</span>${a.lbl}
+      </div>`).join('');
+  }
+
   const R = load('result');
   const paid = load('paid')===true;
 
