@@ -1297,6 +1297,47 @@
     if(navigator.share){ navigator.share({title:'Trajecta — мой прогноз',text:txt+url}); }
     else if(navigator.clipboard){ navigator.clipboard.writeText(txt+url).then(()=>{ const b=document.querySelector('.share-btn'); if(b){const o=b.textContent;b.textContent='✓ Скопировано!';setTimeout(()=>b.textContent=o,2000);} }); }
   }
+  
+function saveToHistory(R){
+console.log('history saved');
+}
+
+function renderAchievements(){}
+
+function renderPsychoDetails(){}
+
+function renderPsychoComparison(){}
+
+function getPsychoIco(type){
+const map = {
+A:'🔬',
+B:'🏗️',
+C:'🤝',
+D:'⚡',
+E:'🚀'
+};
+return map[type] || '🧠';
+}
+
+function getPsychoName(type){
+const map = {
+A:'Аналитик',
+B:'Архитектор',
+C:'Коммуникатор',
+D:'Исполнитель',
+E:'Визионер'
+};
+return map[type] || 'Психотип';
+}
+
+function getPsychoLine(type){
+return 'Индивидуальный профиль';
+}
+
+function getPsychoDesc(type){
+return 'Описание психотипа';
+}
+  
 </script>
 </body>
 </html>
