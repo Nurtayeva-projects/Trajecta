@@ -69,8 +69,8 @@
     .price-tag-lbl{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
     .price-card.featured .price-tag-lbl{color:var(--accent);}
     .price-name{font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:6px;}
-    .price-val{font-family:var(--D);font-size:1.8rem;font-weight:800;color:var(--blue);line-height:1;margin-bottom:3px;}
-    .price-card.featured .price-val{color:var(--accent);}
+    .price-val{font-family:var(--D);font-size:2rem;font-weight:800;color:var(--blue);line-height:1;margin-bottom:3px;text-shadow:0 0 20px rgba(96,165,250,.3);}
+    .price-card.featured .price-val{color:var(--accent);text-shadow:0 0 20px rgba(198,255,0,.3);}
     .price-period{font-size:.75rem;color:var(--muted);margin-bottom:16px;}
     .price-feats{display:flex;flex-direction:column;gap:7px;margin-bottom:20px;flex:1;}
     .price-feat{display:flex;align-items:flex-start;gap:7px;font-size:.8rem;color:var(--muted);line-height:1.4;}
@@ -107,6 +107,12 @@
       .use-grid{grid-template-columns:1fr 1fr;}
       .steps{grid-template-columns:1fr 1fr;}
     }
+
+    /* Price card hover glow */
+    .price-card{transition:border-color .2s,transform .2s,box-shadow .2s;}
+    .price-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(96,165,250,.15);}
+    .price-card.featured:hover{box-shadow:0 12px 40px rgba(198,255,0,.2);}
+
   </style>
 </head>
 <body>
@@ -172,11 +178,12 @@
     <div class="section-label">Применение</div>
     <h2 class="section-title">Решает задачи<br><em>HR и руководителей</em></h2>
     <div class="use-grid" style="margin-top:28px">
-      <div class="use-card"><div class="use-ico">🔍</div><div class="use-title">Оценка при найме</div><div class="use-desc">Объективный поведенческий профиль кандидата. Кто подойдёт на роль и каков потенциал роста.</div></div>
+      <div class="use-card"><div class="use-ico">🔍</div><div class="use-title">Оценка при найме и собеседовании</div><div class="use-desc">Дай кандидату пройти тест перед интервью. Получи психотип, сильные стороны и прогноз роста — за 5 минут до разговора.</div></div>
       <div class="use-card"><div class="use-ico">🗺️</div><div class="use-title">Карьерные треки</div><div class="use-desc">Персональный план развития для каждого сотрудника. Кто готов к повышению, кому нужна смена роли.</div></div>
       <div class="use-card"><div class="use-ico">🛡️</div><div class="use-title">Риск выгорания</div><div class="use-desc">Выявляет сотрудников в зоне риска до того, как они подадут заявление об уходе.</div></div>
       <div class="use-card"><div class="use-ico">📊</div><div class="use-title">Планирование преемственности</div><div class="use-desc">Кто из команды готов занять ключевую позицию. Данные вместо интуиции при кадровых решениях.</div></div>
       <div class="use-card"><div class="use-ico">📚</div><div class="use-title">Корпоративное обучение</div><div class="use-desc">L&D приоритеты на основе данных. Инвестируете в обучение тех, кто реально готов его применить.</div></div>
+      <div class="use-card"><div class="use-ico">🎯</div><div class="use-title">Оценка кандидатов</div><div class="use-desc">Психотип и потенциал кандидата на интервью. Объективные данные вместо интуиции — кто подойдёт на роль и как быстро вырастет.</div></div>
       <div class="use-card"><div class="use-ico">💰</div><div class="use-title">Зарплатные решения</div><div class="use-desc">Данные о рыночном уровне дохода для каждой роли в КЗ. Справедливые и обоснованные решения.</div></div>
     </div>
   </section>
