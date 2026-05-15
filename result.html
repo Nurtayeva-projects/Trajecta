@@ -859,10 +859,10 @@
   }
 
   function buildContent(){
-    const risks = getRisks(R.sc);
-    const years = ['2025','2026','2027','2028','2029','2030','2031','2032','2033','2034'];
-    const insightData = getInsight(R);
-    const mainRisk    = getMainRisk(R);
+    const risks = getRisks ? getRisks(R.sc) : [];
+    const insightData = getInsight ? getInsight(R) : {title:'Твой прогноз готов'};
+    const mainRisk = getMainRisk ? getMainRisk(R) : {title:'Действуй по плану',desc:'Следуй выбранной стратегии'};
+    const moneyLoss = calcMoneyLoss ? calcMoneyLoss(R) : '—';
 
     document.getElementById('content').innerHTML=`
 
@@ -935,7 +935,7 @@
         </div>
         <div style="background:rgba(255,80,50,.05);border:1px solid rgba(255,80,50,.2);border-radius:14px;padding:16px;text-align:center">
           <div style="font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,120,80,.8);margin-bottom:8px">⏳ Если не действовать</div>
-          <div style="font-family:var(--D);font-size:1.6rem;font-weight:800;color:#ff8060;line-height:1">${calcMoneyLoss(R)}</div>
+          <div style="font-family:var(--D);font-size:1.6rem;font-weight:800;color:#ff8060;line-height:1">${moneyLoss}</div>
           <div style="font-size:.75rem;color:var(--muted);margin-top:4px">потеря за 2 года</div>
         </div>
       </div>
