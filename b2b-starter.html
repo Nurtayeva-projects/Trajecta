@@ -431,7 +431,7 @@
     <div class="bc-right">
       <div class="bc-price">24 900 ₸</div>
       <div class="bc-note">10 сотрудников · единоразово</div>
-      <a href="b2b.html" class="btn" style="font-size:.9rem;padding:12px 28px;display:block">Подключить команду →</a>
+      <button onclick="openPlanSelector()" class="btn" style="font-size:.9rem;padding:12px 28px;display:block;border:none;cursor:pointer;width:100%">Выбрать тариф →</button>
     </div>
   </div>
 
@@ -526,6 +526,88 @@
     a.download = 'trajecta_team_demo.csv';
     a.click();
   }
+
+  async function sendToTelegram(data){
+    const text = '🎯 Заявка из демо-дашборда!\n\n👤 ' + data.name + '\n📞 ' + data.phone + '\n📧 ' + data.email + '\n💼 ' + data.plan + '\n💰 ' + data.price;
+    try{ await fetch('https://api.telegram.org/bot8906343439:AAG44Z9tXzYf3FvN2XXfhgJxGzNayvaT_Tk/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:'8424626474',text})}); }catch(e){}
+  }
+
+  function openPlanSelector(){
+    const modal = document.createElement('div');
+    modal.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.93);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;';
+    modal.innerHTML=`<div style="background:#0d1b35;border:1.5px solid rgba(96,165,250,.3);border-radius:22px;padding:32px 28px;max-width:440px;width:100%;position:relative;">
+      <button onclick="this.closest('[style*=fixed]').remove()" style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,.07);border:none;color:rgba(240,244,255,.5);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem">✕</button>
+      <h3 style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:6px">Выберите тариф</h3>
+      <p style="font-size:.85rem;color:rgba(240,244,255,.5);margin-bottom:18px">После заявки свяжемся и пришлём ссылку на оплату через Kaspi</p>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+        <button onclick="openLeadForm('B2B Команда · 10 человек','24 900 ₸')" style="background:rgba(96,165,250,.1);border:1.5px solid rgba(96,165,250,.3);color:#f0f4ff;border-radius:10px;padding:14px;text-align:left;cursor:pointer;font-family:Space Grotesk,sans-serif;">
+          <div style="font-weight:700;margin-bottom:2px">Команда · 10 человек</div>
+          <div style="font-size:.8rem;color:rgba(240,244,255,.5)">Базовый командный дашборд</div>
+          <div style="font-size:1.1rem;font-weight:800;color:rgba(96,165,250,.9);margin-top:4px">24 900 ₸</div>
+        </button>
+        <button onclick="openLeadForm('B2B Бизнес · 50 человек','79 900 ₸')" style="background:rgba(198,255,0,.08);border:1.5px solid rgba(198,255,0,.3);color:#f0f4ff;border-radius:10px;padding:14px;text-align:left;cursor:pointer;font-family:Space Grotesk,sans-serif;">
+          <div style="font-weight:700;margin-bottom:2px">Бизнес · 50 человек ⭐</div>
+          <div style="font-size:.8rem;color:rgba(240,244,255,.5)">Расширенная аналитика + онбординг</div>
+          <div style="font-size:1.1rem;font-weight:800;color:#C6FF00;margin-top:4px">79 900 ₸</div>
+        </button>
+        <button onclick="openLeadForm('B2B Enterprise · Корпоративный','По запросу')" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);color:#f0f4ff;border-radius:10px;padding:14px;text-align:left;cursor:pointer;font-family:Space Grotesk,sans-serif;">
+          <div style="font-weight:700;margin-bottom:2px">Enterprise · Неограниченно</div>
+          <div style="font-size:.8rem;color:rgba(240,244,255,.5)">White-label + API интеграция</div>
+          <div style="font-size:1.1rem;font-weight:800;color:rgba(240,244,255,.5);margin-top:4px">По запросу</div>
+        </button>
+      </div>
+    </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click',e=>{ if(e.target===modal) modal.remove(); });
+  }
+
+  function openLeadForm(plan, price){
+    // Remove plan selector if open
+    document.querySelectorAll('[style*="position:fixed"]').forEach(el=>{
+      if(el.id !== 'lead-modal' && el.id !== 'demo-toast') el.remove();
+    });
+    const modal = document.createElement('div');
+    modal.id='lead-modal';
+    modal.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.93);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;';
+    const FLD='width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:8px;color:#f0f4ff;font-family:Space Grotesk,sans-serif;font-size:.92rem;padding:11px 14px;outline:none;margin-bottom:10px;box-sizing:border-box;';
+    modal.innerHTML=`<div style="background:#0d1b35;border:1.5px solid rgba(198,255,0,.3);border-radius:22px;padding:32px 28px;max-width:420px;width:100%;position:relative;">
+      <button onclick="document.getElementById('lead-modal').remove()" style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,.07);border:none;color:rgba(240,244,255,.5);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem">✕</button>
+      <div style="font-size:1.4rem;margin-bottom:10px">🎯</div>
+      <h3 style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:6px">Оформить доступ</h3>
+      <div style="background:rgba(198,255,0,.1);border:1px solid rgba(198,255,0,.22);border-radius:8px;padding:8px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.82rem;color:rgba(240,244,255,.55)">${plan}</span>
+        <span style="font-family:Syne,sans-serif;font-size:1rem;font-weight:800;color:#C6FF00">${price}</span>
+      </div>
+      <input id="lf-name" placeholder="Имя и фамилия *" style="${FLD}">
+      <input id="lf-phone" placeholder="Телефон * (+7...)" type="tel" style="${FLD}">
+      <input id="lf-email" placeholder="Email *" type="email" style="${FLD}margin-bottom:16px;">
+      <button id="lf-btn" onclick="submitLeadForm('${plan}','${price}')" style="width:100%;background:#C6FF00;color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;margin-bottom:10px;">Отправить заявку →</button>
+      <div style="font-size:.76rem;color:rgba(240,244,255,.4);text-align:center">📲 Свяжемся в течение 2 часов и пришлём ссылку на оплату через Kaspi</div>
+    </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click',e=>{ if(e.target===modal) modal.remove(); });
+    setTimeout(()=>document.getElementById('lf-name')?.focus(),100);
+  }
+
+  async function submitLeadForm(plan,price){
+    const name=document.getElementById('lf-name')?.value?.trim();
+    const phone=document.getElementById('lf-phone')?.value?.trim();
+    const email=document.getElementById('lf-email')?.value?.trim();
+    if(!name||!phone||!email){
+      ['lf-name','lf-phone','lf-email'].forEach(id=>{ const el=document.getElementById(id); if(el&&!el.value.trim()) el.style.borderColor='rgba(255,80,50,.5)'; });
+      return;
+    }
+    const btn=document.getElementById('lf-btn');
+    if(btn){btn.textContent='Отправляем...';btn.disabled=true;}
+    await sendToTelegram({name,phone,email,plan,price});
+    document.getElementById('lead-modal').remove();
+    const t=document.createElement('div');
+    t.style.cssText='position:fixed;bottom:28px;left:16px;right:16px;background:#0d1b35;border:1.5px solid rgba(198,255,0,.3);border-radius:14px;padding:18px 20px;z-index:9999;max-width:380px;margin:0 auto;';
+    t.innerHTML='<div style="font-weight:700;color:#f0f4ff;margin-bottom:4px">✅ Заявка принята!</div><div style="font-size:.82rem;color:rgba(240,244,255,.55)">Свяжемся в течение 2 часов.</div>';
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),5000);
+  }
+
 </script>
 </body>
 </html>
