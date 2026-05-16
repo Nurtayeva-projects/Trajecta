@@ -888,6 +888,37 @@
     } catch(e){ console.error('buildContent error:',e); }
   }
 
+  function buildRings(){
+    // Set hero income
+    const incEl = document.getElementById('hero-income');
+    if(incEl && R.income && R.income.y2){
+      countUp(incEl, R.income.y2, '', 1200);
+    }
+    // Set scenario label
+    const scEl = document.getElementById('hsc');
+    if(scEl) scEl.textContent = {switch:'Смена профессии',grow:'Рост дохода',restart:'Перезапуск',freelance:'Фриланс / Своё дело'}[R.sc]||'';
+    // Set subtitle
+    const subEl = document.getElementById('hsub');
+    const profLabel = {law:'Юрист',finance:'Финансист',it:'IT-специалист',marketing:'Маркетолог',design:'Дизайнер',medicine:'Медик',hr:'HR',education:'Педагог',sales:'Продажник',engineering:'Инженер',creative:'Творческая сфера',other:'Специалист'}[R.prof]||'Специалист';
+    if(subEl) subEl.textContent = profLabel + ' · вероятность ' + (R.prob||0) + '% · риск ' + (R.riskLvl||'');
+    // Set stat pills
+    const pillsEl = document.getElementById('stat-pills');
+    if(pillsEl){
+      const pills = [
+        {ico:'📊', val:(R.prob||0)+'%', lbl:'вероятность успеха'},
+        {ico:'⏱', val:(()=>{const m={short:'3–6 мес.',mid:'6–12 мес.',long:'12–18 мес.'};return m[R.ans?.horizon]||'6–12 мес.';})(), lbl:'до первого результата'},
+        {ico:'⚡', val:R.riskLvl||'Средний', lbl:'уровень риска'},
+      ];
+      pillsEl.innerHTML = pills.map(p=>`
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 18px;text-align:center;min-width:110px">
+          <div style="font-size:.75rem;color:var(--muted);margin-bottom:3px">${p.ico} ${p.lbl}</div>
+          <div style="font-family:var(--D);font-size:1.05rem;font-weight:800;color:var(--text)">${p.val}</div>
+        </div>`).join('');
+    }
+    // Achievements
+    renderAchievements();
+  }
+
   function buildContent(){
     if(!R.income) R.income={now:'—',y2:'—',y5:'—'};
     const insightData=(typeof getInsight==='function')?getInsight(R):{title:'Твой прогноз готов'};
