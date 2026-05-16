@@ -711,7 +711,13 @@
       .steps{grid-template-columns:1fr !important;}
     }
 
+
+    @media(max-width:640px){
+      footer > div:first-child{grid-template-columns:1fr !important;}
+      footer > div:first-child > div:not(:first-child){display:none;}
+    }
   </style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
 </head>
 <body>
 
@@ -1027,16 +1033,88 @@
 
 
   <!-- ══ FOOTER ══ -->
-  <footer>
-    <div class="f-logo">Traject<span>a</span></div>
-    <div class="f-links">
-      <a href="#how">Как работает</a>
-      <a href="#scenarios">Сценарии</a>
-      <a href="#b2b">B2B</a>
-      <a href="choose.html">Запустить</a>
+  
+  <!-- ══ ОТЗЫВЫ ══ -->
+  <section style="padding:64px 0">
+    <div class="reveal" style="text-align:center;margin-bottom:40px">
+      <div class="section-label" style="justify-content:center">Отзывы</div>
+      <h2 class="section-title" style="text-align:center">Что говорят <em>пользователи</em></h2>
     </div>
-    <span class="f-copy">© 2025 Trajecta · AI‑платформа сценарного анализа</span>
-  </footer>
+    <div class="reveal d1" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 24px;position:relative">
+        <div style="font-size:1.4rem;color:var(--accent);margin-bottom:14px">❝</div>
+        <p style="font-size:.92rem;color:var(--muted);line-height:1.75;margin-bottom:20px">Была в декрете 2 года и не понимала куда двигаться дальше. Trajecta показала что мои навыки в маркетинге всё ещё в цене — и даже назвала конкретные цифры. Это помогло не паниковать и начать действовать.</p>
+        <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--border)">
+          <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,rgba(198,255,0,.3),rgba(198,255,0,.1));display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;font-family:var(--D);color:var(--accent)">В</div>
+          <div>
+            <div style="font-size:.88rem;font-weight:600">Валерия</div>
+            <div style="font-size:.75rem;color:var(--muted)">34 года · В декрете</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid rgba(198,255,0,.2);border-radius:18px;padding:28px 24px;position:relative">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 70%);border-radius:18px 18px 0 0"></div>
+        <div style="font-size:1.4rem;color:var(--accent);margin-bottom:14px">❝</div>
+        <p style="font-size:.92rem;color:var(--muted);line-height:1.75;margin-bottom:20px">Думал что предприниматель не найдёт здесь ничего полезного — оказалось наоборот. Прогноз по сценарию «Рост дохода» очень точно попал в мою ситуацию. Показал B2B версию партнёру — он сразу спросил где подключить для команды.</p>
+        <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--border)">
+          <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,rgba(198,255,0,.3),rgba(198,255,0,.1));display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;font-family:var(--D);color:var(--accent)">А</div>
+          <div>
+            <div style="font-size:.88rem;font-weight:600">Асылбек</div>
+            <div style="font-size:.75rem;color:var(--muted)">37 лет · Предприниматель</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 24px;position:relative">
+        <div style="font-size:1.4rem;color:var(--accent);margin-bottom:14px">❝</div>
+        <p style="font-size:.92rem;color:var(--muted);line-height:1.75;margin-bottom:20px">Я тренер и параллельно учусь. Не знал как совмещать это с нормальным доходом. Платформа чётко объяснила что психотип «Коммуникатор» — моё преимущество, и показала конкретные цифры по фрилансу. Теперь знаю куда расти.</p>
+        <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--border)">
+          <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,rgba(198,255,0,.3),rgba(198,255,0,.1));display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;font-family:var(--D);color:var(--accent)">Д</div>
+          <div>
+            <div style="font-size:.88rem;font-weight:600">Динмухаммед</div>
+            <div style="font-size:.75rem;color:var(--muted)">20 лет · Тренер / Студент</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+<footer style="border-top:1px solid var(--border);padding:40px 48px;position:relative;z-index:1;">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;align-items:start">
+    <div>
+      <a href="index.html" style="font-family:var(--D);font-size:1.3rem;font-weight:800;color:var(--text);text-decoration:none">Traject<span style="color:var(--accent)">a</span></a>
+      <p style="font-size:.82rem;color:var(--muted);margin-top:8px;line-height:1.6;">AI-платформа карьерного<br>прогнозирования · КЗ</p>
+    </div>
+    <div>
+      <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Платформа</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <a href="choose.html" style="font-size:.85rem;color:var(--muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='#f0f4ff'" onmouseout="this.style.color='rgba(240,244,255,.52)'">Начать симуляцию</a>
+        <a href="b2b.html" style="font-size:.85rem;color:var(--muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='#f0f4ff'" onmouseout="this.style.color='rgba(240,244,255,.52)'">Для компаний (B2B)</a>
+        <a href="b2b-starter.html" style="font-size:.85rem;color:var(--muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='#f0f4ff'" onmouseout="this.style.color='rgba(240,244,255,.52)'">Демо дашборд</a>
+        <a href="history.html" style="font-size:.85rem;color:var(--muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='#f0f4ff'" onmouseout="this.style.color='rgba(240,244,255,.52)'">История симуляций</a>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Контакты</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <a href="https://t.me/Trajecta_bot" target="_blank" style="font-size:.85rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:7px" onmouseover="this.style.color='#f0f4ff'" onmouseout="this.style.color='rgba(240,244,255,.52)'">
+          <span>✈️</span> Telegram бот
+        </a>
+        <a href="b2b.html" style="font-size:.85rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:7px" onmouseover="this.style.color='#f0f4ff'" onmouseout="this.style.color='rgba(240,244,255,.52)'">
+          <span>🏢</span> Для инвесторов и партнёров
+        </a>
+        <span style="font-size:.82rem;color:var(--dim)">🌐 trajecta.site</span>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:28px auto 0;padding-top:20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+    <span style="font-size:.78rem;color:var(--dim)">© 2025 Trajecta · Казахстан · Все права защищены</span>
+    <span style="font-size:.78rem;color:var(--dim)">Сделано в Алматы 🇰🇿</span>
+  </div>
+</footer>
 
 </div><!-- /wrap -->
 
