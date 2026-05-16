@@ -40,7 +40,7 @@
     .sd.done{background:rgba(198,255,0,.35);}
     .sd.active{background:var(--accent);box-shadow:0 0 6px var(--ag);width:18px;border-radius:3px;}
 
-    main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:108px 24px 64px;}
+    main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:80px 24px 40px;}
 
     /* SCENARIO BADGE */
     .sc-badge{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border2);border-radius:100px;padding:8px 18px;font-size:.82rem;color:var(--muted);margin-bottom:28px;}
@@ -57,7 +57,7 @@
     .qd.active{background:var(--accent);box-shadow:0 0 8px var(--ag);}
 
     /* Q CARD */
-    .qcard{width:100%;max-width:680px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px 40px 32px;position:relative;overflow:hidden;}
+    .qcard{width:100%;max-width:680px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px 28px 20px;position:relative;overflow:hidden;}
     .qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 60%);}
 
     .qcard.in{animation:slideIn .4s cubic-bezier(.34,1.2,.64,1) both;}
@@ -70,16 +70,16 @@
     .qtext{font-family:var(--D);font-size:clamp(1.3rem,3vw,1.7rem);font-weight:800;line-height:1.2;letter-spacing:-.025em;margin-bottom:28px;padding-right:60px;}
 
     /* OPTIONS */
-    .opts{display:flex;flex-direction:column;gap:10px;}
-    .opt{display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;cursor:pointer;transition:all .2s;text-align:left;width:100%;font-family:var(--B);}
+    .opts{display:flex;flex-direction:column;gap:8px;}
+    .opt{display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:12px;padding:11px 16px;cursor:pointer;transition:all .2s;text-align:left;width:100%;font-family:var(--B);}
     .opt:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.05);transform:translateY(-1px);}
 
     .okey{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-weight:800;font-size:.82rem;flex-shrink:0;transition:all .2s;}
     .obody{flex:1;}
     .oval{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;transition:color .2s;}
     /* OPTION CARDS — упрощённые, без длинного текста */
-    .opts{display:flex;flex-direction:column;gap:10px;}
-    .opt{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;transition:all .2s;text-align:left;width:100%;}
+    .opts{display:flex;flex-direction:column;gap:8px;}
+    .opt{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:14px;padding:11px 16px;cursor:pointer;transition:all .2s;text-align:left;width:100%;}
     .opt:hover{border-color:var(--border2);background:rgba(255,255,255,.05);}
     .okey{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-size:.75rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .2s;}
     .obody{flex:1;}
@@ -158,7 +158,7 @@
     }
 
     /* Profession grid */
-    .prof-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+    .prof-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
     .prof-chip{background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--B);font-size:.9rem;color:var(--muted);}
     .prof-chip:hover{border-color:rgba(255,255,255,.2);color:var(--text);background:rgba(255,255,255,.05);}
     .prof-chip.picked{border-color:rgba(198,255,0,.5);background:var(--ad);color:var(--accent);}
@@ -166,7 +166,7 @@
     /* ── ГЕЙМИФИКАЦИЯ test.html ── */
 
     /* XP / прогресс-бар с числом */
-    .xp-wrap{width:100%;max-width:680px;display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+    .xp-wrap{width:100%;max-width:680px;display:flex;align-items:center;gap:12px;margin-bottom:10px;}
     .xp-bar-track{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
     .xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#a8e000);border-radius:4px;transition:width .8s cubic-bezier(.34,1.2,.64,1);box-shadow:0 0 8px var(--ag);}
     .xp-label{font-family:var(--D);font-size:.75rem;font-weight:800;color:var(--accent);white-space:nowrap;}
@@ -223,7 +223,7 @@
       .qcard{padding:20px 16px 18px;}
       .qtext{font-size:clamp(1rem,4vw,1.3rem);padding-right:30px;}
       .opts{gap:8px;}
-      .opt{padding:12px 14px;gap:10px;}
+      .opt{padding:12px 14px;gap:8px;}
       .oval{font-size:.9rem;}
       .otxt{font-size:.75rem;}
       .okey{width:26px;height:26px;font-size:.7rem;}

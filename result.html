@@ -889,10 +889,17 @@
   }
 
   function buildRings(){
-    // Set hero income
+    // Set hero income with typewriter animation
     const incEl = document.getElementById('hero-income');
     if(incEl && R.income && R.income.y2){
-      countUp(incEl, R.income.y2, '', 1200);
+      const txt = R.income.y2;
+      incEl.textContent = '';
+      let i = 0;
+      const t = setInterval(()=>{
+        incEl.textContent += txt[i];
+        i++;
+        if(i >= txt.length) clearInterval(t);
+      }, Math.max(20, 1200/txt.length));
     }
     // Set scenario label
     const scEl = document.getElementById('hsc');

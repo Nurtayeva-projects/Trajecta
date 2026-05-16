@@ -38,13 +38,13 @@
     .prog{position:fixed;top:72px;left:0;right:0;height:3px;background:rgba(255,255,255,.06);z-index:99;}
     .prog-f{height:100%;background:linear-gradient(90deg,rgba(167,139,250,.9),var(--accent));box-shadow:0 0 8px rgba(167,139,250,.5);transition:width .6s cubic-bezier(.4,0,.2,1);}
 
-    main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:100px 24px 64px;}
+    main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:80px 24px 40px;}
 
     /* INTRO BANNER */
     .intro-banner{width:100%;max-width:680px;background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(167,139,250,.04));border:1.5px solid rgba(167,139,250,.25);border-radius:20px;padding:28px 32px;text-align:center;margin-bottom:32px;animation:fup .5s ease both;}
     .intro-banner::before{content:'';display:block;font-size:2.5rem;margin-bottom:12px;}
     .ib-icon{font-size:2.5rem;margin-bottom:12px;}
-    .ib-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);color:rgba(167,139,250,.9);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:14px;}
+    .ib-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);color:rgba(167,139,250,.9);font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:8px;}
     .ib-title{font-family:var(--D);font-size:1.4rem;font-weight:800;letter-spacing:-.025em;margin-bottom:8px;}
     .ib-desc{font-size:.9rem;color:var(--muted);line-height:1.65;}
     .ib-desc strong{color:rgba(240,244,255,.85);}
@@ -65,7 +65,7 @@
     @keyframes checkBounce{0%{transform:scale(0) rotate(-10deg)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
 
     /* Q HEADER */
-    .q-top{width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .q-top{width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
     .q-counter{font-size:.76rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
     .qdots{display:flex;gap:5px;}
     .qd{width:28px;height:4px;border-radius:2px;background:var(--border);transition:all .4s;}
@@ -73,24 +73,24 @@
     .qd.active{background:rgba(167,139,250,.9);box-shadow:0 0 8px rgba(167,139,250,.5);}
 
     /* XP BAR */
-    .xp-wrap{width:100%;max-width:680px;display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+    .xp-wrap{width:100%;max-width:680px;display:flex;align-items:center;gap:12px;margin-bottom:10px;}
     .xp-bar-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
     .xp-bar-fill{height:100%;background:linear-gradient(90deg,rgba(167,139,250,.8),var(--accent));border-radius:3px;transition:width .8s cubic-bezier(.34,1.2,.64,1);}
     .xp-label{font-family:var(--D);font-size:.72rem;font-weight:800;color:rgba(167,139,250,.9);white-space:nowrap;}
 
     /* Q CARD */
     .qwrap{width:100%;max-width:680px;}
-    .qcard{width:100%;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px 36px 28px;position:relative;overflow:hidden;}
+    .qcard{width:100%;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px 28px 20px;position:relative;overflow:hidden;}
     .qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(167,139,250,.8),transparent 60%);}
     .qcard.in{animation:slideIn .4s cubic-bezier(.34,1.2,.64,1) both;}
     .qcard.out{animation:slideOut .25s ease forwards;}
     .qnum-bg{position:absolute;top:20px;right:28px;font-family:var(--D);font-size:4rem;font-weight:800;color:rgba(167,139,250,.05);line-height:1;pointer-events:none;}
-    .qtag{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);color:rgba(167,139,250,.9);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:16px;}
-    .qtext{font-family:var(--D);font-size:clamp(1.2rem,2.8vw,1.6rem);font-weight:800;line-height:1.2;letter-spacing:-.025em;margin-bottom:24px;padding-right:50px;}
+    .qtag{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);color:rgba(167,139,250,.9);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:10px;}
+    .qtext{font-family:var(--D);font-size:clamp(1.2rem,2.8vw,1.6rem);font-weight:800;line-height:1.2;letter-spacing:-.025em;margin-bottom:16px;padding-right:50px;}
 
     /* Options — единый стиль, 5 вариантов */
-    .opts{display:flex;flex-direction:column;gap:10px;}
-    .opt{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:12px;padding:15px 18px;cursor:pointer;transition:all .2s;text-align:left;width:100%;font-family:var(--B);}
+    .opts{display:flex;flex-direction:column;gap:8px;}
+    .opt{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:12px;padding:11px 16px;cursor:pointer;transition:all .2s;text-align:left;width:100%;font-family:var(--B);}
     .opt:hover{border-color:rgba(167,139,250,.35);background:rgba(167,139,250,.06);transform:translateY(-2px);}
     .okey{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-weight:800;font-size:.78rem;flex-shrink:0;transition:all .2s;}
     .obody{flex:1;}
@@ -150,7 +150,7 @@
       .qcard{padding:20px 16px 18px;}
       .qtext{font-size:clamp(1rem,4vw,1.3rem);}
       .opts{gap:8px;}
-      .opt{padding:12px 14px;gap:10px;}
+      .opt{padding:12px 14px;gap:8px;}
       .oval{font-size:.88rem;}
       .otxt{font-size:.74rem;}
       .okey{width:26px;height:26px;font-size:.7rem;}
