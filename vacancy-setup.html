@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профиль вакансии — Trajecta B2B</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#020617;--card:#0d1b35;--accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);--orange:rgba(251,146,60,.9);--od:rgba(251,146,60,.1);--om:rgba(251,146,60,.25);--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);--text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);--D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;}
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;padding:32px 20px 60px;-webkit-font-smoothing:antialiased;}
+    .bg-g{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(251,146,60,.05),transparent 55%);}
+    .wrap{max-width:580px;margin:0 auto;position:relative;z-index:1;}
+    .logo{font-family:var(--D);font-size:1.2rem;font-weight:800;margin-bottom:20px;display:block;text-decoration:none;color:var(--text);}
+    .logo span{color:var(--accent);}
+    .hero{background:linear-gradient(135deg,rgba(251,146,60,.08),rgba(251,146,60,.03));border:1.5px solid var(--om);border-radius:20px;padding:28px 24px;margin-bottom:24px;text-align:center;}
+    .hero-ico{font-size:2.5rem;margin-bottom:12px;}
+    .hero-title{font-family:var(--D);font-size:1.3rem;font-weight:800;letter-spacing:-.03em;margin-bottom:8px;}
+    .hero-sub{font-size:.88rem;color:var(--muted);line-height:1.65;}
+    .section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:14px;}
+    .section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+    label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:6px;margin-top:12px;}
+    label:first-of-type{margin-top:0;}
+    input,textarea{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--B);font-size:.9rem;padding:10px 14px;outline:none;box-sizing:border-box;resize:vertical;}
+    input:focus,textarea:focus{border-color:var(--om);}
+    textarea{min-height:80px;}
+    .opts-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px;}
+    .opt-btn{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);color:rgba(240,244,255,.65);font-family:var(--B);font-size:.8rem;padding:7px 14px;border-radius:100px;cursor:pointer;transition:all .2s;}
+    .opt-btn:hover{border-color:var(--om);color:#f0f4ff;}
+    .opt-btn.sel{border-color:var(--om);background:var(--od);color:var(--orange);}
+    .opt-btn.radio.sel{border-color:var(--om);background:var(--od);color:var(--orange);}
+    .submit-btn{width:100%;background:var(--orange);color:#020617;font-family:var(--B);font-weight:700;font-size:1rem;padding:15px;border-radius:10px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;margin-top:8px;}
+    .submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(251,146,60,.35);}
+    .success{display:none;text-align:center;padding:40px 20px;}
+    .success-ico{font-size:3rem;margin-bottom:16px;}
+    .success-title{font-family:var(--D);font-size:1.4rem;font-weight:800;margin-bottom:8px;color:var(--accent);}
+    .success-sub{font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:20px;}
+    .link-box{background:rgba(198,255,0,.05);border:1px solid var(--am);border-radius:10px;padding:14px 16px;text-align:left;}
+    .link-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px;font-weight:700;}
+    .link-url{font-size:.82rem;color:var(--text);word-break:break-all;margin-bottom:10px;font-family:monospace;}
+    .copy-btn{background:var(--accent);color:#020617;font-family:var(--B);font-weight:700;font-size:.85rem;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;}
+    .step-note{font-size:.78rem;color:var(--muted);line-height:1.6;margin-top:10px;}
+    @media(max-width:500px){.hero{padding:20px 16px;}}
+    .pkg-card{background:rgba(255,255,255,.03);border:2px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .2s;}
+    .pkg-card:hover{border-color:rgba(198,255,0,.3);background:rgba(198,255,0,.04);}
+    .pkg-card.sel{border-color:rgba(198,255,0,.5);background:rgba(198,255,0,.07);}
+  </style>
+</head>
+<body>
+<div class="bg-g"></div>
+<div class="wrap">
+  <a href="index.html" class="logo">Traject<span>a</span></a>
+
+  <!-- FORM -->
+  <div id="form-view">
+    <div class="hero">
+      <div class="hero-ico">📋</div>
+      <div class="hero-title">Профиль вакансии</div>
+      <p class="hero-sub">Заполните информацию о компании и вакансии — это поможет точнее оценить кандидатов и сравнить их с вашими требованиями.</p>
+    </div>
+
+    <!-- О компании -->
+    <div class="section">
+      <div class="section-title">🏢 О компании</div>
+      <label>Название компании *</label>
+      <input type="text" id="f-company" placeholder="ТОО «КомпанияХХХ»">
+      <label>Сфера деятельности</label>
+      <input type="text" id="f-industry" placeholder="Например: IT, финтех, ритейл, строительство...">
+      <label>Размер команды</label>
+      <div class="opts-grid">
+        <button onclick="radio('size','1-10',this)" class="opt-btn radio">1–10 человек</button>
+        <button onclick="radio('size','11-50',this)" class="opt-btn radio">11–50</button>
+        <button onclick="radio('size','51-200',this)" class="opt-btn radio">51–200</button>
+        <button onclick="radio('size','200+',this)" class="opt-btn radio">200+</button>
+      </div>
+    </div>
+
+    <!-- О вакансии -->
+    <div class="section">
+      <div class="section-title">💼 О вакансии</div>
+      <label>Название вакансии *</label>
+      <input type="text" id="f-position" placeholder="Например: Product Manager, Sales Manager...">
+      <label>Что будет делать сотрудник (кратко)</label>
+      <textarea id="f-duties" placeholder="Основные задачи и зоны ответственности..."></textarea>
+      <label>Формат работы</label>
+      <div class="opts-grid">
+        <button onclick="radio('format','office',this)" class="opt-btn radio">🏢 Офис</button>
+        <button onclick="radio('format','remote',this)" class="opt-btn radio">🏠 Удалённо</button>
+        <button onclick="radio('format','hybrid',this)" class="opt-btn radio">⚡ Гибрид</button>
+      </div>
+      <label>Темп работы</label>
+      <div class="opts-grid">
+        <button onclick="radio('pace','calm',this)" class="opt-btn radio">🌿 Спокойный</button>
+        <button onclick="radio('pace','medium',this)" class="opt-btn radio">⚡ Средний</button>
+        <button onclick="radio('pace','fast',this)" class="opt-btn radio">🚀 Высокий</button>
+      </div>
+      <label>Стиль управления</label>
+      <div class="opts-grid">
+        <button onclick="radio('mgmt','autonomous',this)" class="opt-btn radio">🦅 Автономия</button>
+        <button onclick="radio('mgmt','structured',this)" class="opt-btn radio">📐 Структура</button>
+        <button onclick="radio('mgmt','collaborative',this)" class="opt-btn radio">🤝 Командный</button>
+        <button onclick="radio('mgmt','results',this)" class="opt-btn radio">🎯 По результату</button>
+      </div>
+    </div>
+
+    <!-- Требования -->
+    <div class="section">
+      <div class="section-title">🎯 Требования к кандидату</div>
+      <label>Ключевые качества (выбери до 3)</label>
+      <div class="opts-grid" id="traits-grid">
+        <button onclick="toggle('analytical',this)" class="opt-btn">🔬 Аналитичность</button>
+        <button onclick="toggle('leadership',this)" class="opt-btn">👑 Лидерство</button>
+        <button onclick="toggle('creativity',this)" class="opt-btn">💡 Креативность</button>
+        <button onclick="toggle('execution',this)" class="opt-btn">⚡ Исполнительность</button>
+        <button onclick="toggle('communication',this)" class="opt-btn">🗣️ Коммуникация</button>
+        <button onclick="toggle('stability',this)" class="opt-btn">🛡️ Стабильность</button>
+        <button onclick="toggle('growth',this)" class="opt-btn">📈 Амбиции</button>
+        <button onclick="toggle('teamwork',this)" class="opt-btn">🤝 Командность</button>
+      </div>
+      <label>Красные флаги — что недопустимо</label>
+      <div class="opts-grid">
+        <button onclick="toggle('job_hopping',this)" class="opt-btn">🚩 Частая смена работ</button>
+        <button onclick="toggle('only_money',this)" class="opt-btn">🚩 Только деньги</button>
+        <button onclick="toggle('no_growth',this)" class="opt-btn">🚩 Нет амбиций</button>
+        <button onclick="toggle('conflict',this)" class="opt-btn">🚩 Конфликтность</button>
+        <button onclick="toggle('no_ownership',this)" class="opt-btn">🚩 Избегает ответственности</button>
+      </div>
+      <label>Что важно ещё (необязательно)</label>
+      <textarea id="f-notes" placeholder="Любые дополнительные требования, особенности роли..."></textarea>
+    </div>
+
+    <!-- ПАКЕТЫ -->
+    <div class="section" style="border-color:rgba(198,255,0,.2);background:linear-gradient(135deg,rgba(198,255,0,.05),transparent)">
+      <div class="section-title">💰 Выберите пакет</div>
+      <div style="display:flex;flex-direction:column;gap:10px" id="packages">
+
+        <div class="pkg-card" id="pkg-1" onclick="selectPkg('pkg-1','1 кандидат','4 900 ₸')">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-weight:700;margin-bottom:2px">1 кандидат</div>
+              <div style="font-size:.78rem;color:var(--muted)">Попробовать сервис</div>
+            </div>
+            <div style="font-family:var(--D);font-size:1.3rem;font-weight:800;color:var(--accent)">4 900 ₸</div>
+          </div>
+        </div>
+
+        <div class="pkg-card sel" id="pkg-5" onclick="selectPkg('pkg-5','5 кандидатов','19 900 ₸')">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+                <span style="font-weight:700">5 кандидатов</span>
+                <span style="background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:100px">Популярный</span>
+              </div>
+              <div style="font-size:.78rem;color:var(--muted)">Экономия 20% · 3 980 ₸ за кандидата</div>
+            </div>
+            <div style="font-family:var(--D);font-size:1.3rem;font-weight:800;color:var(--accent)">19 900 ₸</div>
+          </div>
+        </div>
+
+        <div class="pkg-card" id="pkg-10" onclick="selectPkg('pkg-10','10 кандидатов','34 900 ₸')">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-weight:700;margin-bottom:2px">10 кандидатов</div>
+              <div style="font-size:.78rem;color:var(--muted)">Экономия 30% · 3 490 ₸ за кандидата</div>
+            </div>
+            <div style="font-family:var(--D);font-size:1.3rem;font-weight:800;color:var(--accent)">34 900 ₸</div>
+          </div>
+        </div>
+
+      </div>
+      <div style="font-size:.75rem;color:var(--dim);margin-top:10px;text-align:center">📲 После сохранения свяжемся и пришлём ссылку на оплату через Kaspi</div>
+    </div>
+
+    <button class="submit-btn" onclick="submitForm()">Сохранить и оформить →</button>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success" id="success-view">
+    <div class="success-ico">✅</div>
+    <div class="success-title">Профиль сохранён!</div>
+    <p class="success-sub">Профиль вакансии сохранён. Мы свяжемся с вами для подтверждения оплаты и активации пакета. Ссылки для кандидатов будут готовы после оплаты.</p>
+    <div id="pkg-summary" style="background:rgba(198,255,0,.08);border:1px solid rgba(198,255,0,.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:.85rem;font-weight:600" id="pkg-name-show">—</span><span style="font-family:var(--D);font-size:1.1rem;font-weight:800;color:var(--accent)" id="pkg-price-show">—</span></div>
+    <div class="link-box">
+      <div class="link-label">🔗 Ссылка для кандидатов</div>
+      <div class="link-url" id="cand-link">—</div>
+      <button class="copy-btn" onclick="copyLink()">📋 Скопировать ссылку</button>
+      <p class="step-note">Отправьте эту ссылку каждому кандидату перед интервью. Тест займёт 7–10 минут.</p>
+    </div>
+    <div style="margin-top:14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
+      <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">📊 Дашборд с результатами</div>
+      <div class="link-url" id="dash-link">—</div>
+      <a id="dash-btn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);color:var(--muted);font-family:var(--B);font-weight:600;font-size:.82rem;padding:8px 16px;border-radius:8px;text-decoration:none;margin-top:6px">📊 Открыть дашборд →</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const B2B_WEBHOOK = 'https://hook.eu1.make.com/fmphpccbshx83909g7w7cnrghvnr3zcq';
+  const params = new URLSearchParams(window.location.search);
+  // Pre-fill company from URL if passed
+  const preCompany = params.get('company');
+  if(preCompany) document.getElementById('f-company').value = decodeURIComponent(preCompany);
+
+  const profile = {size:null, format:null, pace:null, mgmt:null, selected:new Set()};
+
+  function radio(key, val, btn){
+    profile[key] = val;
+    btn.closest('.opts-grid').querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');
+  }
+
+  const RED_FLAGS = ['job_hopping','only_money','no_growth','conflict','no_ownership'];
+  function toggle(val, btn){
+    if(profile.selected.has(val)){
+      profile.selected.delete(val); btn.classList.remove('sel');
+    } else {
+      const traits = [...profile.selected].filter(t=>!RED_FLAGS.includes(t));
+      if(!RED_FLAGS.includes(val) && traits.length >= 3) return;
+      profile.selected.add(val); btn.classList.add('sel');
+    }
+  }
+
+  function submitForm(){
+    const company = document.getElementById('f-company').value.trim();
+    const position = document.getElementById('f-position').value.trim();
+    if(!company){ document.getElementById('f-company').style.borderColor='rgba(255,80,50,.5)'; return; }
+    if(!position){ document.getElementById('f-position').style.borderColor='rgba(255,80,50,.5)'; return; }
+
+    const id = Math.random().toString(36).substring(2,8).toUpperCase();
+    const vacData = {
+      id, company, title: position,
+      industry: document.getElementById('f-industry').value.trim(),
+      duties: document.getElementById('f-duties').value.trim(),
+      notes: document.getElementById('f-notes').value.trim(),
+      size: profile.size, format: profile.format,
+      pace: profile.pace, mgmt: profile.mgmt,
+      traits: [...profile.selected].filter(t=>!RED_FLAGS.includes(t)),
+      redFlags: [...profile.selected].filter(t=>RED_FLAGS.includes(t)),
+      createdAt: new Date().toLocaleDateString('ru-RU')
+    };
+
+    // Save to localStorage
+    const allVac = JSON.parse(localStorage.getItem('trajecta_vacancies')||'{}');
+    allVac[id] = vacData;
+    localStorage.setItem('trajecta_vacancies', JSON.stringify(allVac));
+    localStorage.setItem('trajecta_last_vacancy', id);
+
+    // Send to Make
+    // Add package to vacData
+    vacData.package = selectedPkg.name;
+    vacData.price = selectedPkg.price;
+
+    // Send to Make webhook
+    fetch(B2B_WEBHOOK, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({type:'vacancy_profile', ...vacData})}).catch(()=>{});
+
+    // Send to Telegram
+    const TG_TOKEN = '8906343439:AAG44Z9tXzYf3FvN2XXfhgJxGzNayvaT_Tk';
+    const CHAT_ID = '8424626474';
+    const tgText = '🎯 Оценка кандидатов!\n\n🏢 ' + company + '\n💼 ' + position + '\n📦 ' + selectedPkg.name + '\n💰 ' + selectedPkg.price + '\n📅 ' + new Date().toLocaleString('ru-RU',{timeZone:'Asia/Almaty'});
+    fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CHAT_ID,text:tgText})}).catch(()=>{});
+
+    // Show success with links
+    const base = window.location.origin;
+    const candLink = base+'/candidate-entry.html?company='+encodeURIComponent(company)+'&id='+id+'&position='+encodeURIComponent(position);
+    const dashLink = base+'/candidates-dashboard.html?company='+encodeURIComponent(company)+'&id='+id;
+
+    document.getElementById('cand-link').textContent = candLink;
+    document.getElementById('dash-link').textContent = dashLink;
+    document.getElementById('dash-btn').href = dashLink;
+    window._candLink = candLink;
+
+    document.getElementById('pkg-name-show').textContent = selectedPkg.name;
+    document.getElementById('pkg-price-show').textContent = selectedPkg.price;
+    document.getElementById('form-view').style.display='none';
+    document.getElementById('success-view').style.display='block';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // Package selection
+  let selectedPkg = {id:'pkg-5', name:'5 кандидатов', price:'19 900 ₸'};
+
+  function selectPkg(id, name, price){
+    selectedPkg = {id, name, price};
+    document.querySelectorAll('.pkg-card').forEach(c=>c.classList.remove('sel'));
+    document.getElementById(id).classList.add('sel');
+  }
+
+  function copyLink(){
+    navigator.clipboard?.writeText(window._candLink||'');
+    const btn = event.target;
+    const o = btn.textContent; btn.textContent='✓ Скопировано!';
+    setTimeout(()=>btn.textContent=o, 2000);
+  }
+</script>
+</body>
+</html>
