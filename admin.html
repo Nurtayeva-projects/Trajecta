@@ -96,7 +96,7 @@
 </div>
 
 <div class="wrap" id="main" style="display:none">
-  <a href="index.html" class="logo" style="text-decoration:none">Traject<span>a</span></a>
+  <a href="index.html" class="logo" style="text-decoration:none;color:var(--text)">Traject<span style="color:var(--accent)">a</span></a>
   <div class="admin-tag">🔒 Admin</div>
 
   <!-- STEP 1: ВЫБОР ТИПА -->
@@ -416,7 +416,8 @@
     window._curCand=entry;
     document.getElementById('cand-link-url').textContent=link;
     document.getElementById('cand-dash-btn').href=dashLink;
-    const msg='Добрый день, '+company+'!\n\nПеред нашим собеседованием просим пройти короткий тест (7–10 минут).\n\nЭто поможет нам лучше понять ваши сильные стороны и сделать интервью более предметным.\n\n🔗 Ссылка:\n'+link+'\n\nНет правильных или неправильных ответов — отвечайте честно.\n\nДо встречи! — HR Trajecta';
+    const posText=position?' на позицию '+position:'';
+    const msg='Добрый день!\n\nКомпания '+company+' приглашает вас пройти короткий тест перед собеседованием'+posText+' (7–10 минут).\n\n🔗 Ссылка:\n'+link+'\n\nНет правильных или неправильных ответов.\n\nДо встречи! — HR команда';
     document.getElementById('cand-msg').textContent=msg;
     window._curCandMsg=msg;
     document.getElementById('cand-result').style.display='block';
