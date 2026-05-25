@@ -62,11 +62,11 @@
       document.getElementById('name-error').style.display='block';
       return;
     }
-    // Save employee info for after test
+    // Save employee info
     localStorage.setItem('tr_b2b_employee', JSON.stringify({name, role, company: decodeURIComponent(company), companyId}));
     localStorage.setItem('tr_b2b_mode', 'true');
-    // Start the regular test
-    window.location.href = 'choose.html?b2b=1&company='+encodeURIComponent(company);
+    // Go to B2B test
+    window.location.href = 'b2b-test.html?company='+company+'&id='+companyId;
   }
 </script>
 </body>
