@@ -293,7 +293,8 @@
   },500);
 
   async function sendToTelegram(data){
-    const text='🏢 Заявка B2B!\n\n👤 '+data.name+'\n📞 '+data.phone+'\n📧 '+data.email+'\n💼 '+data.plan+'\n💰 '+data.price+'\n🕐 '+new Date().toLocaleString('ru-RU',{timeZone:'Asia/Almaty'});
+    const isHiring=data.plan&&(data.plan.includes('Найм')||data.plan.toLowerCase().includes('найм'));
+    const text=(isHiring?'🎯 Оценка кандидатов!':'🏢 Заявка B2B!')+'\n\n'+(isHiring?'🏢 Компания: ':'👤 ')+data.name+'\n📞 '+data.phone+'\n📧 '+data.email+'\n💼 '+data.plan+'\n💰 '+data.price+'\n🕐 '+new Date().toLocaleString('ru-RU',{timeZone:'Asia/Almaty'});
     try{await fetch('https://api.telegram.org/bot8906343439:AAG44Z9tXzYf3FvN2XXfhgJxGzNayvaT_Tk/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:'8424626474',text})});}catch(e){}
     // Make webhook
     try{await fetch('https://hook.eu1.make.com/sgnv4m0gt3nqkcu4n4ppw38t7blt50pw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:data.name,phone:data.phone,email:data.email,plan:data.plan,price:data.price,date:new Date().toLocaleString('ru-RU',{timeZone:'Asia/Almaty'}),source:window.location.pathname})});}catch(e){}
@@ -302,21 +303,30 @@
   function openLeadForm(plan,price){
     const ex=document.getElementById('lead-modal');if(ex)ex.remove();
     const isFree=price==='Бесплатно';
+    const isCandidate=plan.includes('Найм')||plan.includes('кандидат');
     const m=document.createElement('div');m.id='lead-modal';
     m.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.93);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;';
     const FLD='width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:8px;color:#f0f4ff;font-family:Space Grotesk,sans-serif;font-size:.92rem;padding:11px 14px;outline:none;margin-bottom:10px;box-sizing:border-box;';
-    m.innerHTML='<div style="background:#0d1b35;border:1.5px solid rgba(96,165,250,.3);border-radius:22px;padding:32px 28px;max-width:440px;width:100%;position:relative;">'
-      +'<button onclick="document.getElementById(\'lead-modal\').remove()" style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,.07);border:none;color:rgba(240,244,255,.5);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;">✕</button>'
-      +'<div style="font-size:1.4rem;margin-bottom:10px;">🏢</div>'
-      +'<h3 style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:6px;">'+(isFree?'Запросить демо':'Оформить доступ')+'</h3>'
-      +'<p style="font-size:.85rem;color:rgba(240,244,255,.5);margin-bottom:14px;">'+(isFree?'Пришлём ссылку на демо-дашборд и ответим на вопросы.':'После заявки свяжемся и пришлём ссылку на оплату через Kaspi.')+'</p>'
-      +'<div style="background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.25);border-radius:8px;padding:8px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">'
+    const bdr=isCandidate?'rgba(251,146,60,.4)':'rgba(96,165,250,.3)';
+    const acc=isCandidate?'rgba(251,146,60,.9)':'rgba(96,165,250,.9)';
+    const bg=isCandidate?'rgba(251,146,60,.1)':'rgba(96,165,250,.1)';
+    const bdr2=isCandidate?'rgba(251,146,60,.25)':'rgba(96,165,250,.25)';
+    const title=isCandidate?'Подключить оценку кандидатов':isFree?'Запросить демо':'Оформить доступ';
+    const desc=isCandidate?'Свяжемся с вами, пришлём ссылку для заполнения профиля вакансии и настроим оценку кандидатов.':isFree?'Пришлём ссылку на демо-дашборд и ответим на вопросы.':'После заявки свяжемся и пришлём ссылку на оплату через Kaspi.';
+    const ph1=isCandidate?'Название компании *':'Имя и фамилия *';
+    const ph2=isCandidate?'Телефон / WhatsApp * (+7...)':'Телефон * (+7...)';
+    m.innerHTML='<div style="background:#0d1b35;border:1.5px solid '+bdr+';border-radius:22px;padding:32px 28px;max-width:440px;width:100%;position:relative;">'
+      +'<button onclick="document.getElementById(&quot;lead-modal&quot;).remove()" style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,.07);border:none;color:rgba(240,244,255,.5);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;">✕</button>'
+      +'<div style="font-size:1.4rem;margin-bottom:10px;">'+(isCandidate?'🎯':'🏢')+'</div>'
+      +'<h3 style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:6px;">'+title+'</h3>'
+      +'<p style="font-size:.85rem;color:rgba(240,244,255,.5);margin-bottom:14px;">'+desc+'</p>'
+      +'<div style="background:'+bg+';border:1px solid '+bdr2+';border-radius:8px;padding:8px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">'
       +'<span style="font-size:.82rem;color:rgba(240,244,255,.55);">'+plan+'</span>'
-      +'<span style="font-family:Syne,sans-serif;font-size:1rem;font-weight:800;color:rgba(96,165,250,.9);">'+price+'</span></div>'
-      +'<input id="lf-name" placeholder="Имя и фамилия *" style="'+FLD+'">'
-      +'<input id="lf-phone" placeholder="Телефон * (+7...)" type="tel" style="'+FLD+'">'
-      +'<input id="lf-email" placeholder="Email *" type="email" style="'+FLD+'margin-bottom:16px;">'
-      +'<button id="lf-btn" onclick="submitLeadForm(\''+plan+'\',\''+price+'\')" style="width:100%;background:rgba(96,165,250,.9);color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;">Отправить заявку →</button>'
+      +'<span style="font-family:Syne,sans-serif;font-size:1rem;font-weight:800;color:'+acc+';">'+price+'</span></div>'
+      +'<input id="lf-name" placeholder="'+ph1+'" style="'+FLD+'">'
+      +'<input id="lf-phone" placeholder="'+ph2+'" type="tel" style="'+FLD+'">'
+      +'<input id="lf-email" placeholder="Email" type="email" style="'+FLD+'margin-bottom:16px;">'
+      +'<button id="lf-btn" onclick="submitLeadForm(''+plan+'',''+price+'')" style="width:100%;background:'+acc+';color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;">Отправить заявку →</button>'
       +'</div>';
     document.body.appendChild(m);
     m.addEventListener('click',e=>{if(e.target===m)m.remove();});
