@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кандидаты — Trajecta B2B</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#020617;--card:#0d1b35;--card2:#111f3a;--accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);--blue:rgba(96,165,250,.9);--bd:rgba(96,165,250,.12);--bm:rgba(96,165,250,.25);--orange:rgba(251,146,60,.9);--od:rgba(251,146,60,.1);--om:rgba(251,146,60,.25);--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);--text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);--D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;}
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;-webkit-font-smoothing:antialiased;}
+    .bg-g{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 40% at 60% 0%,rgba(251,146,60,.05),transparent 55%);}
+    header{display:flex;align-items:center;padding:0 40px;height:64px;border-bottom:1px solid var(--border);background:rgba(2,6,23,.9);backdrop-filter:blur(20px);position:fixed;top:0;left:0;right:0;z-index:100;gap:10px;}
+    .logo{font-family:var(--D);font-size:1.3rem;font-weight:800;text-decoration:none;color:var(--text);}
+    .logo span{color:var(--accent);}
+    .htag{display:inline-flex;align-items:center;gap:5px;background:var(--od);border:1px solid var(--om);color:var(--orange);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:100px;}
+    .hright{margin-left:auto;display:flex;gap:8px;}
+    .btn{display:inline-flex;align-items:center;gap:6px;background:rgba(251,146,60,.9);color:#020617;font-family:var(--B);font-weight:700;font-size:.82rem;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s;text-decoration:none;white-space:nowrap;}
+    .btn:hover{transform:translateY(-2px);}
+    .btn-g{background:rgba(255,255,255,.08);color:var(--muted);border:1px solid var(--border2);}
+    .btn-g:hover{color:var(--text);}
+    .wrap{max-width:1100px;margin:0 auto;padding:84px 40px 60px;position:relative;z-index:1;}
+    .page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:16px;}
+    .page-title{font-family:var(--D);font-size:1.8rem;font-weight:800;letter-spacing:-.03em;margin-bottom:4px;}
+    .page-sub{font-size:.82rem;color:var(--muted);}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+    .metric{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;}
+    .metric-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+    .metric-val{font-family:var(--D);font-size:2rem;font-weight:800;line-height:1;}
+
+    /* CANDIDATE CARDS */
+    .cands-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
+    .cand-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;transition:border-color .2s,transform .2s;cursor:pointer;}
+    .cand-card:hover{border-color:var(--om);transform:translateY(-3px);}
+    .cand-card.verdict-rec{border-color:rgba(198,255,0,.3);}
+    .cand-card.verdict-no{border-color:rgba(255,80,50,.2);opacity:.8;}
+    .cand-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+    .cand-name{font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:3px;}
+    .cand-pos{font-size:.78rem;color:var(--muted);}
+    .verdict-badge{display:inline-flex;align-items:center;font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:100px;white-space:nowrap;}
+    .v-rec{background:var(--ad);border:1px solid var(--am);color:var(--accent);}
+    .v-con{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:rgba(251,191,36,.9);}
+    .v-no{background:rgba(255,80,50,.1);border:1px solid rgba(255,80,50,.25);color:rgba(255,120,80,.9);}
+    .cand-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+    .cm{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+    .cm-lbl{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+    .cm-val{font-size:.85rem;font-weight:600;}
+    .psycho-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+    .cand-insight{font-size:.8rem;color:var(--muted);line-height:1.55;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+    .flags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+    .flag-red{background:rgba(255,80,50,.1);border:1px solid rgba(255,80,50,.2);color:rgba(255,120,80,.85);font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:100px;}
+    .flag-green{background:var(--ad);border:1px solid var(--am);color:var(--accent);font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:100px;}
+    .interview-qs{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+    .iq-title{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px;}
+    .iq-item{font-size:.78rem;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:8px;}
+    .iq-item:last-child{border-bottom:none;}
+    .iq-num{color:var(--orange);font-weight:700;flex-shrink:0;}
+    .cand-date{font-size:.72rem;color:var(--dim);margin-top:10px;}
+    .empty{text-align:center;padding:60px 20px;}
+    .empty-ico{font-size:3rem;margin-bottom:14px;}
+
+    @media(max-width:768px){
+      header{padding:0 16px;}
+      .wrap{padding:80px 16px 40px;}
+      .metrics{grid-template-columns:1fr 1fr;}
+      .cands-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-g"></div>
+
+<header>
+  <a href="index.html" class="logo">Traject<span>a</span></a>
+  <span class="htag">Кандидаты</span>
+  <div class="hright">
+    <button class="btn btn-g" onclick="exportCSV()">📥 CSV</button>
+    <a href="admin.html" class="btn btn-g">← Admin</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-header">
+    <div>
+      <div class="page-title" id="page-title">Кандидаты</div>
+      <div class="page-sub" id="page-sub">Профили кандидатов · Trajecta B2B</div>
+    </div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><div class="metric-lbl">Прошли тест</div><div class="metric-val" id="m-total">0</div></div>
+    <div class="metric"><div class="metric-lbl">Рекомендуем</div><div class="metric-val" style="color:var(--accent)" id="m-rec">0</div></div>
+    <div class="metric"><div class="metric-lbl">Рассмотреть</div><div class="metric-val" style="color:rgba(251,191,36,.9)" id="m-con">0</div></div>
+    <div class="metric"><div class="metric-lbl">Не подходит</div><div class="metric-val" style="color:rgba(255,120,80,.9)" id="m-no">0</div></div>
+  </div>
+
+  <div class="cands-grid" id="cands-grid">
+    <div class="empty" style="grid-column:1/-1">
+      <div class="empty-ico">🎯</div>
+      <div style="font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:8px">Кандидатов пока нет</div>
+      <div style="font-size:.85rem;color:var(--muted)">Создай ссылку в Admin → отправь кандидату перед интервью</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CAND_KEY = 'trajecta_candidates';
+  const params = new URLSearchParams(window.location.search);
+  const companyId = params.get('id') || '';
+  const company = params.get('company') || '';
+
+  if(company){
+    document.getElementById('page-title').textContent = decodeURIComponent(company) + ' · Кандидаты';
+    document.getElementById('page-sub').textContent = 'ID: '+companyId+' · Профили кандидатов · Trajecta B2B';
+  }
+
+  const PSYCHO_ICO = {A:'🔬',B:'🏗️',C:'🤝',D:'⚡',E:'🚀'};
+  const PSYCHO_NAMES = {A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель',E:'Визионер'};
+
+  function getCandidates(){
+    try{
+      const all = JSON.parse(localStorage.getItem(CAND_KEY)||'{}');
+      if(companyId) return all[companyId]||[];
+      // Return all if no filter
+      return Object.values(all).flat();
+    }catch(e){return[];}
+  }
+
+  function getVerdictBadge(v){
+    if(!v) return '<span class="verdict-badge v-con">—</span>';
+    if(v.includes('Рекомендуем')) return '<span class="verdict-badge v-rec">✅ '+v+'</span>';
+    if(v.includes('Рассмотреть')) return '<span class="verdict-badge v-con">🟡 '+v+'</span>';
+    return '<span class="verdict-badge v-no">❌ '+v+'</span>';
+  }
+
+  function getScoreColor(s){
+    return s>=75?'var(--accent)':s>=50?'var(--blue)':'rgba(255,120,80,.9)';
+  }
+
+  function render(){
+    const cands = getCandidates();
+    const total = cands.length;
+    const rec = cands.filter(c=>c.verdict?.includes('Рекомендуем')).length;
+    const con = cands.filter(c=>c.verdict?.includes('Рассмотреть')).length;
+    const no = cands.filter(c=>c.verdict?.includes('Не рекомендуем')).length;
+
+    document.getElementById('m-total').textContent = total;
+    document.getElementById('m-rec').textContent = rec;
+    document.getElementById('m-con').textContent = con;
+    document.getElementById('m-no').textContent = no;
+
+    const grid = document.getElementById('cands-grid');
+    if(!total){
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-ico">🎯</div><div style="font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:8px">Кандидатов пока нет</div><div style="font-size:.85rem;color:var(--muted)">Создай ссылку в Admin → отправь кандидату</div></div>';
+      return;
+    }
+
+    grid.innerHTML = cands.map(c=>{
+      const score = c.potential_score||50;
+      const pcode = c.psychotype_code||'D';
+      const verdictClass = c.verdict?.includes('Рекомендуем')?'verdict-rec':c.verdict?.includes('Не рекомендуем')?'verdict-no':'';
+      const redFlags = (c.red_flags||[]);
+      const greenFlags = (c.green_flags||[]);
+      const iqs = (c.interview_questions||[]);
+
+      return `<div class="cand-card ${verdictClass}">
+        <div class="cand-top">
+          <div>
+            <div class="cand-name">${c.name||'—'}</div>
+            <div class="cand-pos">${c.position||'Вакансия не указана'}</div>
+          </div>
+          ${getVerdictBadge(c.verdict)}
+        </div>
+
+        <div class="psycho-row">
+          <span style="font-size:1.3rem">${PSYCHO_ICO[pcode]||'🧠'}</span>
+          <span style="font-weight:600">${c.psychotype||PSYCHO_NAMES[pcode]||'—'}</span>
+          <span style="color:var(--muted);font-size:.8rem">· ${c.motivation_type||'—'}</span>
+        </div>
+
+        <div class="cand-metrics">
+          <div class="cm">
+            <div class="cm-lbl">Потенциал</div>
+            <div class="cm-val" style="color:${getScoreColor(score)}">${score}%</div>
+          </div>
+          <div class="cm">
+            <div class="cm-lbl">Совместимость</div>
+            <div class="cm-val" style="color:${getScoreColor(c.compatibility_score||50)}">${c.compatibility_score||'—'}%</div>
+          </div>
+        </div>
+
+        ${c.insight?`<div class="cand-insight">${c.insight}</div>`:''}
+
+        ${redFlags.length?`<div class="flags">${redFlags.map(f=>`<span class="flag-red">⚠ ${f}</span>`).join('')}</div>`:''}
+        ${greenFlags.length?`<div class="flags">${greenFlags.slice(0,3).map(f=>`<span class="flag-green">✓ ${f}</span>`).join('')}</div>`:''}
+
+        ${iqs.length?`<div class="interview-qs">
+          <div class="iq-title">💬 Вопросы для интервью</div>
+          ${iqs.slice(0,3).map((q,i)=>`<div class="iq-item"><span class="iq-num">${i+1}.</span><span>${q}</span></div>`).join('')}
+        </div>`:''}
+
+        <div class="cand-date">📅 ${c.date||'—'} · ${c.company||''}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function exportCSV(){
+    const cands = getCandidates();
+    if(!cands.length){alert('Нет данных');return;}
+    const BOM='\uFEFF';
+    const h='Имя,Вакансия,Психотип,Потенциал,Совместимость,Мотивация,Вердикт,Красные флаги,Инсайт,Дата';
+    const rows=cands.map(c=>`"${c.name||''}","${c.position||''}","${c.psychotype||''}","${c.potential_score||''}%","${c.compatibility_score||''}%","${c.motivation_type||''}","${c.verdict||''}","${(c.red_flags||[]).join('; ')}","${(c.insight||'').replace(/"/g,"'")}","${c.date||''}"`);
+    const blob=new Blob([BOM+h+'\n'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='trajecta_candidates_'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+
+  render();
+  setInterval(render, 30000);
+</script>
+</body>
+</html>
