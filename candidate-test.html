@@ -387,28 +387,180 @@ JSON:
   }
 
   function calcFallback(){
-    let flags=0,potential=70,type='D';
-    const typeScores={A:0,B:0,C:0,D:0};
+    let flags=0, potential=0, typeScores={A:0,B:0,C:0,D:0,E:0};
+    let motivation='рост', honesty=0, resilience=0, growth=0, teamwork=0;
+
     QS.forEach((q,i)=>{
-      const o=q.opts[answers[i]||0]; if(!o)return;
+      const o=q.opts[answers[i]]; if(!o) return;
       const s=o.score;
-      if(s.flag)flags+=s.flag;
-      if(s.type)typeScores[s.type]=(typeScores[s.type]||0)+1;
-      if(s.potential)potential+=s.potential;
+      if(s.flag) flags+=s.flag;
+      if(s.type) typeScores[s.type]=(typeScores[s.type]||0)+1;
+      if(s.potential) potential+=s.potential;
+      if(s.honesty) honesty+=s.honesty;
+      if(s.resilience) resilience+=s.resilience;
+      if(s.growth) growth+=s.growth;
+      if(s.teamwork) teamwork+=s.teamwork;
+      if(s.motivation) motivation=s.motivation;
     });
+
     const topType=Object.entries(typeScores).sort((a,b)=>b[1]-a[1])[0][0];
-    const NAMES={A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель'};
-    const verdict=flags<=2?'Рекомендуем':flags<=5?'Рассмотреть':'Не рекомендуем';
-    return{
-      psychotype:NAMES[topType]||'Исполнитель', psychotype_code:topType,
-      potential_score:Math.min(90,Math.max(25,potential/4)),
-      motivation_type:'рост', compatibility_score:65,
-      compatibility_note:'Профиль требует детальной оценки на интервью.',
-      red_flags:flags>4?['Требует дополнительной проверки']:[], 
-      green_flags:['Прошёл тест','Ответил честно'],
-      verdict, verdict_reason:'На основе анализа ответов.',
-      interview_questions:['Расскажите о вашем опыте работы в команде','Как вы справляетесь с дедлайнами?','Что вас привлекает в этой вакансии?'],
-      insight:'Кандидат показал характерный профиль '+NAMES[topType]+'. Рекомендуется провести структурированное интервью.'
+    const NAMES={A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель',E:'Визионер'};
+
+    // Base potential score
+    const potentialScore = Math.min(90, Math.max(25,
+      50 + (potential*2) + (honesty*3) + (resilience*2) + (growth*2) - (flags*5)
+    ));
+
+    // Load vacancy profile for compatibility
+    let compatScore = 65;
+    let compatNote = 'Нет профиля вакансии для сравнения.';
+    let extraRedFlags = [];
+    let extraGreenFlags = [];
+    let interviewQs = [];
+
+    try{
+      const vacId = localStorage.getItem('trajecta_last_vacancy');
+      const allVac = JSON.parse(localStorage.getItem('trajecta_vacancies')||'{}');
+      const vac = vacId ? allVac[vacId] : null;
+
+      if(vac){
+        let compatPoints = 0;
+        let totalPoints = 0;
+
+        // PACE compatibility
+        if(vac.pace){
+          totalPoints += 20;
+          const q4ans = answers[3]; // burnout question
+          if(vac.pace==='fast' && q4ans===0) compatPoints+=20; // works without breaks = fast pace ok
+          else if(vac.pace==='fast' && q4ans===3) { compatPoints+=0; extraRedFlags.push('Работа без отдыха — риск выгорания в высоком темпе'); }
+          else if(vac.pace==='calm' && q4ans===0) { compatPoints+=10; }
+          else compatPoints+=12;
+        }
+
+        // MANAGEMENT STYLE compatibility
+        if(vac.mgmt){
+          totalPoints += 20;
+          const q5ans = answers[4]; // criticism reaction
+          if(vac.mgmt==='autonomous' && q5ans===0) { compatPoints+=20; extraGreenFlags.push('Принимает обратную связь конструктивно'); }
+          else if(vac.mgmt==='structured' && q5ans===1) compatPoints+=16;
+          else if(vac.mgmt==='collaborative' && q5ans===0) compatPoints+=18;
+          else compatPoints+=12;
+        }
+
+        // TRAITS compatibility
+        if(vac.traits && vac.traits.length){
+          totalPoints += 30;
+          let traitMatch = 0;
+          if(vac.traits.includes('analytical') && topType==='A') traitMatch+=10;
+          if(vac.traits.includes('leadership') && (topType==='B'||topType==='E')) traitMatch+=10;
+          if(vac.traits.includes('creativity') && topType==='E') traitMatch+=10;
+          if(vac.traits.includes('execution') && topType==='D') traitMatch+=10;
+          if(vac.traits.includes('communication') && topType==='C') traitMatch+=10;
+          if(vac.traits.includes('stability') && flags<=2) traitMatch+=10;
+          if(vac.traits.includes('growth') && growth>=4) traitMatch+=10;
+          if(vac.traits.includes('teamwork') && teamwork>=3) traitMatch+=10;
+          compatPoints += Math.min(30, traitMatch);
+        }
+
+        // RED FLAGS check
+        if(vac.redFlags && vac.redFlags.length){
+          totalPoints += 30;
+          let flagPenalty = 0;
+          const q12ans = answers[11]; // 2-year goals
+          const q3ans = answers[2];   // salary question
+          const q6ans = answers[5];   // error handling
+
+          if(vac.redFlags.includes('job_hopping') && q12ans===2) {
+            flagPenalty+=15; extraRedFlags.push('Рассматривает уход через 2 года — риск текучки');
+            interviewQs.push('Почему вы уходили с предыдущих мест работы?');
+          }
+          if(vac.redFlags.includes('only_money') && motivation==='money') {
+            flagPenalty+=10; extraRedFlags.push('Главная мотивация — деньги');
+            interviewQs.push('Что кроме зарплаты важно для вас в работе?');
+          }
+          if(vac.redFlags.includes('no_growth') && q12ans===2) {
+            flagPenalty+=10; extraRedFlags.push('Нет чёткого карьерного видения');
+          }
+          if(vac.redFlags.includes('conflict') && flags>=4) {
+            flagPenalty+=15; extraRedFlags.push('Признаки конфликтного поведения в ответах');
+            interviewQs.push('Расскажите о сложной ситуации с коллегой. Как вы её разрешили?');
+          }
+          if(vac.redFlags.includes('no_ownership') && q6ans===1) {
+            flagPenalty+=10; extraRedFlags.push('Склонность скрывать ошибки');
+            interviewQs.push('Опишите ситуацию когда вы допустили серьёзную ошибку. Что сделали?');
+          }
+          compatPoints += Math.max(0, 30 - flagPenalty);
+        }
+
+        compatScore = totalPoints > 0
+          ? Math.min(95, Math.max(20, Math.round(compatPoints/totalPoints*100)))
+          : 65;
+
+        compatNote = compatScore>=75
+          ? 'Хорошо соответствует требованиям вакансии "'+vac.title+'"'
+          : compatScore>=50
+          ? 'Частично соответствует вакансии "'+vac.title+'" — стоит уточнить на интервью'
+          : 'Есть расхождения с профилем вакансии "'+vac.title+'"';
+
+        if(extraGreenFlags.length===0 && compatScore>=70) {
+          extraGreenFlags.push('Соответствует культуре компании');
+        }
+      }
+    }catch(e){ console.error('Vacancy match error:', e); }
+
+    // Default interview questions if not enough
+    const defaultQs = [
+      'Расскажите о вашем самом сложном проекте',
+      'Как вы расставляете приоритеты при нескольких срочных задачах?',
+      'Что вас привлекает в этой вакансии именно сейчас?',
+      'Опишите идеальную рабочую среду для вас'
+    ];
+    while(interviewQs.length < 3) {
+      const q = defaultQs[interviewQs.length];
+      if(q) interviewQs.push(q);
+      else break;
+    }
+
+    const verdictScore = potentialScore - (flags*3) + (compatScore>70?10:0);
+    const verdict = verdictScore>=70?'Рекомендуем':verdictScore>=50?'Рассмотреть':'Не рекомендуем';
+
+    const greenFlags = [];
+    if(honesty>=6) greenFlags.push('Высокий уровень честности в ответах');
+    if(resilience>=6) greenFlags.push('Хорошая стрессоустойчивость');
+    if(growth>=4) greenFlags.push('Выраженная ориентация на рост');
+    if(teamwork>=3) greenFlags.push('Командный игрок');
+    greenFlags.push(...extraGreenFlags);
+
+    const redFlagsAll = [];
+    if(flags>=6) redFlagsAll.push('Множественные красные флаги в ответах');
+    else if(flags>=3) redFlagsAll.push('Требует дополнительной проверки');
+    redFlagsAll.push(...extraRedFlags);
+
+    const PSYCH_INSIGHTS = {
+      A:'Аналитический тип — принимает взвешенные решения, нужно время на адаптацию.',
+      B:'Архитектор — видит системы и процессы, ценен для структурирования работы.',
+      C:'Коммуникатор — сильные навыки работы с людьми, хорош в клиентских ролях.',
+      D:'Исполнитель — ориентирован на результат, быстро входит в рабочий ритм.',
+      E:'Визионер — генерирует идеи, нужна свобода и интересные задачи.'
+    };
+
+    return {
+      psychotype: NAMES[topType]||'Исполнитель',
+      psychotype_code: topType,
+      potential_score: potentialScore,
+      motivation_type: motivation,
+      compatibility_score: compatScore,
+      compatibility_note: compatNote,
+      red_flags: redFlagsAll.slice(0,3),
+      green_flags: greenFlags.slice(0,3),
+      verdict,
+      verdict_reason: verdict==='Рекомендуем'
+        ? 'Сильный профиль, хорошее соответствие требованиям.'
+        : verdict==='Рассмотреть'
+        ? 'Есть потенциал, но требуется уточнение на интервью.'
+        : 'Значительные расхождения с профилем вакансии.',
+      interview_questions: interviewQs,
+      insight: PSYCH_INSIGHTS[topType] + ' ' + compatNote
     };
   }
 
