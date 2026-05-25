@@ -1109,11 +1109,7 @@
     if(btn){btn.textContent='Отправляем...';btn.disabled=true;}
     await sendToTelegram({name,phone,email,plan,price});
     document.getElementById('lead-modal').remove();
-    const t=document.createElement('div');
-    t.style.cssText='position:fixed;bottom:28px;left:16px;right:16px;background:#0d1b35;border:1.5px solid rgba(198,255,0,.3);border-radius:14px;padding:18px 20px;z-index:9999;max-width:380px;margin:0 auto;';
-    t.innerHTML='<div style="font-weight:700;color:#f0f4ff;margin-bottom:4px">✅ Заявка принята!</div><div style="font-size:.82rem;color:rgba(240,244,255,.55)">Свяжемся в течение 2 часов. Ожидайте сообщения в Telegram или WhatsApp.</div>';
-    document.body.appendChild(t);
-    setTimeout(()=>t.remove(),5000);
+    setTimeout(()=>{ window.location.href='thank-you.html?plan='+encodeURIComponent(plan); }, 800);
   }
 
 </script>
