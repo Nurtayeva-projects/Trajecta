@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trajecta B2B — оценка и развитие команды</title>
+  <title>Trajecta B2B — Оценка и развитие команды</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BMXPMT81Y5"></script>
@@ -326,14 +326,16 @@
       +'<input id="lf-name" placeholder="'+ph1+'" style="'+FLD+'">'
       +'<input id="lf-phone" placeholder="'+ph2+'" type="tel" style="'+FLD+'">'
       +'<input id="lf-email" placeholder="Email" type="email" style="'+FLD+'margin-bottom:16px;">'
-      +'<button id="lf-btn" onclick="submitLeadForm(''+plan+'',''+price+'')" style="width:100%;background:'+acc+';color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;">Отправить заявку →</button>'
+      +'<button id="lf-btn" onclick="submitLeadForm(this)" data-plan="'+plan+'" data-price="'+price+'" style="width:100%;background:'+acc+';color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;">Отправить заявку →</button>'
       +'</div>';
     document.body.appendChild(m);
     m.addEventListener('click',e=>{if(e.target===m)m.remove();});
     setTimeout(()=>document.getElementById('lf-name')?.focus(),100);
   }
 
-  async function submitLeadForm(plan,price){
+  async function submitLeadForm(btnOrPlan,price){
+    const plan = typeof btnOrPlan==='string' ? btnOrPlan : btnOrPlan?.dataset?.plan||'';
+    if(typeof btnOrPlan!=='string') price = btnOrPlan?.dataset?.price||price||'';
     const name=document.getElementById('lf-name')?.value?.trim();
     const phone=document.getElementById('lf-phone')?.value?.trim();
     const email=document.getElementById('lf-email')?.value?.trim();
