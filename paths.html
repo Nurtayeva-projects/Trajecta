@@ -1070,12 +1070,23 @@
     // Grant access
     localStorage.setItem('tr_paid', 'true');
 
-    // Show success and reload
+    // Show success
     const pw = document.querySelector('.paywall-wrap');
     if(pw){
-      pw.innerHTML = '<div style="padding:24px;text-align:center"><div style="font-size:2.5rem;margin-bottom:12px">🎉</div><div style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:800;color:#C6FF00;margin-bottom:8px">Доступ открыт!</div><div style="font-size:.85rem;color:rgba(240,244,255,.6)">Страница обновится через секунду...</div></div>';
+      pw.innerHTML = '<div style="padding:24px;text-align:center"><div style="font-size:2.5rem;margin-bottom:12px">🎉</div><div style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:800;color:#C6FF00;margin-bottom:8px">Доступ открыт!</div><div style="font-size:.85rem;color:rgba(240,244,255,.6)">Загружаем твой план...</div></div>';
     }
-    setTimeout(()=>window.location.reload(), 1500);
+
+    // Check if user already selected a path - redirect to it
+    setTimeout(()=>{
+      const selectedPath = load('selected_path');
+      if(selectedPath){
+        // User already chose a path - go to path-detail
+        window.location.href = 'path-detail.html';
+      } else {
+        // No path selected yet - reload so both paths are visible
+        window.location.reload();
+      }
+    }, 1200);
   }
 
   function showCodeError(msg){
