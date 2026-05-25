@@ -80,6 +80,12 @@
       .type-selector{grid-template-columns:1fr;}
       .stats{grid-template-columns:1fr 1fr;}
     }
+    .vac-btn{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);color:rgba(240,244,255,.65);font-family:var(--B);font-size:.78rem;padding:7px 10px;border-radius:8px;cursor:pointer;transition:all .2s;text-align:center;}
+    .vac-btn:hover{border-color:rgba(251,146,60,.4);color:#f0f4ff;}
+    .vac-btn.sel{border-color:rgba(251,146,60,.6);background:rgba(251,146,60,.12);color:rgba(251,146,60,.9);}
+    .vac-trait-btn{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);color:rgba(240,244,255,.65);font-family:var(--B);font-size:.75rem;padding:5px 12px;border-radius:100px;cursor:pointer;transition:all .2s;}
+    .vac-trait-btn:hover{border-color:rgba(251,146,60,.4);color:#f0f4ff;}
+    .vac-trait-btn.sel{border-color:rgba(251,146,60,.6);background:rgba(251,146,60,.12);color:rgba(251,146,60,.9);}
   </style>
 </head>
 <body>
@@ -219,10 +225,54 @@
   <div class="panel" id="panel-cand">
     <div class="card" style="border-color:rgba(251,146,60,.2);background:linear-gradient(135deg,rgba(251,146,60,.05),transparent)">
       <div class="card-title">Создать ссылку для кандидата</div>
+
+      <!-- STEP 1: Basic info -->
       <label>Название компании</label>
       <input type="text" id="cand-company" placeholder="ТОО «КомпанияХХХ»">
-      <label>Вакансия (необязательно)</label>
+      <label>Вакансия *</label>
       <input type="text" id="cand-position" placeholder="Например: Product Manager">
+
+      <!-- STEP 2: Vacancy profile -->
+      <div style="border-top:1px solid var(--border);margin:16px 0;padding-top:16px">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(251,146,60,.8);margin-bottom:12px">📋 Профиль вакансии — для точной оценки совместимости</div>
+
+        <label>Темп работы</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px" id="pace-wrap">
+          <button onclick="selectVacOpt('pace','calm',this)" class="vac-btn">🌿 Спокойный</button>
+          <button onclick="selectVacOpt('pace','medium',this)" class="vac-btn">⚡ Средний</button>
+          <button onclick="selectVacOpt('pace','fast',this)" class="vac-btn">🚀 Высокий</button>
+        </div>
+
+        <label>Стиль управления</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px">
+          <button onclick="selectVacOpt('mgmt','autonomous',this)" class="vac-btn">🦅 Автономия</button>
+          <button onclick="selectVacOpt('mgmt','structured',this)" class="vac-btn">📐 Структура</button>
+          <button onclick="selectVacOpt('mgmt','collaborative',this)" class="vac-btn">🤝 Командный</button>
+          <button onclick="selectVacOpt('mgmt','results',this)" class="vac-btn">🎯 По результату</button>
+        </div>
+
+        <label>Ключевые качества кандидата (до 3)</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+          <button onclick="toggleVacTrait('analytical',this)" class="vac-trait-btn">🔬 Аналитичность</button>
+          <button onclick="toggleVacTrait('leadership',this)" class="vac-trait-btn">👑 Лидерство</button>
+          <button onclick="toggleVacTrait('creativity',this)" class="vac-trait-btn">💡 Креативность</button>
+          <button onclick="toggleVacTrait('execution',this)" class="vac-trait-btn">⚡ Исполнительность</button>
+          <button onclick="toggleVacTrait('communication',this)" class="vac-trait-btn">🗣️ Коммуникация</button>
+          <button onclick="toggleVacTrait('stability',this)" class="vac-trait-btn">🛡️ Стабильность</button>
+          <button onclick="toggleVacTrait('growth',this)" class="vac-trait-btn">📈 Амбиции</button>
+          <button onclick="toggleVacTrait('teamwork',this)" class="vac-trait-btn">🤝 Командность</button>
+        </div>
+
+        <label>Красные флаги — что недопустимо</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
+          <button onclick="toggleVacTrait('job_hopping',this)" class="vac-trait-btn">🚩 Частая смена работ</button>
+          <button onclick="toggleVacTrait('only_money',this)" class="vac-trait-btn">🚩 Только деньги</button>
+          <button onclick="toggleVacTrait('no_growth',this)" class="vac-trait-btn">🚩 Нет амбиций</button>
+          <button onclick="toggleVacTrait('conflict',this)" class="vac-trait-btn">🚩 Конфликтность</button>
+          <button onclick="toggleVacTrait('no_ownership',this)" class="vac-trait-btn">🚩 Избегает ответственности</button>
+        </div>
+      </div>
+
       <button class="btn" style="background:rgba(251,146,60,.9)" onclick="createCandLink()">🎯 Создать ссылку</button>
 
       <div id="cand-result" style="display:none;margin-top:16px">
@@ -403,15 +453,56 @@
   function getCandLinks(){ try{return JSON.parse(localStorage.getItem(CAND_KEY)||'[]');}catch(e){return[];} }
   function saveCandLinks(l){ localStorage.setItem(CAND_KEY,JSON.stringify(l)); }
 
+  // Vacancy form state
+  const vacProfile = {pace:null, mgmt:null, traits:new Set()};
+
+  function selectVacOpt(type, val, btn){
+    vacProfile[type] = val;
+    btn.closest('div').querySelectorAll('.vac-btn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');
+  }
+
+  function toggleVacTrait(val, btn){
+    const isRedFlag = ['job_hopping','only_money','no_growth','conflict','no_ownership'].includes(val);
+    if(vacProfile.traits.has(val)){
+      vacProfile.traits.delete(val);
+      btn.classList.remove('sel');
+    } else {
+      // Max 3 regular traits
+      const regularTraits = [...vacProfile.traits].filter(t=>!['job_hopping','only_money','no_growth','conflict','no_ownership'].includes(t));
+      if(!isRedFlag && regularTraits.length>=3) return;
+      vacProfile.traits.add(val);
+      btn.classList.add('sel');
+    }
+  }
+
   function createCandLink(){
     const company=document.getElementById('cand-company').value.trim();
-    if(!company){alert('Введите название компании');return;}
     const position=document.getElementById('cand-position').value.trim();
+    if(!company){alert('Введите название компании');return;}
+    if(!position){alert('Введите название вакансии');return;}
+
     const id=Math.random().toString(36).substring(2,8).toUpperCase();
     const base=window.location.origin;
     const link=base+'/candidate-entry.html?company='+encodeURIComponent(company)+'&id='+id+'&position='+encodeURIComponent(position);
     const dashLink=base+'/candidates-dashboard.html?company='+encodeURIComponent(company)+'&id='+id;
-    const entry={id,company,position,link,dashLink,created:new Date().toLocaleDateString('ru-RU')};
+
+    // Save vacancy profile linked to this ID
+    const redFlagsList = ['job_hopping','only_money','no_growth','conflict','no_ownership'];
+    const vacData = {
+      id, title: position, company,
+      pace: vacProfile.pace,
+      mgmt: vacProfile.mgmt,
+      traits: [...vacProfile.traits].filter(t=>!redFlagsList.includes(t)),
+      redFlags: [...vacProfile.traits].filter(t=>redFlagsList.includes(t)),
+      createdAt: new Date().toLocaleDateString('ru-RU')
+    };
+    const allVac = JSON.parse(localStorage.getItem('trajecta_vacancies')||'{}');
+    allVac[id] = vacData;
+    localStorage.setItem('trajecta_vacancies', JSON.stringify(allVac));
+    localStorage.setItem('trajecta_last_vacancy', id);
+
+    const entry={id,company,position,link,dashLink,vacData,created:new Date().toLocaleDateString('ru-RU')};
     const links=getCandLinks(); links.unshift(entry); saveCandLinks(links);
     window._curCand=entry;
     document.getElementById('cand-link-url').textContent=link;

@@ -419,9 +419,9 @@ JSON:
     let interviewQs = [];
 
     try{
-      const vacId = localStorage.getItem('trajecta_last_vacancy');
+      // First try to load vacancy by companyId (linked directly from admin)
       const allVac = JSON.parse(localStorage.getItem('trajecta_vacancies')||'{}');
-      const vac = vacId ? allVac[vacId] : null;
+      const vac = allVac[companyId] || allVac[localStorage.getItem('trajecta_last_vacancy')] || null;
 
       if(vac){
         let compatPoints = 0;

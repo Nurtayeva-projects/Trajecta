@@ -91,73 +91,6 @@
   <p class="timer">Среднее время ответа: <strong>47 минут</strong></p>
 </div>
 
-<!-- VACANCY FORM - shows only for B2B -->
-<div id="vacancy-form" style="display:none;position:relative;z-index:1;background:var(--card);border:1.5px solid rgba(96,165,250,.25);border-radius:22px;padding:36px 32px;max-width:520px;width:100%;margin-top:16px;animation:popIn .5s .3s cubic-bezier(.34,1.2,.64,1) both">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-    <div style="font-size:1.4rem">📋</div>
-    <div>
-      <div style="font-family:var(--D);font-size:1rem;font-weight:800">Расскажите о вакансии</div>
-      <div style="font-size:.8rem;color:var(--muted)">Это поможет точнее оценить кандидатов</div>
-    </div>
-  </div>
-  <p style="font-size:.85rem;color:var(--muted);line-height:1.6;margin:14px 0">Заполните профиль вакансии — система будет сравнивать ответы кандидатов именно с вашими требованиями.</p>
-
-  <div style="display:flex;flex-direction:column;gap:10px">
-    <div>
-      <label style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px">Название вакансии *</label>
-      <input id="vac-title" type="text" placeholder="Например: Product Manager" style="width:100%;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:8px;color:#f0f4ff;font-family:Space Grotesk,sans-serif;font-size:.9rem;padding:10px 14px;outline:none;box-sizing:border-box">
-    </div>
-
-    <div>
-      <label style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px">Темп работы в компании</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px" id="pace-opts">
-        <button onclick="selectOpt('pace','calm',this)" class="vac-opt">🌿 Спокойный</button>
-        <button onclick="selectOpt('pace','medium',this)" class="vac-opt">⚡ Средний</button>
-        <button onclick="selectOpt('pace','fast',this)" class="vac-opt">🚀 Высокий</button>
-      </div>
-    </div>
-
-    <div>
-      <label style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px">Стиль управления</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
-        <button onclick="selectOpt('mgmt','autonomous',this)" class="vac-opt">🦅 Автономия</button>
-        <button onclick="selectOpt('mgmt','structured',this)" class="vac-opt">📐 Структура</button>
-        <button onclick="selectOpt('mgmt','collaborative',this)" class="vac-opt">🤝 Командный</button>
-        <button onclick="selectOpt('mgmt','results',this)" class="vac-opt">🎯 По результату</button>
-      </div>
-    </div>
-
-    <div>
-      <label style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px">Главные качества кандидата (выбери до 3)</label>
-      <div style="display:flex;flex-wrap:wrap;gap:6px" id="traits-opts">
-        <button onclick="toggleTrait('analytical',this)" class="vac-trait">🔬 Аналитичность</button>
-        <button onclick="toggleTrait('leadership',this)" class="vac-trait">👑 Лидерство</button>
-        <button onclick="toggleTrait('creativity',this)" class="vac-trait">💡 Креативность</button>
-        <button onclick="toggleTrait('execution',this)" class="vac-trait">⚡ Исполнительность</button>
-        <button onclick="toggleTrait('communication',this)" class="vac-trait">🗣️ Коммуникация</button>
-        <button onclick="toggleTrait('stability',this)" class="vac-trait">🛡️ Стабильность</button>
-        <button onclick="toggleTrait('growth',this)" class="vac-trait">📈 Амбиции</button>
-        <button onclick="toggleTrait('teamwork',this)" class="vac-trait">🤝 Командность</button>
-      </div>
-    </div>
-
-    <div>
-      <label style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:5px">Красные флаги для этой роли</label>
-      <div style="display:flex;flex-wrap:wrap;gap:6px">
-        <button onclick="toggleTrait('job_hopping',this)" class="vac-trait">🚩 Частая смена работ</button>
-        <button onclick="toggleTrait('only_money',this)" class="vac-trait">🚩 Только деньги</button>
-        <button onclick="toggleTrait('no_growth',this)" class="vac-trait">🚩 Нет амбиций</button>
-        <button onclick="toggleTrait('conflict',this)" class="vac-trait">🚩 Конфликтность</button>
-        <button onclick="toggleTrait('no_ownership',this)" class="vac-trait">🚩 Избегает ответственности</button>
-      </div>
-    </div>
-
-    <button onclick="saveVacancy()" style="background:rgba(96,165,250,.9);color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;margin-top:4px">
-      Сохранить профиль вакансии →
-    </button>
-  </div>
-</div>
-
 <script>
   const params = new URLSearchParams(window.location.search);
   const plan = params.get('plan');
@@ -185,35 +118,7 @@
     if(steps[2]) steps[2].innerHTML = '<strong>Настроим доступ</strong> — и вы получите ссылку для команды и HR дашборд';
   }
 
-  // Show vacancy form for B2B plans
-  const planParam = params.get('plan')||'';
-  if(isB2B){
-    document.getElementById('vacancy-form').style.display = 'block';
-  }
 
-  // Vacancy form logic
-  const vacData = {pace: null, mgmt: null, traits: [], redFlags: []};
-
-  function selectOpt(type, val, btn){
-    vacData[type] = val;
-    const container = btn.closest('[id]') || btn.parentElement;
-    container.querySelectorAll('.vac-opt').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  }
-
-  const selectedTraits = new Set();
-  function toggleTrait(val, btn){
-    if(selectedTraits.has(val)){
-      selectedTraits.delete(val);
-      btn.classList.remove('selected');
-    } else {
-      if(selectedTraits.size >= 3 && !val.startsWith('job_') && val !== 'only_money' && val !== 'no_growth' && val !== 'conflict' && val !== 'no_ownership'){
-        return; // max 3 traits
-      }
-      selectedTraits.add(val);
-      btn.classList.add('selected');
-    }
-  }
 
   function saveVacancy(){
     const title = document.getElementById('vac-title')?.value?.trim();
