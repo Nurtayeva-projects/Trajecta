@@ -278,6 +278,8 @@
   async function sendToTelegram(data){
     const text='🏢 Заявка B2B!\n\n👤 '+data.name+'\n📞 '+data.phone+'\n📧 '+data.email+'\n💼 '+data.plan+'\n💰 '+data.price+'\n🕐 '+new Date().toLocaleString('ru-RU',{timeZone:'Asia/Almaty'});
     try{await fetch('https://api.telegram.org/bot8906343439:AAG44Z9tXzYf3FvN2XXfhgJxGzNayvaT_Tk/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:'8424626474',text})});}catch(e){}
+    // Make webhook
+    try{await fetch('https://hook.eu1.make.com/sgnv4m0gt3nqkcu4n4ppw38t7blt50pw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:data.name,phone:data.phone,email:data.email,plan:data.plan,price:data.price,date:new Date().toLocaleString('ru-RU',{timeZone:'Asia/Almaty'}),source:window.location.pathname})});}catch(e){}
   }
 
   function openLeadForm(plan,price){

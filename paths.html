@@ -1061,6 +1061,8 @@
         body: JSON.stringify({chat_id:'8424626474', text})
       });
     } catch(e){}
+  
+    try{ await fetch('https://hook.eu1.make.com/sgnv4m0gt3nqkcu4n4ppw38t7blt50pw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:data.name,phone:data.phone,email:data.email,plan:data.plan||'',price:data.price||'',date:new Date().toLocaleString('ru-RU',{timeZone:'Asia/Almaty'}),source:window.location.pathname})});}catch(e){}
   }
 
   function openLeadForm(plan, price){
