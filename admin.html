@@ -8,403 +8,364 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#020617;--card:#0d1b35;--accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);--text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);--D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;}
+    :root{--bg:#020617;--card:#0d1b35;--card2:#111f3a;--accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);--blue:rgba(96,165,250,.9);--bd:rgba(96,165,250,.12);--bm:rgba(96,165,250,.25);--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);--text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);--D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;}
     body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;padding:40px 20px;}
-    .wrap{max-width:700px;margin:0 auto;}
-    .logo{font-family:var(--D);font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+    .wrap{max-width:680px;margin:0 auto;}
+    .logo{font-family:var(--D);font-size:1.4rem;font-weight:800;margin-bottom:4px;}
     .logo span{color:var(--accent);}
-    .admin-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,80,50,.1);border:1px solid rgba(255,80,50,.3);color:rgba(255,120,80,.9);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:32px;}
-    h2{font-family:var(--D);font-size:1.2rem;font-weight:800;margin-bottom:16px;}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;}
-    .card.accent{border-color:rgba(198,255,0,.25);background:linear-gradient(135deg,rgba(198,255,0,.06),rgba(198,255,0,.02));}
-    input,select{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--B);font-size:.9rem;padding:10px 14px;outline:none;margin-bottom:10px;box-sizing:border-box;}
-    input:focus,select:focus{border-color:rgba(198,255,0,.5);}
-    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#020617;font-family:var(--B);font-weight:700;font-size:.9rem;padding:11px 24px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s;}
-    .btn:hover{transform:translateY(-2px);}
+    .admin-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,80,50,.1);border:1px solid rgba(255,80,50,.3);color:rgba(255,120,80,.9);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:28px;}
+
+    /* TYPE SELECTOR */
+    .type-selector{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+    .type-btn{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;text-align:left;}
+    .type-btn:hover{border-color:var(--border2);}
+    .type-btn.active-b2c{border-color:rgba(198,255,0,.5);background:rgba(198,255,0,.05);}
+    .type-btn.active-b2b{border-color:rgba(96,165,250,.5);background:rgba(96,165,250,.05);}
+    .type-ico{font-size:1.6rem;margin-bottom:8px;}
+    .type-name{font-family:var(--D);font-size:.95rem;font-weight:800;margin-bottom:4px;}
+    .type-desc{font-size:.78rem;color:var(--muted);line-height:1.4;}
+
+    /* PANELS */
+    .panel{display:none;}
+    .panel.active{display:block;}
+
+    /* CARD */
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:16px;}
+    .card-title{font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:16px;}
+    label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px;}
+    input,select{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--B);font-size:.9rem;padding:10px 14px;outline:none;margin-bottom:14px;box-sizing:border-box;}
+    input:focus,select:focus{border-color:rgba(198,255,0,.4);}
+    .btn{display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:#020617;font-family:var(--B);font-weight:700;font-size:.9rem;padding:11px 22px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(198,255,0,.3);}
+    .btn-blue{background:var(--blue);}
+    .btn-blue:hover{box-shadow:0 6px 20px rgba(96,165,250,.3);}
     .btn-sm{padding:7px 14px;font-size:.8rem;}
-    .btn-red{background:rgba(255,80,50,.9);color:#fff;}
-    .btn-blue{background:rgba(96,165,250,.9);color:#020617;}
-    .btn-gray{background:rgba(255,255,255,.1);color:var(--text);}
-    .code-box{background:var(--bg);border:2px solid var(--am);border-radius:10px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin:12px 0;}
-    .code-val{font-family:var(--D);font-size:1.6rem;font-weight:800;color:var(--accent);letter-spacing:.1em;}
-    .tag{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:100px;}
-    .tag-new{background:var(--ad);border:1px solid var(--am);color:var(--accent);}
-    .tag-used{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);}
-    .tag-b2b{background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);color:rgba(96,165,250,.9);}
-    table{width:100%;border-collapse:collapse;font-size:.85rem;}
-    th{text-align:left;color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;padding:8px 12px;border-bottom:1px solid var(--border);}
+    .btn-gray{background:rgba(255,255,255,.08);color:var(--text);}
+    .btn-gray:hover{box-shadow:none;}
+    .btn-red{background:rgba(255,80,50,.85);color:#fff;}
+
+    /* RESULT BOX */
+    .result-box{background:var(--bg);border:2px solid var(--am);border-radius:12px;padding:18px 20px;margin-top:16px;}
+    .result-box.blue{border-color:var(--bm);}
+    .result-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;}
+    .result-val{font-family:var(--D);font-size:1.4rem;font-weight:800;color:var(--accent);letter-spacing:.08em;word-break:break-all;}
+    .result-val.blue{color:var(--blue);font-size:.9rem;}
+    .msg-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:.82rem;color:var(--muted);line-height:1.6;white-space:pre-wrap;margin-top:10px;}
+
+    /* TABLE */
+    .tbl-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;font-size:.82rem;}
+    th{text-align:left;color:var(--muted);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;padding:8px 12px;border-bottom:1px solid var(--border);}
     td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
     tr:last-child td{border-bottom:none;}
-    .copy-btn{background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--muted);font-size:.75rem;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:var(--B);}
-    .copy-btn:hover{color:var(--text);}
-    .stat{text-align:center;padding:16px;}
-    .stat-n{font-family:var(--D);font-size:2rem;font-weight:800;color:var(--accent);}
-    .stat-l{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
+    .badge{display:inline-flex;align-items:center;font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:100px;}
+    .badge-active{background:var(--ad);border:1px solid var(--am);color:var(--accent);}
+    .badge-used{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);}
+    .badge-b2b{background:var(--bd);border:1px solid var(--bm);color:var(--blue);}
+    .icon-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-size:.75rem;padding:4px 8px;border-radius:6px;cursor:pointer;font-family:var(--B);}
+    .icon-btn:hover{color:var(--text);}
+
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+    .stat{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+    .stat-n{font-family:var(--D);font-size:1.6rem;font-weight:800;}
+    .stat-l{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;}
+
+    /* LOGIN */
     .login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;}
-    .login-box{background:var(--card);border:1.5px solid rgba(198,255,0,.25);border-radius:20px;padding:40px;max-width:360px;width:100%;text-align:center;}
-    .pw-input{text-align:center;font-size:1.2rem;letter-spacing:.2em;}
-    .section-divider{display:flex;align-items:center;gap:12px;margin:24px 0 16px;color:var(--dim);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;}
-    .section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+    .login-box{background:var(--card);border:1.5px solid rgba(198,255,0,.25);border-radius:20px;padding:40px;max-width:340px;width:100%;text-align:center;}
+    .pw-input{text-align:center;font-size:1.2rem;letter-spacing:.15em;}
+
+    @media(max-width:500px){
+      .type-selector{grid-template-columns:1fr;}
+      .stats{grid-template-columns:1fr 1fr;}
+    }
   </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="login-screen" id="login-screen">
   <div class="login-box">
     <div style="font-family:var(--D);font-size:1.5rem;font-weight:800;margin-bottom:6px">Traject<span style="color:var(--accent)">a</span></div>
     <div style="font-size:.85rem;color:var(--muted);margin-bottom:24px">Admin панель</div>
     <input type="password" class="pw-input" id="pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()">
-    <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="checkPw()">Войти →</button>
-    <div id="pw-error" style="color:rgba(255,80,50,.8);font-size:.82rem;margin-top:10px;opacity:0">Неверный пароль</div>
+    <button class="btn" style="width:100%;justify-content:center;margin-top:4px" onclick="checkPw()">Войти →</button>
+    <div id="pw-error" style="color:rgba(255,80,50,.8);font-size:.82rem;margin-top:10px;display:none">Неверный пароль</div>
   </div>
 </div>
 
 <div class="wrap" id="main" style="display:none">
   <div class="logo">Traject<span>a</span></div>
-  <div class="admin-tag">🔒 Admin панель</div>
+  <div class="admin-tag">🔒 Admin</div>
 
-  <!-- STATS -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
-    <div class="card" style="padding:16px;text-align:center">
-      <div class="stat-n" id="stat-total">0</div>
-      <div class="stat-l">Всего кодов</div>
+  <!-- STEP 1: ВЫБОР ТИПА -->
+  <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Что хочешь сделать?</div>
+  <div class="type-selector">
+    <div class="type-btn" id="btn-b2c" onclick="setType('b2c')">
+      <div class="type-ico">🎯</div>
+      <div class="type-name">B2C — Личный доступ</div>
+      <div class="type-desc">Клиент оплатил → создаёшь код → он вводит на сайте</div>
     </div>
-    <div class="card" style="padding:16px;text-align:center">
-      <div class="stat-n" id="stat-new" style="color:var(--accent)">0</div>
-      <div class="stat-l">Активных</div>
-    </div>
-    <div class="card" style="padding:16px;text-align:center">
-      <div class="stat-n" id="stat-used" style="color:var(--muted)">0</div>
-      <div class="stat-l">Использованных</div>
-    </div>
-    <div class="card" style="padding:16px;text-align:center">
-      <div class="stat-n" id="stat-b2b" style="color:rgba(96,165,250,.9)">0</div>
-      <div class="stat-l">B2B кодов</div>
+    <div class="type-btn" id="btn-b2b" onclick="setType('b2b')">
+      <div class="type-ico">🏢</div>
+      <div class="type-name">B2B — Доступ для команды</div>
+      <div class="type-desc">Компания оплатила → создаёшь ссылку → команда проходит тест</div>
     </div>
   </div>
 
-  <!-- GENERATE -->
-  <div class="card accent">
-    <h2>Создать новый код</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-      <div>
-        <label style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px">Тип</label>
-        <select id="gen-type">
-          <option value="b2c">B2C — Полный план (4 900 ₸)</option>
-          <option value="b2b-s">B2B — Команда (24 900 ₸)</option>
-          <option value="b2b-m">B2B — Бизнес (79 900 ₸)</option>
-          <option value="b2b-e">B2B — Enterprise</option>
-        </select>
-      </div>
-      <div>
-        <label style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px">Клиент (необязательно)</label>
-        <input type="text" id="gen-client" placeholder="Имя клиента или телефон">
+  <!-- B2C PANEL -->
+  <div class="panel" id="panel-b2c">
+    <!-- Stats -->
+    <div class="stats" id="b2c-stats">
+      <div class="stat"><div class="stat-n" id="s-total">0</div><div class="stat-l">Всего кодов</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--accent)" id="s-active">0</div><div class="stat-l">Активных</div></div>
+      <div class="stat"><div class="stat-n" style="color:var(--muted)" id="s-used">0</div><div class="stat-l">Использованных</div></div>
+    </div>
+
+    <!-- Generate -->
+    <div class="card">
+      <div class="card-title">Создать код доступа</div>
+      <label>Тариф</label>
+      <select id="b2c-plan">
+        <option value="b2c">Полный план · 4 900 ₸</option>
+      </select>
+      <label>Имя клиента (для себя)</label>
+      <input type="text" id="b2c-client" placeholder="Например: Асылбек +77771234567">
+      <button class="btn" onclick="generateCode()">⚡ Создать код</button>
+
+      <div id="b2c-result" style="display:none">
+        <div class="result-box" style="margin-top:16px">
+          <div class="result-label">Код доступа</div>
+          <div class="result-val" id="b2c-code-val">—</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn btn-sm" onclick="copyCode()">📋 Копировать код</button>
+          <button class="btn btn-sm btn-gray" onclick="copyB2CMsg()">✉️ Скопировать сообщение</button>
+        </div>
+        <div class="msg-box" id="b2c-msg"></div>
       </div>
     </div>
-    <button class="btn" onclick="generateCode()">⚡ Создать код</button>
 
-    <!-- Generated code display -->
-    <div id="gen-result" style="display:none;margin-top:16px">
-      <div class="code-box">
-        <div>
-          <div style="font-size:.7rem;color:var(--muted);margin-bottom:4px">Новый код доступа</div>
-          <div class="code-val" id="gen-code-val">TRAJ-0000</div>
-        </div>
-        <div style="display:flex;gap:8px;flex-direction:column">
-          <button class="btn btn-sm" onclick="copyCode()" id="copy-btn">📋 Копировать</button>
-          <button class="btn btn-sm btn-blue" onclick="copyMessage()">✉️ Скопировать сообщение</button>
-        </div>
+    <!-- Codes list -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div class="card-title" style="margin:0">История кодов</div>
+        <button class="btn btn-sm btn-red" onclick="clearUsed()">Удалить использованные</button>
       </div>
-      <div id="gen-message" style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.85rem;color:var(--muted);line-height:1.6;white-space:pre-wrap"></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Код</th><th>Клиент</th><th>Дата</th><th>Статус</th><th></th></tr></thead>
+          <tbody id="b2c-table"></tbody>
+        </table>
+      </div>
+      <div id="b2c-empty" style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem">Кодов пока нет</div>
     </div>
   </div>
 
-  <!-- CODES LIST -->
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <h2 style="margin:0">Все коды</h2>
-      <button class="btn btn-sm btn-red" onclick="if(confirm('Удалить использованные коды?'))clearUsed()">Удалить использованные</button>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Код</th>
-          <th>Тип</th>
-          <th>Клиент</th>
-          <th>Создан</th>
-          <th>Статус</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="codes-table"></tbody>
-    </table>
-    <div id="no-codes" style="text-align:center;padding:32px;color:var(--muted);font-size:.88rem">Кодов пока нет — создай первый выше</div>
-  </div>
+  <!-- B2B PANEL -->
+  <div class="panel" id="panel-b2b">
+    <!-- Create team -->
+    <div class="card" style="border-color:rgba(96,165,250,.2);background:linear-gradient(135deg,rgba(96,165,250,.05),transparent)">
+      <div class="card-title">Создать доступ для команды</div>
+      <label>Название компании</label>
+      <input type="text" id="b2b-company" placeholder="Например: ТОО «TechStart»">
+      <label>Тариф</label>
+      <select id="b2b-plan">
+        <option value="b2b-s">Команда · до 10 человек · 24 900 ₸</option>
+        <option value="b2b-m">Бизнес · до 50 человек · 79 900 ₸</option>
+        <option value="b2b-e">Enterprise · без ограничений</option>
+      </select>
+      <button class="btn btn-blue" onclick="createB2B()">🏢 Создать доступ</button>
 
-
-  <!-- B2B TEAMS SECTION -->
-  <div class="section-divider">B2B Команды</div>
-
-  <div class="card accent" style="border-color:rgba(96,165,250,.25);background:linear-gradient(135deg,rgba(96,165,250,.06),rgba(96,165,250,.02))">
-    <h2 style="margin-bottom:16px">Создать доступ для команды</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-      <div>
-        <label style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px">Название компании</label>
-        <input type="text" id="b2b-company" placeholder="ТОО «КомпанияХХХ»">
-      </div>
-      <div>
-        <label style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px">Тариф</label>
-        <select id="b2b-plan">
-          <option value="b2b-s">Команда · 10 чел · 24 900 ₸</option>
-          <option value="b2b-m">Бизнес · 50 чел · 79 900 ₸</option>
-          <option value="b2b-e">Enterprise</option>
-        </select>
-      </div>
-    </div>
-    <button class="btn" style="background:rgba(96,165,250,.9)" onclick="createB2BAccess()">🏢 Создать доступ для команды</button>
-
-    <div id="b2b-result" style="display:none;margin-top:16px">
-      <div style="background:rgba(2,6,23,.5);border:1.5px solid rgba(96,165,250,.3);border-radius:10px;padding:16px;margin-bottom:12px">
-        <div style="font-size:.7rem;color:rgba(96,165,250,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Ссылки для команды</div>
-        <div style="margin-bottom:8px">
-          <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">👥 Ссылка для сотрудников:</div>
-          <div style="font-family:monospace;font-size:.82rem;color:var(--accent);word-break:break-all" id="b2b-team-link">—</div>
+      <div id="b2b-result" style="display:none;margin-top:16px">
+        <!-- Team link -->
+        <div style="background:rgba(96,165,250,.08);border:1px solid var(--bm);border-radius:12px;padding:16px;margin-bottom:10px">
+          <div style="font-size:.72rem;color:var(--blue);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">👥 Ссылка для сотрудников</div>
+          <div style="font-size:.82rem;color:var(--text);word-break:break-all;margin-bottom:10px" id="b2b-team-url">—</div>
+          <div style="font-size:.75rem;color:var(--muted)">Отправь эту ссылку всем сотрудникам. Каждый вводит своё имя и проходит тест.</div>
         </div>
-        <div>
-          <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">📊 Ссылка для HR-дашборда:</div>
-          <div style="font-family:monospace;font-size:.82rem;color:rgba(96,165,250,.9);word-break:break-all" id="b2b-dash-link">—</div>
+        <!-- Dashboard link -->
+        <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px">
+          <div style="font-size:.72rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">📊 Дашборд для HR</div>
+          <div style="font-size:.82rem;color:var(--muted);word-break:break-all;margin-bottom:10px" id="b2b-dash-url">—</div>
+          <div style="font-size:.75rem;color:var(--dim)">Только для HR-менеджера. Показывает результаты всей команды.</div>
         </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-sm btn-blue" onclick="copyB2BMsg()">✉️ Сообщение клиенту</button>
+          <button class="btn btn-sm btn-gray" onclick="copyTeamLink()">📋 Ссылка команде</button>
+          <button class="btn btn-sm btn-gray" onclick="copyDashLink()">📊 Ссылка HR</button>
+        </div>
+        <div class="msg-box" id="b2b-msg" style="display:none"></div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-sm" style="background:rgba(96,165,250,.9)" onclick="copyB2BMessage()">✉️ Скопировать сообщение клиенту</button>
-        <button class="btn btn-sm btn-gray" onclick="copyB2BLink('team')">📋 Ссылка команде</button>
-        <button class="btn btn-sm btn-gray" onclick="copyB2BLink('dash')">📊 Ссылка HR</button>
-      </div>
-      <div id="b2b-msg-preview" style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.82rem;color:var(--muted);line-height:1.6;white-space:pre-wrap;margin-top:10px;display:none"></div>
     </div>
-  </div>
 
-  <!-- B2B TEAMS LIST -->
-  <div class="card" style="margin-top:0">
-    <h2 style="margin-bottom:16px">Активные команды</h2>
-    <div id="b2b-teams-list"><div style="color:var(--muted);font-size:.85rem;text-align:center;padding:20px">Команд пока нет</div></div>
+    <!-- Teams list -->
+    <div class="card">
+      <div class="card-title">Активные команды</div>
+      <div id="b2b-teams-list">
+        <div style="text-align:center;padding:20px;color:var(--muted);font-size:.85rem">Команд пока нет</div>
+      </div>
+    </div>
   </div>
 
 </div>
 
 <script>
   const ADMIN_PW = 'trajecta2025';
-  const STORAGE_KEY = 'trajecta_admin_codes';
+  const CODES_KEY = 'trajecta_admin_codes';
+  const TEAMS_KEY = 'trajecta_b2b_teams';
 
   function checkPw(){
-    const val = document.getElementById('pw-input').value;
-    if(val === ADMIN_PW){
+    if(document.getElementById('pw-input').value === ADMIN_PW){
       document.getElementById('login-screen').style.display='none';
       document.getElementById('main').style.display='block';
       renderAll();
     } else {
-      const err = document.getElementById('pw-error');
-      err.style.opacity='1';
-      setTimeout(()=>err.style.opacity='0',2000);
+      const e=document.getElementById('pw-error');
+      e.style.display='block';
+      setTimeout(()=>e.style.display='none',2000);
     }
   }
 
-  function getCodes(){
-    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }
-    catch(e){ return []; }
+  // ── TYPE SELECTOR ──
+  let currentType = null;
+  function setType(type){
+    currentType = type;
+    document.getElementById('btn-b2c').className='type-btn'+(type==='b2c'?' active-b2c':'');
+    document.getElementById('btn-b2b').className='type-btn'+(type==='b2b'?' active-b2b':'');
+    document.getElementById('panel-b2c').className='panel'+(type==='b2c'?' active':'');
+    document.getElementById('panel-b2b').className='panel'+(type==='b2b'?' active':'');
   }
 
-  function saveCodes(codes){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(codes));
-  }
+  // ── B2C CODES ──
+  function getCodes(){ try{return JSON.parse(localStorage.getItem(CODES_KEY)||'[]');}catch(e){return[];} }
+  function saveCodes(c){ localStorage.setItem(CODES_KEY,JSON.stringify(c)); }
 
   function generateCode(){
-    const type = document.getElementById('gen-type').value;
-    const client = document.getElementById('gen-client').value.trim();
-
-    // Generate unique code
-    const prefix = type==='b2c'?'TRAJ':type==='b2b-s'?'B2B-S':type==='b2b-m'?'B2B-M':'B2B-E';
-    const num = Math.random().toString(36).substring(2,6).toUpperCase();
-    const code = prefix+'-'+num;
-
-    const typeLabels = {
-      'b2c':'B2C · Полный план · 4 900 ₸',
-      'b2b-s':'B2B · Команда · 24 900 ₸',
-      'b2b-m':'B2B · Бизнес · 79 900 ₸',
-      'b2b-e':'B2B · Enterprise'
-    };
-
-    const entry = {
-      code, type, client,
-      label: typeLabels[type],
-      created: new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),
-      used: false,
-      usedAt: null
-    };
-
+    const client = document.getElementById('b2c-client').value.trim();
+    const prefix = 'TRAJ';
+    const code = prefix+'-'+Math.random().toString(36).substring(2,6).toUpperCase();
+    const entry = {code, client, created:new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}), used:false};
     const codes = getCodes();
     codes.unshift(entry);
     saveCodes(codes);
-
-    // Show result
-    document.getElementById('gen-code-val').textContent = code;
-    document.getElementById('gen-result').style.display='block';
-
-    // Generate message
-    const msg = type==='b2c'
-      ? `Привет! Твоя оплата подтверждена ✅\n\nВот твой код доступа к полному плану:\n\n🔑 ${code}\n\nКак использовать:\n1. Зайди на trajecta.site\n2. Пройди тест (если ещё не прошёл)\n3. На странице «Выбор пути» введи этот код\n4. Второй путь разблокируется\n\nЕсли вопросы — пиши сюда. Удачи! 🚀`
-      : `Привет! Оплата подтверждена ✅\n\nВот код доступа для вашей команды:\n\n🔑 ${code}\n\nКак использовать:\n1. Перейдите на trajecta.site/b2b-starter.html\n2. Введите код для активации\n3. Поделитесь ссылкой с командой\n\nЕсли вопросы — пишите. — Trajecta`;
-
-    document.getElementById('gen-message').textContent = msg;
-    window._currentCode = code;
-    window._currentMsg = msg;
-
+    window._curCode = code;
+    document.getElementById('b2c-code-val').textContent = code;
+    const msg = `Привет! Оплата подтверждена ✅\n\nВот твой код доступа:\n\n🔑 ${code}\n\nКак использовать:\n1. Зайди на trajecta.site\n2. Пройди тест\n3. На странице выбора пути введи код — второй путь откроется\n\nЕсли вопросы — пиши сюда. — Trajecta`;
+    document.getElementById('b2c-msg').textContent = msg;
+    window._curMsg = msg;
+    document.getElementById('b2c-result').style.display='block';
+    document.getElementById('b2c-client').value='';
     renderAll();
-    document.getElementById('gen-client').value='';
   }
 
   function copyCode(){
-    navigator.clipboard?.writeText(window._currentCode||'');
-    const btn = document.getElementById('copy-btn');
-    const orig = btn.textContent;
-    btn.textContent = '✓ Скопировано!';
-    setTimeout(()=>btn.textContent=orig,2000);
+    navigator.clipboard?.writeText(window._curCode||'');
+    flash(event.target,'✓ Скопировано!');
   }
-
-  function copyMessage(){
-    navigator.clipboard?.writeText(window._currentMsg||'');
-    const btn = event.target;
-    const orig = btn.textContent;
-    btn.textContent = '✓ Сообщение скопировано!';
-    setTimeout(()=>btn.textContent=orig,2000);
+  function copyB2CMsg(){
+    navigator.clipboard?.writeText(window._curMsg||'');
+    flash(event.target,'✓ Скопировано!');
   }
-
   function clearUsed(){
-    const codes = getCodes().filter(c=>!c.used);
-    saveCodes(codes);
+    if(!confirm('Удалить все использованные коды?')) return;
+    saveCodes(getCodes().filter(c=>!c.used));
     renderAll();
   }
-
   function deleteCode(code){
-    const codes = getCodes().filter(c=>c.code!==code);
-    saveCodes(codes);
+    saveCodes(getCodes().filter(c=>c.code!==code));
     renderAll();
   }
 
-  function renderAll(){
+  function renderB2C(){
     const codes = getCodes();
-    const total = codes.length;
-    const active = codes.filter(c=>!c.used).length;
-    const used = codes.filter(c=>c.used).length;
-    const b2b = codes.filter(c=>c.type!=='b2c').length;
-
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-new').textContent = active;
-    document.getElementById('stat-used').textContent = used;
-    document.getElementById('stat-b2b').textContent = b2b;
-
-    const tbody = document.getElementById('codes-table');
-    document.getElementById('no-codes').style.display = codes.length?'none':'block';
-
-    tbody.innerHTML = codes.map(c=>`
-      <tr style="${c.used?'opacity:.5':''}">
-        <td><code style="font-family:monospace;font-size:.9rem;font-weight:700;color:${c.used?'var(--muted)':'var(--accent)'}">${c.code}</code></td>
-        <td><span class="tag ${c.type==='b2c'?'tag-new':'tag-b2b'}">${c.type.toUpperCase()}</span></td>
-        <td style="color:var(--muted);font-size:.82rem">${c.client||'—'}</td>
-        <td style="color:var(--dim);font-size:.78rem">${c.created}</td>
-        <td><span class="tag ${c.used?'tag-used':'tag-new'}">${c.used?'Использован':'Активный'}</span></td>
-        <td>
-          <button class="copy-btn" onclick="navigator.clipboard?.writeText('${c.code}')">📋</button>
-          <button class="copy-btn" style="margin-left:4px;color:rgba(255,80,50,.6)" onclick="deleteCode('${c.code}')">✕</button>
-        </td>
-      </tr>`).join('');
+    document.getElementById('s-total').textContent=codes.length;
+    document.getElementById('s-active').textContent=codes.filter(c=>!c.used).length;
+    document.getElementById('s-used').textContent=codes.filter(c=>c.used).length;
+    const tbody = document.getElementById('b2c-table');
+    document.getElementById('b2c-empty').style.display=codes.length?'none':'block';
+    tbody.innerHTML=codes.map(c=>`<tr style="${c.used?'opacity:.45':''}">
+      <td><code style="font-family:monospace;font-weight:700;color:${c.used?'var(--muted)':'var(--accent)'}">${c.code}</code></td>
+      <td style="color:var(--muted);font-size:.8rem">${c.client||'—'}</td>
+      <td style="color:var(--dim);font-size:.75rem">${c.created}</td>
+      <td><span class="badge ${c.used?'badge-used':'badge-active'}">${c.used?'Использован':'Активный'}</span></td>
+      <td style="display:flex;gap:4px">
+        <button class="icon-btn" onclick="navigator.clipboard?.writeText('${c.code}')">📋</button>
+        <button class="icon-btn" style="color:rgba(255,80,50,.6)" onclick="deleteCode('${c.code}')">✕</button>
+      </td>
+    </tr>`).join('');
   }
 
+  // ── B2B TEAMS ──
+  function getTeams(){ try{return JSON.parse(localStorage.getItem(TEAMS_KEY)||'[]');}catch(e){return[];} }
+  function saveTeams(t){ localStorage.setItem(TEAMS_KEY,JSON.stringify(t)); }
 
-  const B2B_TEAMS_KEY = 'trajecta_b2b_teams';
-
-  function getTeams(){
-    try{ return JSON.parse(localStorage.getItem(B2B_TEAMS_KEY)||'[]'); }catch(e){ return []; }
-  }
-  function saveTeams(t){ localStorage.setItem(B2B_TEAMS_KEY, JSON.stringify(t)); }
-
-  function createB2BAccess(){
+  function createB2B(){
     const company = document.getElementById('b2b-company').value.trim();
+    if(!company){alert('Введите название компании');return;}
     const plan = document.getElementById('b2b-plan').value;
-    if(!company){ alert('Введите название компании'); return; }
-
+    const planLabels={'b2b-s':'Команда · 24 900 ₸','b2b-m':'Бизнес · 79 900 ₸','b2b-e':'Enterprise'};
     const id = Math.random().toString(36).substring(2,8).toUpperCase();
-    const planLabels = {'b2b-s':'Команда · 24 900 ₸','b2b-m':'Бизнес · 79 900 ₸','b2b-e':'Enterprise'};
     const base = window.location.origin;
-    const teamLink = base + '/team.html?company=' + encodeURIComponent(company) + '&id=' + id;
-    const dashLink = base + '/dashboard.html?company=' + encodeURIComponent(company) + '&id=' + id;
-
-    const team = {id, company, plan, label: planLabels[plan], teamLink, dashLink,
-      created: new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})};
-
+    const teamLink = base+'/team.html?company='+encodeURIComponent(company)+'&id='+id;
+    const dashLink = base+'/dashboard.html?company='+encodeURIComponent(company)+'&id='+id;
+    const team = {id,company,plan,label:planLabels[plan],teamLink,dashLink,created:new Date().toLocaleDateString('ru-RU')};
     const teams = getTeams();
     teams.unshift(team);
     saveTeams(teams);
-
-    window._b2bTeam = team;
-    document.getElementById('b2b-team-link').textContent = teamLink;
-    document.getElementById('b2b-dash-link').textContent = dashLink;
+    window._curTeam = team;
+    document.getElementById('b2b-team-url').textContent=teamLink;
+    document.getElementById('b2b-dash-url').textContent=dashLink;
+    const msg=`Добрый день!\n\nДоступ к Trajecta B2B активирован ✅\n🏢 ${company} · ${planLabels[plan]}\n\n👥 Ссылка для сотрудников:\n${teamLink}\n\nОтправьте её команде — каждый проходит тест за 5–7 минут.\nРезультаты появятся в вашем дашборде автоматически.\n\nЕсли вопросы — пишите. — Trajecta`;
+    document.getElementById('b2b-msg').textContent=msg;
+    window._curB2BMsg=msg;
     document.getElementById('b2b-result').style.display='block';
-
-    const msg = `Добрый день!\n\nВаш доступ к Trajecta B2B активирован ✅\n\n🏢 Компания: ${company}\n💼 Тариф: ${planLabels[plan]}\n\n📋 Ссылка для сотрудников (отправьте команде):\n${teamLink}\n\n📊 Ссылка для HR-дашборда (только для вас):\n${dashLink}\n\nКак начать:\n1. Отправьте ссылку для сотрудников всей команде\n2. Каждый проходит тест (5–7 минут)\n3. Результаты появляются в HR-дашборде автоматически\n4. Скачайте CSV отчёт в любое время\n\nЕсли вопросы — пишите сюда. — Trajecta`;
-    document.getElementById('b2b-msg-preview').textContent = msg;
-    document.getElementById('b2b-msg-preview').style.display='block';
-    window._b2bMsg = msg;
-
-    renderB2BTeams();
     document.getElementById('b2b-company').value='';
+    renderB2B();
   }
 
-  function copyB2BMessage(){
-    navigator.clipboard?.writeText(window._b2bMsg||'');
-    const btn = event.target;
-    const orig = btn.textContent;
-    btn.textContent = '✓ Скопировано!';
-    setTimeout(()=>btn.textContent=orig,2000);
+  function copyTeamLink(){ navigator.clipboard?.writeText(window._curTeam?.teamLink||''); flash(event.target,'✓ Скопировано!'); }
+  function copyDashLink(){ navigator.clipboard?.writeText(window._curTeam?.dashLink||''); flash(event.target,'✓ Скопировано!'); }
+  function copyB2BMsg(){
+    const msg=document.getElementById('b2b-msg');
+    msg.style.display=msg.style.display==='none'?'block':'none';
+    if(msg.style.display==='block') navigator.clipboard?.writeText(window._curB2BMsg||'');
+    flash(event.target,'✓ Скопировано!');
   }
-
-  function copyB2BLink(type){
-    const t = window._b2bTeam;
-    if(!t) return;
-    navigator.clipboard?.writeText(type==='team'?t.teamLink:t.dashLink);
-    const btn = event.target;
-    const orig = btn.textContent;
-    btn.textContent = '✓ Скопировано!';
-    setTimeout(()=>btn.textContent=orig,2000);
-  }
-
-  function renderB2BTeams(){
-    const teams = getTeams();
-    const el = document.getElementById('b2b-teams-list');
-    if(!teams.length){ el.innerHTML='<div style="color:var(--muted);font-size:.85rem;text-align:center;padding:20px">Команд пока нет</div>'; return; }
-    el.innerHTML = teams.map(t=>`
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <div style="font-weight:600">${t.company}</div>
-          <span class="tag" style="font-size:.65rem">${t.label}</span>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="copy-btn" onclick="navigator.clipboard?.writeText('${t.teamLink}')">👥 Ссылка команде</button>
-          <a href="${t.dashLink}" target="_blank" class="copy-btn" style="text-decoration:none">📊 Открыть дашборд</a>
-          <button class="copy-btn" style="color:rgba(255,80,50,.6)" onclick="deleteTeam('${t.id}')">✕</button>
-        </div>
-        <div style="font-size:.72rem;color:var(--dim);margin-top:6px">Создан: ${t.created} · ID: ${t.id}</div>
-      </div>`).join('');
-  }
-
   function deleteTeam(id){
-    if(!confirm('Удалить команду?')) return;
+    if(!confirm('Удалить команду?'))return;
     saveTeams(getTeams().filter(t=>t.id!==id));
-    renderB2BTeams();
+    renderB2B();
   }
 
-  renderB2BTeams();
+  function renderB2B(){
+    const teams=getTeams();
+    const el=document.getElementById('b2b-teams-list');
+    if(!teams.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:.85rem">Команд пока нет</div>';return;}
+    el.innerHTML=teams.map(t=>`<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-weight:600">${t.company}</div>
+        <span class="badge badge-b2b">${t.label}</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="icon-btn" onclick="navigator.clipboard?.writeText('${t.teamLink}');flash(this,'✓ Скопировано!')">👥 Ссылка команде</button>
+        <a href="${t.dashLink}" target="_blank" class="icon-btn" style="text-decoration:none">📊 Открыть дашборд</a>
+        <button class="icon-btn" style="color:rgba(255,80,50,.5)" onclick="deleteTeam('${t.id}')">✕</button>
+      </div>
+      <div style="font-size:.72rem;color:var(--dim);margin-top:6px">Создан: ${t.created} · ID: ${t.id}</div>
+    </div>`).join('');
+  }
+
+  function renderAll(){ renderB2C(); renderB2B(); }
+
+  function flash(btn,txt){
+    if(!btn)return;
+    const o=btn.textContent;
+    btn.textContent=txt;
+    setTimeout(()=>btn.textContent=o,2000);
+  }
+
   document.getElementById('pw-input').focus();
 </script>
 </body>
