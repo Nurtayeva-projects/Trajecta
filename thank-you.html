@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ваша заявка принята — Trajecta</title>
+  <title>Заявка принята — Trajecta</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
@@ -79,19 +79,37 @@
     </div>
   </div>
 
-  <a href="choose.html" class="btn">Пройти ещё один сценарий →</a>
+  <a href="choose.html" class="btn" id="main-cta">Пройти ещё один сценарий →</a>
   <a href="index.html" class="btn btn-outline">На главную</a>
 
   <p class="timer">Среднее время ответа: <strong>47 минут</strong></p>
 </div>
 
 <script>
-  // Get plan from URL params if passed
   const params = new URLSearchParams(window.location.search);
   const plan = params.get('plan');
+  const source = params.get('source') || document.referrer;
+
+  // Update heading with plan name
   if(plan){
     const h1 = document.querySelector('h1');
-    if(h1) h1.innerHTML = 'Заявка на <em>' + decodeURIComponent(plan) + '</em> принята!';
+    if(h1) h1.innerHTML = 'Заявка <em>принята!</em>';
+  }
+
+  // Change CTA based on source
+  const isB2B = plan && (plan.includes('B2B') || plan.includes('Команда') || plan.includes('Бизнес') || plan.includes('Enterprise') || plan.includes('Демо'));
+  const ctaEl = document.getElementById('main-cta');
+  if(ctaEl && isB2B){
+    ctaEl.href = 'b2b.html';
+    ctaEl.textContent = 'Вернуться на B2B страницу →';
+  }
+
+  // Update steps for B2B
+  if(isB2B){
+    const steps = document.querySelectorAll('.step-txt');
+    if(steps[0]) steps[0].innerHTML = '<strong>В течение 2 часов</strong> — свяжемся и обсудим детали подключения для вашей команды';
+    if(steps[1]) steps[1].innerHTML = '<strong>Пришлём счёт</strong> через Kaspi или по реквизитам компании';
+    if(steps[2]) steps[2].innerHTML = '<strong>Настроим доступ</strong> — и ваша команда сможет начать прохождение тестов';
   }
 </script>
 </body>
