@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HR Дашборд — Trajecta B2B</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#020617;--card:#0d1b35;--card2:#111f3a;--accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);--blue:rgba(96,165,250,.9);--bd:rgba(96,165,250,.12);--bm:rgba(96,165,250,.25);--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);--text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);--D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;}
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;-webkit-font-smoothing:antialiased;}
+    .bg-g{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 40% at 60% 0%,rgba(96,165,250,.07),transparent 55%);}
+    header{display:flex;align-items:center;padding:0 40px;height:64px;border-bottom:1px solid var(--border);background:rgba(2,6,23,.9);backdrop-filter:blur(20px);position:fixed;top:0;left:0;right:0;z-index:100;}
+    .logo{font-family:var(--D);font-size:1.3rem;font-weight:800;}
+    .logo span{color:var(--accent);}
+    .tag{display:inline-flex;align-items:center;gap:5px;background:var(--bd);border:1px solid var(--bm);color:var(--blue);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:100px;margin-left:10px;}
+    .hright{margin-left:auto;display:flex;gap:10px;align-items:center;}
+    .btn{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#020617;font-family:var(--B);font-weight:700;font-size:.82rem;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s;text-decoration:none;}
+    .btn:hover{transform:translateY(-2px);}
+    .btn-g{background:rgba(255,255,255,.08);color:var(--muted);border:1px solid var(--border2);}
+    .btn-g:hover{color:var(--text);}
+    .wrap{max-width:1100px;margin:0 auto;padding:84px 40px 60px;position:relative;z-index:1;}
+    .company-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px;}
+    .company-name{font-family:var(--D);font-size:1.6rem;font-weight:800;letter-spacing:-.03em;}
+    .company-sub{font-size:.85rem;color:var(--muted);margin-top:4px;}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+    .metric{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
+    .metric-n{font-family:var(--D);font-size:2rem;font-weight:800;line-height:1;margin-bottom:4px;}
+    .metric-l{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+    .section-title{font-family:var(--D);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:14px;}
+    table{width:100%;border-collapse:collapse;}
+    th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--border);}
+    td{padding:12px 14px;border-bottom:1px solid var(--border);font-size:.88rem;vertical-align:middle;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:rgba(255,255,255,.02);}
+    .badge{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:100px;}
+    .badge-green{background:var(--ad);border:1px solid var(--am);color:var(--accent);}
+    .badge-red{background:rgba(255,80,50,.1);border:1px solid rgba(255,80,50,.25);color:rgba(255,120,80,.9);}
+    .badge-blue{background:var(--bd);border:1px solid var(--bm);color:var(--blue);}
+    .badge-gray{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);}
+    .bar-wrap{display:flex;align-items:center;gap:8px;}
+    .bar-track{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;min-width:60px;}
+    .bar-fill{height:100%;border-radius:3px;}
+    .psycho-ico{font-size:1.1rem;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;}
+    .empty{text-align:center;padding:60px 20px;color:var(--muted);}
+    .empty-ico{font-size:3rem;margin-bottom:16px;}
+    .link-box{background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
+    .link-url{font-size:.82rem;color:var(--blue);word-break:break-all;}
+    @media(max-width:768px){
+      .wrap{padding:80px 16px 40px;}
+      header{padding:0 16px;}
+      .metrics{grid-template-columns:1fr 1fr;}
+      table{font-size:.8rem;}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-g"></div>
+
+<header>
+  <div class="logo">Traject<span>a</span></div>
+  <span class="tag">HR Дашборд</span>
+  <div class="hright">
+    <button class="btn btn-g" onclick="exportCSV()">📥 Экспорт CSV</button>
+    <a href="b2b.html" class="btn btn-g">← B2B</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="company-header">
+    <div>
+      <div class="company-name" id="company-title">Загрузка...</div>
+      <div class="company-sub" id="company-sub">HR дашборд · Trajecta B2B</div>
+    </div>
+    <button class="btn" onclick="copyTeamLink()">🔗 Скопировать ссылку для команды</button>
+  </div>
+
+  <!-- Team link -->
+  <div class="link-box" id="team-link-box">
+    <div class="link-url" id="team-link-url">—</div>
+    <button class="btn" style="font-size:.75rem;padding:6px 12px;white-space:nowrap" onclick="copyTeamLink()">Копировать</button>
+  </div>
+
+  <!-- Metrics -->
+  <div class="metrics" id="metrics">
+    <div class="metric"><div class="metric-n" id="m-total">0</div><div class="metric-l">Прошли тест</div></div>
+    <div class="metric"><div class="metric-n" style="color:var(--accent)" id="m-growth">0</div><div class="metric-l">Готовы к росту</div></div>
+    <div class="metric"><div class="metric-n" style="color:rgba(255,120,80,.9)" id="m-risk">0</div><div class="metric-l">Риск ухода</div></div>
+    <div class="metric"><div class="metric-n" style="color:var(--blue)" id="m-avg">—</div><div class="metric-l">Средний потенциал</div></div>
+  </div>
+
+  <!-- Team table -->
+  <div class="card">
+    <div class="section-title">Результаты команды</div>
+    <div id="table-wrap">
+      <div class="empty">
+        <div class="empty-ico">👥</div>
+        <div style="font-family:var(--D);font-size:1rem;font-weight:800;margin-bottom:8px">Никто ещё не прошёл тест</div>
+        <div style="font-size:.85rem">Отправьте ссылку команде — результаты появятся здесь автоматически</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const B2B_RESULTS_KEY = 'trajecta_b2b_results';
+  const params = new URLSearchParams(window.location.search);
+  const companyId = params.get('id') || 'demo';
+  const company = params.get('company') || 'Ваша компания';
+
+  document.getElementById('company-title').textContent = decodeURIComponent(company);
+  document.getElementById('company-sub').textContent = 'Код команды: ' + companyId + ' · HR дашборд · Trajecta B2B';
+
+  const teamLink = window.location.origin + '/team.html?company=' + company + '&id=' + companyId;
+  document.getElementById('team-link-url').textContent = teamLink;
+
+  function getResults(){
+    try{
+      const all = JSON.parse(localStorage.getItem(B2B_RESULTS_KEY)||'{}');
+      return all[companyId] || [];
+    }catch(e){ return []; }
+  }
+
+  const PSYCHO_NAMES = {A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель',E:'Визионер'};
+  const PSYCHO_ICO = {A:'🔬',B:'🏗️',C:'🤝',D:'⚡',E:'🚀'};
+
+  function getScore(r){
+    let s = 50;
+    if(r.prob) s = Math.min(95, Math.max(20, r.prob));
+    return s;
+  }
+
+  function getStatus(r){
+    const s = getScore(r);
+    if(s >= 75) return {label:'Готов к росту', cls:'badge-green'};
+    if(s <= 40) return {label:'Риск ухода', cls:'badge-red'};
+    return {label:'Стабильный', cls:'badge-blue'};
+  }
+
+  function render(){
+    const results = getResults();
+
+    // Metrics
+    document.getElementById('m-total').textContent = results.length;
+    const growth = results.filter(r=>getScore(r)>=75).length;
+    const risk = results.filter(r=>getScore(r)<=40).length;
+    const avgScore = results.length ? Math.round(results.reduce((a,r)=>a+getScore(r),0)/results.length) : 0;
+    document.getElementById('m-growth').textContent = growth;
+    document.getElementById('m-risk').textContent = risk;
+    document.getElementById('m-avg').textContent = results.length ? avgScore+'%' : '—';
+
+    if(!results.length) return;
+
+    // Table
+    const wrap = document.getElementById('table-wrap');
+    wrap.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Сотрудник</th>
+            <th>Должность</th>
+            <th>Психотип</th>
+            <th>Потенциал</th>
+            <th>Доход сейчас</th>
+            <th>Через 2 года</th>
+            <th>Статус</th>
+            <th>Дата</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${results.map(r=>{
+            const score = getScore(r);
+            const status = getStatus(r);
+            const psycho = r.psychotype || '—';
+            const barColor = score>=75?'var(--accent)':score<=40?'rgba(255,120,80,.8)':'var(--blue)';
+            return `<tr>
+              <td style="font-weight:600">${r.name||'—'}</td>
+              <td style="color:var(--muted)">${r.role||'—'}</td>
+              <td><span class="psycho-ico">${PSYCHO_ICO[psycho]||'🧠'}</span> ${PSYCHO_NAMES[psycho]||psycho}</td>
+              <td>
+                <div class="bar-wrap">
+                  <div class="bar-track"><div class="bar-fill" style="width:${score}%;background:${barColor}"></div></div>
+                  <span style="font-family:var(--D);font-size:.85rem;font-weight:700;color:${barColor};min-width:32px">${score}%</span>
+                </div>
+              </td>
+              <td style="color:var(--muted)">${r.income_now||'—'}</td>
+              <td style="color:var(--accent);font-weight:600">${r.income_y2||'—'}</td>
+              <td><span class="badge ${status.cls}">${status.label}</span></td>
+              <td style="color:var(--dim);font-size:.78rem">${r.date||'—'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  function copyTeamLink(){
+    navigator.clipboard?.writeText(teamLink);
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✓ Скопировано!';
+    setTimeout(()=>btn.textContent=orig, 2000);
+  }
+
+  function exportCSV(){
+    const results = getResults();
+    if(!results.length){ alert('Нет данных для экспорта'); return; }
+    const BOM = '\uFEFF';
+    const headers = 'Имя,Должность,Психотип,Потенциал (%),Доход сейчас,Доход через 2 года,Статус,Дата';
+    const rows = results.map(r=>`"${r.name||''}","${r.role||''}","${PSYCHO_NAMES[r.psychotype]||r.psychotype||''}","${getScore(r)}","${r.income_now||''}","${r.income_y2||''}","${getStatus(r).label}","${r.date||''}"`);
+    const csv = BOM + headers + '\n' + rows.join('\n');
+    const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'trajecta_'+decodeURIComponent(company)+'_'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  // Auto-refresh every 30 seconds
+  render();
+  setInterval(render, 30000);
+</script>
+</body>
+</html>

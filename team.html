@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тест команды — Trajecta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#020617;--card:#0d1b35;--accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);--blue:rgba(96,165,250,.9);--bd:rgba(96,165,250,.12);--bm:rgba(96,165,250,.25);--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);--text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);--D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;}
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+    .bg-g{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(96,165,250,.06),transparent 60%);}
+    .card{position:relative;z-index:1;background:var(--card);border:1.5px solid var(--bm);border-radius:24px;padding:40px 36px;max-width:480px;width:100%;text-align:center;}
+    .logo{font-family:var(--D);font-size:1.2rem;font-weight:800;margin-bottom:4px;}
+    .logo span{color:var(--accent);}
+    .company-tag{display:inline-flex;align-items:center;gap:6px;background:var(--bd);border:1px solid var(--bm);color:var(--blue);font-size:.75rem;font-weight:600;padding:4px 12px;border-radius:100px;margin:8px 0 20px;}
+    h1{font-family:var(--D);font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin-bottom:8px;}
+    p{font-size:.9rem;color:var(--muted);line-height:1.65;margin-bottom:24px;}
+    input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--B);font-size:.95rem;padding:12px 14px;outline:none;margin-bottom:10px;}
+    input:focus{border-color:var(--bm);}
+    .btn{width:100%;background:var(--blue);color:#020617;font-family:var(--B);font-weight:700;font-size:.95rem;padding:13px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s;margin-top:4px;}
+    .btn:hover{transform:translateY(-2px);}
+    .error{color:rgba(255,80,50,.8);font-size:.82rem;margin-top:6px;display:none;}
+    .steps{display:flex;justify-content:center;gap:8px;margin-bottom:24px;}
+    .step-dot{width:8px;height:8px;border-radius:50%;background:var(--bd);border:1px solid var(--bm);}
+    .step-dot.active{background:var(--blue);width:24px;border-radius:4px;}
+  </style>
+</head>
+<body>
+<div class="bg-g"></div>
+
+<div class="card" id="step-enter">
+  <div class="logo">Traject<span>a</span></div>
+  <div class="company-tag" id="company-tag">🏢 Загрузка...</div>
+  <div class="steps">
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+  <h1>Введи своё имя</h1>
+  <p>Твой работодатель подключил Trajecta для оценки команды. Пройди короткий тест — результаты помогут построить твой карьерный план.</p>
+  <input type="text" id="emp-name" placeholder="Имя и фамилия *" onkeydown="if(event.key==='Enter')startTest()">
+  <input type="text" id="emp-role" placeholder="Должность (необязательно)">
+  <div class="error" id="name-error">Введите ваше имя</div>
+  <button class="btn" onclick="startTest()">Начать тест →</button>
+  <p style="font-size:.75rem;color:var(--dim);margin-top:12px;margin-bottom:0">Займёт 5–7 минут · Анонимно для коллег</p>
+</div>
+
+<script>
+  const B2B_WEBHOOK = 'https://hook.eu1.make.com/fmphpccbshx83909g7w7cnrghvnr3zcq';
+  const params = new URLSearchParams(window.location.search);
+  const company = params.get('company') || 'Команда';
+  const companyId = params.get('id') || '';
+
+  document.getElementById('company-tag').textContent = '🏢 ' + decodeURIComponent(company);
+
+  function startTest(){
+    const name = document.getElementById('emp-name').value.trim();
+    const role = document.getElementById('emp-role').value.trim();
+    if(!name){
+      document.getElementById('name-error').style.display='block';
+      return;
+    }
+    // Save employee info for after test
+    localStorage.setItem('tr_b2b_employee', JSON.stringify({name, role, company: decodeURIComponent(company), companyId}));
+    localStorage.setItem('tr_b2b_mode', 'true');
+    // Start the regular test
+    window.location.href = 'choose.html?b2b=1&company='+encodeURIComponent(company);
+  }
+</script>
+</body>
+</html>

@@ -142,6 +142,55 @@
     <div id="no-codes" style="text-align:center;padding:32px;color:var(--muted);font-size:.88rem">Кодов пока нет — создай первый выше</div>
   </div>
 
+
+  <!-- B2B TEAMS SECTION -->
+  <div class="section-divider">B2B Команды</div>
+
+  <div class="card accent" style="border-color:rgba(96,165,250,.25);background:linear-gradient(135deg,rgba(96,165,250,.06),rgba(96,165,250,.02))">
+    <h2 style="margin-bottom:16px">Создать доступ для команды</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div>
+        <label style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px">Название компании</label>
+        <input type="text" id="b2b-company" placeholder="ТОО «КомпанияХХХ»">
+      </div>
+      <div>
+        <label style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px">Тариф</label>
+        <select id="b2b-plan">
+          <option value="b2b-s">Команда · 10 чел · 24 900 ₸</option>
+          <option value="b2b-m">Бизнес · 50 чел · 79 900 ₸</option>
+          <option value="b2b-e">Enterprise</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" style="background:rgba(96,165,250,.9)" onclick="createB2BAccess()">🏢 Создать доступ для команды</button>
+
+    <div id="b2b-result" style="display:none;margin-top:16px">
+      <div style="background:rgba(2,6,23,.5);border:1.5px solid rgba(96,165,250,.3);border-radius:10px;padding:16px;margin-bottom:12px">
+        <div style="font-size:.7rem;color:rgba(96,165,250,.7);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Ссылки для команды</div>
+        <div style="margin-bottom:8px">
+          <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">👥 Ссылка для сотрудников:</div>
+          <div style="font-family:monospace;font-size:.82rem;color:var(--accent);word-break:break-all" id="b2b-team-link">—</div>
+        </div>
+        <div>
+          <div style="font-size:.75rem;color:var(--muted);margin-bottom:4px">📊 Ссылка для HR-дашборда:</div>
+          <div style="font-family:monospace;font-size:.82rem;color:rgba(96,165,250,.9);word-break:break-all" id="b2b-dash-link">—</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-sm" style="background:rgba(96,165,250,.9)" onclick="copyB2BMessage()">✉️ Скопировать сообщение клиенту</button>
+        <button class="btn btn-sm btn-gray" onclick="copyB2BLink('team')">📋 Ссылка команде</button>
+        <button class="btn btn-sm btn-gray" onclick="copyB2BLink('dash')">📊 Ссылка HR</button>
+      </div>
+      <div id="b2b-msg-preview" style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.82rem;color:var(--muted);line-height:1.6;white-space:pre-wrap;margin-top:10px;display:none"></div>
+    </div>
+  </div>
+
+  <!-- B2B TEAMS LIST -->
+  <div class="card" style="margin-top:0">
+    <h2 style="margin-bottom:16px">Активные команды</h2>
+    <div id="b2b-teams-list"><div style="color:var(--muted);font-size:.85rem;text-align:center;padding:20px">Команд пока нет</div></div>
+  </div>
+
 </div>
 
 <script>
@@ -272,6 +321,90 @@
       </tr>`).join('');
   }
 
+
+  const B2B_TEAMS_KEY = 'trajecta_b2b_teams';
+
+  function getTeams(){
+    try{ return JSON.parse(localStorage.getItem(B2B_TEAMS_KEY)||'[]'); }catch(e){ return []; }
+  }
+  function saveTeams(t){ localStorage.setItem(B2B_TEAMS_KEY, JSON.stringify(t)); }
+
+  function createB2BAccess(){
+    const company = document.getElementById('b2b-company').value.trim();
+    const plan = document.getElementById('b2b-plan').value;
+    if(!company){ alert('Введите название компании'); return; }
+
+    const id = Math.random().toString(36).substring(2,8).toUpperCase();
+    const planLabels = {'b2b-s':'Команда · 24 900 ₸','b2b-m':'Бизнес · 79 900 ₸','b2b-e':'Enterprise'};
+    const base = window.location.origin;
+    const teamLink = base + '/team.html?company=' + encodeURIComponent(company) + '&id=' + id;
+    const dashLink = base + '/dashboard.html?company=' + encodeURIComponent(company) + '&id=' + id;
+
+    const team = {id, company, plan, label: planLabels[plan], teamLink, dashLink,
+      created: new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'})};
+
+    const teams = getTeams();
+    teams.unshift(team);
+    saveTeams(teams);
+
+    window._b2bTeam = team;
+    document.getElementById('b2b-team-link').textContent = teamLink;
+    document.getElementById('b2b-dash-link').textContent = dashLink;
+    document.getElementById('b2b-result').style.display='block';
+
+    const msg = `Добрый день!\n\nВаш доступ к Trajecta B2B активирован ✅\n\n🏢 Компания: ${company}\n💼 Тариф: ${planLabels[plan]}\n\n📋 Ссылка для сотрудников (отправьте команде):\n${teamLink}\n\n📊 Ссылка для HR-дашборда (только для вас):\n${dashLink}\n\nКак начать:\n1. Отправьте ссылку для сотрудников всей команде\n2. Каждый проходит тест (5–7 минут)\n3. Результаты появляются в HR-дашборде автоматически\n4. Скачайте CSV отчёт в любое время\n\nЕсли вопросы — пишите сюда. — Trajecta`;
+    document.getElementById('b2b-msg-preview').textContent = msg;
+    document.getElementById('b2b-msg-preview').style.display='block';
+    window._b2bMsg = msg;
+
+    renderB2BTeams();
+    document.getElementById('b2b-company').value='';
+  }
+
+  function copyB2BMessage(){
+    navigator.clipboard?.writeText(window._b2bMsg||'');
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✓ Скопировано!';
+    setTimeout(()=>btn.textContent=orig,2000);
+  }
+
+  function copyB2BLink(type){
+    const t = window._b2bTeam;
+    if(!t) return;
+    navigator.clipboard?.writeText(type==='team'?t.teamLink:t.dashLink);
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✓ Скопировано!';
+    setTimeout(()=>btn.textContent=orig,2000);
+  }
+
+  function renderB2BTeams(){
+    const teams = getTeams();
+    const el = document.getElementById('b2b-teams-list');
+    if(!teams.length){ el.innerHTML='<div style="color:var(--muted);font-size:.85rem;text-align:center;padding:20px">Команд пока нет</div>'; return; }
+    el.innerHTML = teams.map(t=>`
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-weight:600">${t.company}</div>
+          <span class="tag" style="font-size:.65rem">${t.label}</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="copy-btn" onclick="navigator.clipboard?.writeText('${t.teamLink}')">👥 Ссылка команде</button>
+          <a href="${t.dashLink}" target="_blank" class="copy-btn" style="text-decoration:none">📊 Открыть дашборд</a>
+          <button class="copy-btn" style="color:rgba(255,80,50,.6)" onclick="deleteTeam('${t.id}')">✕</button>
+        </div>
+        <div style="font-size:.72rem;color:var(--dim);margin-top:6px">Создан: ${t.created} · ID: ${t.id}</div>
+      </div>`).join('');
+  }
+
+  function deleteTeam(id){
+    if(!confirm('Удалить команду?')) return;
+    saveTeams(getTeams().filter(t=>t.id!==id));
+    renderB2BTeams();
+  }
+
+  renderB2BTeams();
   document.getElementById('pw-input').focus();
 </script>
 </body>
