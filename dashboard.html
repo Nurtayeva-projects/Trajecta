@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HR дашборд — Trajecta B2B</title>
+  <title>HR Дашборд — Trajecta B2B</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
   <style>
@@ -63,7 +63,8 @@
   <div class="logo">Traject<span>a</span></div>
   <span class="tag">HR Дашборд</span>
   <div class="hright">
-    <button class="btn btn-g" onclick="exportCSV()">📥 Экспорт CSV</button>
+    <button class="btn btn-g" onclick="exportCSV()">📥 CSV</button>
+    <button class="btn" onclick="generatePDF()" style="background:rgba(198,255,0,.9);color:#020617">📄 PDF отчёт</button>
     <a href="b2b.html" class="btn btn-g">← B2B</a>
   </div>
 </header>
@@ -219,6 +220,144 @@
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+  }
+
+
+  async function generatePDF(){
+    const results = getResults();
+    if(!results.length){ alert('Нет данных для отчёта'); return; }
+
+    const btn = event.target;
+    btn.textContent = '⏳ Генерируем...';
+    btn.disabled = true;
+
+    const PSYCHO_ICO2 = {A:'🔬',B:'🏗️',C:'🤝',D:'⚡',E:'🚀'};
+    const total = results.length;
+    const growth = results.filter(r=>getScore(r)>=75).length;
+    const risk = results.filter(r=>getScore(r)<=40).length;
+    const avgScore = Math.round(results.reduce((a,r)=>a+getScore(r),0)/total);
+
+    // Generate AI summary for the team
+    let teamSummary = '';
+    try{
+      const employeeList = results.map(r=>
+        `${r.name} (${r.role||'—'}): психотип ${r.psychotype||'—'}, потенциал ${getScore(r)}%, ${r.departure_risk||'—'} риск ухода, ${r.growth_readiness||'—'}`
+      ).join('\n');
+
+      const response = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:1000,
+          messages:[{role:'user',content:`Ты HR-аналитик. Составь краткий аналитический отчёт по команде для руководителя. Только текст, без markdown.
+
+Компания: ${decodeURIComponent(company)}
+Прошли тест: ${total} человек
+Готовы к росту: ${growth}
+Риск ухода: ${risk}
+Средний потенциал: ${avgScore}%
+
+Сотрудники:
+${employeeList}
+
+Напиши:
+1. Общее состояние команды (2-3 предложения)
+2. Ключевые находки (3 пункта)
+3. Рекомендации руководителю (3 конкретных действия)`}]
+        })
+      });
+      const data = await response.json();
+      teamSummary = data.content[0].text;
+    }catch(e){
+      teamSummary = 'Анализ команды выполнен на основе результатов тестирования.';
+    }
+
+    // Build HTML for PDF
+    const dateStr = new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'long',year:'numeric'});
+    const companyName = decodeURIComponent(company);
+
+    const employeeRows = results.map(r=>{
+      const score = getScore(r);
+      const scoreColor = score>=75?'#C6FF00':score>=50?'#60a5fa':'#ff8060';
+      const ico = PSYCHO_ICO2[r.psychotype_code] || '🧠';
+      return `
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #1e2d4a;font-weight:600">${r.name||'—'}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #1e2d4a;color:#94a3b8">${r.role||'—'}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #1e2d4a">${ico} ${r.psychotype||'—'}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #1e2d4a;font-weight:700;color:${scoreColor}">${score}%</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #1e2d4a;color:#94a3b8">${r.burnout_risk||'—'}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #1e2d4a;color:#94a3b8">${r.departure_risk||'—'}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #1e2d4a;color:#94a3b8">${r.growth_readiness||'—'}</td>
+        </tr>`;
+    }).join('');
+
+    const pdfHTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#020617; color:#f0f4ff; font-family:'Segoe UI',Arial,sans-serif; padding:40px; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:32px; padding-bottom:20px; border-bottom:1px solid #1e2d4a; }
+  .logo { font-size:1.5rem; font-weight:900; letter-spacing:-.02em; }
+  .logo span { color:#C6FF00; }
+  .date { font-size:.82rem; color:#64748b; text-align:right; }
+  .company { font-size:1.8rem; font-weight:900; margin-bottom:6px; letter-spacing:-.03em; }
+  .subtitle { font-size:.9rem; color:#64748b; margin-bottom:28px; }
+  .metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px; }
+  .metric { background:#0d1b35; border:1px solid #1e2d4a; border-radius:12px; padding:16px; text-align:center; }
+  .metric-n { font-size:2rem; font-weight:900; line-height:1; margin-bottom:4px; }
+  .metric-l { font-size:.68rem; color:#64748b; text-transform:uppercase; letter-spacing:.08em; }
+  .section { margin-bottom:28px; }
+  .section-title { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:#64748b; margin-bottom:12px; }
+  .summary-box { background:#0d1b35; border:1px solid #1e2d4a; border-radius:12px; padding:20px; font-size:.88rem; line-height:1.7; color:#94a3b8; white-space:pre-wrap; }
+  table { width:100%; border-collapse:collapse; font-size:.82rem; }
+  th { text-align:left; padding:10px 12px; border-bottom:2px solid #1e2d4a; color:#64748b; font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; }
+  .footer { margin-top:32px; padding-top:16px; border-top:1px solid #1e2d4a; display:flex; justify-content:space-between; font-size:.75rem; color:#64748b; }
+  @media print { body { padding:20px; } }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">Traject<span>a</span> B2B</div>
+    <div class="date">HR Отчёт<br>${dateStr}</div>
+  </div>
+  <div class="company">${companyName}</div>
+  <div class="subtitle">Результаты оценки команды · ${total} сотрудников · Trajecta B2B</div>
+  <div class="metrics">
+    <div class="metric"><div class="metric-n">${total}</div><div class="metric-l">Прошли тест</div></div>
+    <div class="metric"><div class="metric-n" style="color:#C6FF00">${growth}</div><div class="metric-l">Готовы к росту</div></div>
+    <div class="metric"><div class="metric-n" style="color:#ff8060">${risk}</div><div class="metric-l">Риск ухода</div></div>
+    <div class="metric"><div class="metric-n" style="color:#60a5fa">${avgScore}%</div><div class="metric-l">Средний потенциал</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">AI Аналитика команды</div>
+    <div class="summary-box">${teamSummary}</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Результаты по сотрудникам</div>
+    <table>
+      <thead><tr><th>Сотрудник</th><th>Должность</th><th>Психотип</th><th>Потенциал</th><th>Выгорание</th><th>Риск ухода</th><th>Готовность</th></tr></thead>
+      <tbody>${employeeRows}</tbody>
+    </table>
+  </div>
+  <div class="footer">
+    <span>Trajecta B2B · trajecta.site</span>
+    <span>Конфиденциально · Только для HR</span>
+  </div>
+  <script>window.onload=()=>{ setTimeout(()=>window.print(), 500); }<\/script>
+</body>
+</html>`;
+
+    // Open in new window for printing/saving as PDF
+    const win = window.open('','_blank');
+    win.document.write(pdfHTML);
+    win.document.close();
+
+    btn.textContent = '📄 PDF отчёт';
+    btn.disabled = false;
   }
 
   // Auto-refresh every 30 seconds
