@@ -171,6 +171,57 @@
     </div>
   </div>
 
+      <!-- INCOME GROWTH + CAREER TRACKS + L&D + ROI -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px" id="extra-sections" class="extra-sections">
+
+        <!-- Потенциал роста дохода -->
+        <div class="db-card">
+          <div class="db-card-head"><span class="db-card-title">💰 Потенциал роста дохода</span></div>
+          <div style="font-size:.78rem;color:var(--muted);margin-bottom:12px">Прогноз через 2 года при инвестиции в развитие</div>
+          <div id="income-bars" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div style="margin-top:12px;display:flex;gap:14px;font-size:.73rem;color:var(--muted)">
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;background:var(--blue);border-radius:2px;display:inline-block"></span>Сейчас</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:3px;background:var(--accent);border-radius:2px;display:inline-block"></span>Через 2 года</span>
+          </div>
+        </div>
+
+        <!-- Карьерные треки -->
+        <div class="db-card">
+          <div class="db-card-head"><span class="db-card-title">🚀 Карьерные треки</span></div>
+          <div id="career-tracks" style="display:flex;flex-direction:column;gap:0"></div>
+        </div>
+
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px">
+
+        <!-- L&D Приоритеты -->
+        <div class="db-card">
+          <div class="db-card-head"><span class="db-card-title">🎯 L&D Приоритеты</span></div>
+          <div id="ld-priorities" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
+
+        <!-- ROI -->
+        <div class="db-card">
+          <div class="db-card-head"><span class="db-card-title">💰 ROI инвестиции</span></div>
+          <div style="font-size:.82rem;color:var(--muted);margin-bottom:10px">При вложении в развитие команды</div>
+          <div style="font-family:var(--D);font-size:2.2rem;font-weight:800;color:var(--accent);margin-bottom:4px">×3.2</div>
+          <div style="font-size:.75rem;color:var(--muted);margin-bottom:10px">средний ROI по рынку КЗ</div>
+          <div style="font-size:.75rem;color:var(--muted);background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px;line-height:1.5">
+            Удержание 1 опытного сотрудника = экономия 6–18 его зарплат на поиск замены
+          </div>
+        </div>
+
+        <!-- AI Рекомендации -->
+        <div class="db-card">
+          <div class="db-card-head"><span class="db-card-title">🤖 AI Рекомендации</span></div>
+          <div id="ai-recs" style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:.82rem;color:var(--muted);text-align:center;padding:16px">Нет данных</div>
+          </div>
+        </div>
+
+      </div>
+
 </div>
 
 <script>
@@ -217,6 +268,13 @@
     document.getElementById('m-risk').textContent = atRisk;
     document.getElementById('m-avg').textContent = total ? avgScore+'%' : '—';
     document.getElementById('last-update').textContent = total ? 'Обновлено: ' + new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}) : 'Нет данных';
+
+    if(total) {
+      renderIncomeBars(results);
+      renderCareerTracks(results);
+      renderLD(results);
+      renderAIRecs(results);
+    }
 
     if(!total) return;
 
@@ -368,6 +426,85 @@
     </body></html>`);
     win.document.close();
     btn.textContent='📄 PDF отчёт'; btn.disabled=false;
+  }
+
+
+  function renderIncomeBars(results){
+    const el = document.getElementById('income-bars');
+    if(!el) return;
+    el.innerHTML = results.slice(0,5).map(r=>{
+      const now = parseInt((r.income_now||'').replace(/\D/g,''))||300;
+      const y2 = parseInt((r.income_y2||'').replace(/\D/g,''))||Math.round(now*1.4);
+      const maxVal = Math.max(now, y2, 500);
+      const nowPct = Math.round(now/maxVal*100);
+      const y2Pct = Math.round(y2/maxVal*100);
+      return `<div style="margin-bottom:6px">
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:3px">${r.name||'—'}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+          <div style="width:50px;font-size:.65rem;color:var(--dim)">Сейчас</div>
+          <div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden">
+            <div style="width:${nowPct}%;height:100%;background:var(--blue);border-radius:2px"></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="width:50px;font-size:.65rem;color:var(--dim)">2 года</div>
+          <div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden">
+            <div style="width:${y2Pct}%;height:100%;background:var(--accent);border-radius:2px"></div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderCareerTracks(results){
+    const el = document.getElementById('career-tracks');
+    if(!el) return;
+    el.innerHTML = results.map(r=>{
+      const score = getScore(r);
+      const track = score>=75?'Готов к росту':score>=50?'6–12 мес.':'Требует внимания';
+      const color = score>=75?'var(--accent)':score>=50?'var(--blue)':'rgba(255,120,80,.8)';
+      return `<div style="display:flex;align-items:center;justify-content:space-between;font-size:.82rem;padding:8px 0;border-bottom:1px solid var(--border)">
+        <div>${r.name||'—'}<span style="color:var(--muted);font-size:.75rem;margin-left:6px">${r.role||''}</span></div>
+        <span style="font-size:.72rem;font-weight:600;color:${color};background:rgba(255,255,255,.04);padding:3px 10px;border-radius:100px;white-space:nowrap">${track}</span>
+      </div>`;
+    }).join('');
+  }
+
+  const LD_MAP = {
+    A:'Аналитические инструменты', B:'Стратегическое планирование',
+    C:'Коммуникация и переговоры', D:'Project Management', E:'Лидерство и инновации'
+  };
+  function renderLD(results){
+    const el = document.getElementById('ld-priorities');
+    if(!el) return;
+    const counts = {};
+    results.forEach(r=>{
+      const code = r.psychotype_code||'D';
+      const skill = LD_MAP[code]||'Профессиональные навыки';
+      counts[skill] = (counts[skill]||0)+1;
+    });
+    el.innerHTML = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([skill,count])=>`
+      <div style="display:flex;align-items:center;gap:10px;font-size:.82rem">
+        <span style="font-size:.9rem">📚</span>
+        <div>
+          <div style="font-weight:600">${skill}</div>
+          <div style="color:var(--muted);font-size:.72rem">${count} ${count===1?'сотрудник':'сотрудника'} — рекомендовано</div>
+        </div>
+      </div>`).join('');
+  }
+
+  function renderAIRecs(results){
+    const el = document.getElementById('ai-recs');
+    if(!el) return;
+    const recs = [];
+    const highBurnout = results.filter(r=>(r.burnout_risk||'').toLowerCase().includes('выс'));
+    const highRisk = results.filter(r=>(r.departure_risk||'').toLowerCase().includes('выс'));
+    const ready = results.filter(r=>getScore(r)>=75);
+    if(highBurnout.length) recs.push({ico:'🔥',text:`Провести 1-on-1 с ${highBurnout.map(r=>r.name).join(', ')} — признаки выгорания`});
+    if(highRisk.length) recs.push({ico:'🚪',text:`Подготовить оффер для ${highRisk.map(r=>r.name).join(', ')} — риск ухода`});
+    if(ready.length) recs.push({ico:'⭐',text:`Рассмотреть повышение: ${ready.map(r=>r.name).join(', ')}`});
+    if(!recs.length) recs.push({ico:'✅',text:'Команда в стабильном состоянии'});
+    el.innerHTML = recs.map(r=>`<div style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:var(--muted);line-height:1.5"><span>${r.ico}</span><span>${r.text}</span></div>`).join('');
   }
 
   render();
