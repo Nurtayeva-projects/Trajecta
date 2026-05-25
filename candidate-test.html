@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оценка кандидата — Trajecta B2B</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#020617;--card:#0d1b35;
+      --accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);
+      --blue:rgba(96,165,250,.9);--bd:rgba(96,165,250,.12);--bm:rgba(96,165,250,.25);
+      --orange:rgba(251,146,60,.9);--od:rgba(251,146,60,.1);--om:rgba(251,146,60,.25);
+      --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+      --text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);
+      --D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;
+    }
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+    .bg-g{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(251,146,60,.05),transparent 55%);}
+    header{display:flex;align-items:center;padding:0 40px;height:64px;border-bottom:1px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(2,6,23,.9);backdrop-filter:blur(20px);}
+    .logo{font-family:var(--D);font-size:1.3rem;font-weight:800;}
+    .logo span{color:var(--accent);}
+    .prog{position:fixed;top:64px;left:0;right:0;height:3px;background:rgba(255,255,255,.06);z-index:99;}
+    .prog-f{height:100%;background:linear-gradient(90deg,rgba(251,146,60,.9),var(--accent));transition:width .6s cubic-bezier(.4,0,.2,1);}
+    main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:84px 20px 60px;}
+
+    .phase-banner{width:100%;max-width:640px;border-radius:14px;padding:13px 18px;margin-bottom:18px;display:flex;align-items:center;gap:12px;font-size:.88rem;font-weight:600;}
+    .ph1{background:var(--od);border:1px solid var(--om);color:var(--orange);}
+    .ph2{background:var(--bd);border:1px solid var(--bm);color:var(--blue);}
+
+    .qdots{display:flex;gap:4px;width:100%;max-width:640px;margin-bottom:10px;}
+    .qd{height:4px;border-radius:2px;flex:1;background:var(--border);transition:all .4s;}
+    .qd.done{background:rgba(251,146,60,.5);}
+    .qd.active{background:rgba(251,146,60,.9);}
+    .qd.done2{background:rgba(96,165,250,.5);}
+    .qd.active2{background:rgba(96,165,250,.9);}
+
+    .qwrap{width:100%;max-width:640px;}
+    .qcard{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px 28px 22px;position:relative;overflow:hidden;}
+    .qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(251,146,60,.8),transparent 60%);}
+    .qcard.ph2::before{background:linear-gradient(90deg,rgba(96,165,250,.8),transparent 60%);}
+    @keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+    .qcard.in{animation:slideIn .35s cubic-bezier(.34,1.2,.64,1) both;}
+    .qtag{display:inline-flex;align-items:center;gap:6px;background:var(--od);border:1px solid var(--om);color:var(--orange);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:14px;}
+    .qtag.t2{background:var(--bd);border-color:var(--bm);color:var(--blue);}
+    .qnum{position:absolute;top:20px;right:24px;font-family:var(--D);font-size:3.5rem;font-weight:800;color:rgba(255,255,255,.04);line-height:1;}
+    .qtext{font-family:var(--D);font-size:clamp(1.1rem,2.5vw,1.4rem);font-weight:800;letter-spacing:-.025em;line-height:1.25;margin-bottom:20px;padding-right:40px;}
+    .opts{display:flex;flex-direction:column;gap:8px;}
+    .opt{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;cursor:pointer;transition:all .2s;text-align:left;width:100%;font-family:var(--B);}
+    .opt:hover{border-color:rgba(251,146,60,.35);background:rgba(251,146,60,.06);transform:translateY(-2px);}
+    .opt.ph2:hover{border-color:rgba(96,165,250,.35);background:rgba(96,165,250,.06);}
+    .opt.sel{border-color:rgba(251,146,60,.6);background:rgba(251,146,60,.1);}
+    .opt.sel.ph2{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.1);}
+    .okey{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-family:var(--D);font-weight:800;font-size:.75rem;flex-shrink:0;transition:all .2s;}
+    .opt.sel .okey{background:rgba(251,146,60,.25);color:var(--orange);}
+    .opt.sel.ph2 .okey{background:rgba(96,165,250,.25);color:var(--blue);}
+    .oval{font-size:.9rem;font-weight:500;color:var(--text);}
+    .hint{font-size:.78rem;color:rgba(255,100,100,.7);text-align:center;min-height:18px;margin-top:8px;opacity:0;transition:opacity .3s;}
+    .hint.show{opacity:1;}
+    .qnav{width:100%;max-width:640px;display:flex;gap:10px;margin-top:12px;}
+    .btn-back{width:48px;height:48px;background:var(--card);border:1px solid var(--border2);border-radius:10px;color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+    .btn-back:hover:not(:disabled){border-color:rgba(255,255,255,.22);color:var(--text);}
+    .btn-back:disabled{opacity:.25;cursor:not-allowed;}
+    .btn-next{flex:1;height:48px;background:rgba(251,146,60,.9);color:#020617;font-family:var(--B);font-weight:700;font-size:.95rem;border:none;border-radius:10px;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+    .btn-next:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(251,146,60,.4);}
+    .btn-next.ph2{background:rgba(96,165,250,.9);}
+    .btn-next.ph2:hover{box-shadow:0 8px 28px rgba(96,165,250,.4);}
+
+    .analyzing{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;pointer-events:none;transition:opacity .4s;}
+    .analyzing.show{opacity:1;pointer-events:all;}
+    .ai-spinner{width:52px;height:52px;border-radius:50%;border:3px solid rgba(198,255,0,.1);border-top-color:var(--accent);animation:spin 1s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .astep{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--muted);}
+    .astep.done{color:var(--accent);}
+    .astep-dot{width:7px;height:7px;border-radius:50%;background:var(--border);flex-shrink:0;}
+    .astep.done .astep-dot{background:var(--accent);}
+
+    @media(max-width:640px){
+      header{padding:0 16px;}
+      main{padding:76px 12px 40px;}
+      .qcard{padding:20px 16px 16px;}
+      .qtext{font-size:1rem;}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-g"></div>
+
+<div class="analyzing" id="analyzing">
+  <div style="font-family:var(--D);font-size:1.8rem;font-weight:800">Traject<span style="color:var(--accent)">a</span></div>
+  <div class="ai-spinner"></div>
+  <div style="font-family:var(--D);font-size:1.1rem;font-weight:800">AI составляет профиль кандидата...</div>
+  <div style="font-size:.85rem;color:var(--muted)">Анализируем ответы и формируем рекомендации для HR</div>
+  <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+    <div class="astep" id="as1"><div class="astep-dot"></div>Анализ мотивации и ценностей</div>
+    <div class="astep" id="as2"><div class="astep-dot"></div>Определение психотипа</div>
+    <div class="astep" id="as3"><div class="astep-dot"></div>Оценка потенциала роста</div>
+    <div class="astep" id="as4"><div class="astep-dot"></div>Выявление красных флагов</div>
+    <div class="astep" id="as5"><div class="astep-dot"></div>Формирование рекомендаций для HR</div>
+  </div>
+</div>
+
+<header>
+  <div class="logo">Traject<span>a</span></div>
+  <div style="margin-left:10px;font-size:.75rem;color:var(--muted)" id="company-label"></div>
+  <div style="margin-left:auto;font-size:.78rem;color:var(--muted)">Вопрос <span id="qnum-h">1</span> из 12</div>
+</header>
+<div class="prog"><div class="prog-f" id="prog-f" style="width:0%"></div></div>
+
+<main>
+  <div class="qdots" id="qdots"></div>
+  <div class="phase-banner ph1" id="phase-banner">
+    <span style="font-size:1.2rem">💡</span>
+    <div><div style="font-size:.65rem;opacity:.7;text-transform:uppercase;letter-spacing:.08em">Часть 1 из 2</div><div>Мотивация и ценности</div></div>
+  </div>
+  <div class="qwrap" id="qwrap"></div>
+  <div class="hint" id="hint">👆 Выбери один вариант</div>
+  <div class="qnav">
+    <button class="btn-back" id="btn-back" onclick="prev()" disabled>←</button>
+    <button class="btn-next" id="btn-next" onclick="next()">Следующий →</button>
+  </div>
+</main>
+
+<script>
+  const B2B_WEBHOOK = 'https://hook.eu1.make.com/fmphpccbshx83909g7w7cnrghvnr3zcq';
+  const params = new URLSearchParams(window.location.search);
+  const company = decodeURIComponent(params.get('company')||'');
+  const companyId = params.get('id')||'';
+  const position = decodeURIComponent(params.get('position')||'');
+  const candData = JSON.parse(localStorage.getItem('tr_candidate')||'{}');
+
+  if(company) document.getElementById('company-label').textContent = '🏢 ' + company + (position?' · '+position:'');
+
+  const QS = [
+    // PHASE 1: Мотивация и ценности
+    {
+      phase:1, tag:'🚀 Мотивация', num:'01',
+      text:'Почему ты ищешь новое место прямо сейчас?',
+      opts:[
+        {key:'A', val:'Хочу расти — на текущем месте достиг потолка', score:{motivation:'growth', flag:0, ambition:4}},
+        {key:'B', val:'Ищу более интересные задачи и вызовы', score:{motivation:'challenge', flag:0, ambition:3}},
+        {key:'C', val:'Хочу больше зарабатывать', score:{motivation:'money', flag:1, ambition:2}},
+        {key:'D', val:'Не лажу с руководством или командой', score:{motivation:'conflict', flag:3, ambition:1}},
+      ]
+    },
+    {
+      phase:1, tag:'💎 Ценности', num:'02',
+      text:'Что для тебя важнее всего в работе?',
+      opts:[
+        {key:'A', val:'Интересные задачи и профессиональный рост', score:{motivation:'growth', flag:0, loyalty:3}},
+        {key:'B', val:'Хорошая команда и атмосфера', score:{motivation:'team', flag:0, loyalty:4}},
+        {key:'C', val:'Достойная зарплата и стабильность', score:{motivation:'money', flag:1, loyalty:2}},
+        {key:'D', val:'Свобода и автономия в работе', score:{motivation:'freedom', flag:0, loyalty:2}},
+      ]
+    },
+    {
+      phase:1, tag:'💰 Честность', num:'03',
+      text:'Тебе предложили оффер на 15% ниже ожидаемого, но компания интересная. Что делаешь?',
+      opts:[
+        {key:'A', val:'Принимаю — деньги не главное, важен рост', score:{flag:0, loyalty:4, ambition:3}},
+        {key:'B', val:'Торгуюсь — объясняю почему стою больше', score:{flag:0, loyalty:3, ambition:4}},
+        {key:'C', val:'Принимаю но буду продолжать искать', score:{flag:2, loyalty:1, ambition:2}},
+        {key:'D', val:'Откажусь — не готов работать ниже рынка', score:{flag:1, loyalty:2, ambition:3}},
+      ]
+    },
+    {
+      phase:1, tag:'🔥 Демотивация', num:'04',
+      text:'Что тебя демотивирует сильнее всего?',
+      opts:[
+        {key:'A', val:'Отсутствие обратной связи и признания', score:{flag:0, needsFeedback:true}},
+        {key:'B', val:'Монотонные задачи без развития', score:{flag:0, needsGrowth:true}},
+        {key:'C', val:'Микроменеджмент и контроль каждого шага', score:{flag:0, needsAutonomy:true}},
+        {key:'D', val:'Токсичные коллеги или несправедливый руководитель', score:{flag:2, needsTeam:true}},
+      ]
+    },
+    {
+      phase:1, tag:'🤝 Критика', num:'05',
+      text:'Руководитель публично указал на твою ошибку на совещании. Твоя реакция?',
+      opts:[
+        {key:'A', val:'Признаю ошибку и предложу как исправить', score:{flag:0, resilience:4}},
+        {key:'B', val:'Выслушаю но поговорю один на один — публично неприятно', score:{flag:0, resilience:3}},
+        {key:'C', val:'Внутренне обижусь но промолчу', score:{flag:1, resilience:2}},
+        {key:'D', val:'Буду защищаться — возможно ошибка не моя', score:{flag:2, resilience:1}},
+      ]
+    },
+    {
+      phase:1, tag:'❌ Ошибка', num:'06',
+      text:'Расскажи о серьёзной ошибке которую ты допустил на работе. Как ты поступил?',
+      opts:[
+        {key:'A', val:'Сразу признал — предупредил команду и исправил', score:{flag:0, honesty:4, resilience:4}},
+        {key:'B', val:'Постарался исправить сам прежде чем говорить', score:{flag:1, honesty:2, resilience:3}},
+        {key:'C', val:'Трудно вспомнить серьёзную ошибку', score:{flag:3, honesty:1, resilience:2}},
+        {key:'D', val:'Причиной была ситуация — не только я', score:{flag:2, honesty:1, resilience:2}},
+      ]
+    },
+    // PHASE 2: Потенциал и стиль
+    {
+      phase:2, tag:'⚡ Стиль работы', num:'07',
+      text:'Ты попал в новую команду. Первая неделя — как ты себя ведёшь?',
+      opts:[
+        {key:'A', val:'Наблюдаю и изучаю — сначала понять как здесь всё работает', score:{type:'A', potential:3}},
+        {key:'B', val:'Сразу строю структуру — ищу что можно улучшить', score:{type:'B', potential:4}},
+        {key:'C', val:'Знакомлюсь со всеми — отношения важнее всего', score:{type:'C', potential:3}},
+        {key:'D', val:'Сразу берусь за задачи — покажу результат делом', score:{type:'D', potential:4}},
+      ]
+    },
+    {
+      phase:2, tag:'🧩 Коллега', num:'08',
+      text:'Ты видишь что коллега делает задачу неправильно. Это повлияет на общий результат. Что делаешь?',
+      opts:[
+        {key:'A', val:'Тактично скажу — объясню почему вижу иначе', score:{flag:0, teamwork:4}},
+        {key:'B', val:'Сначала уточню — может я не знаю всего контекста', score:{flag:0, teamwork:4}},
+        {key:'C', val:'Скажу руководителю — это его зона ответственности', score:{flag:2, teamwork:1}},
+        {key:'D', val:'Промолчу — не хочу конфликтов', score:{flag:1, teamwork:2}},
+      ]
+    },
+    {
+      phase:2, tag:'📈 Рост', num:'09',
+      text:'Тебе дали новую роль — сложнее текущей. Без обучения и поддержки. Как реагируешь?',
+      opts:[
+        {key:'A', val:'Берусь — разберусь по ходу, это шанс', score:{flag:0, potential:4, growth:4}},
+        {key:'B', val:'Соглашусь если дадут хоть минимальный онбординг', score:{flag:0, potential:3, growth:3}},
+        {key:'C', val:'Попрошу время — хочу понять ожидания чётко', score:{flag:0, potential:3, growth:3}},
+        {key:'D', val:'Откажусь — не хочу провалиться публично', score:{flag:1, potential:2, growth:1}},
+      ]
+    },
+    {
+      phase:2, tag:'🎯 Слабость', num:'10',
+      text:'Назови свою главную профессиональную слабость. Честно.',
+      opts:[
+        {key:'A', val:'Перфекционизм — трудно отпустить задачу незавершённой', score:{flag:0, honesty:3, potential:3}},
+        {key:'B', val:'Сложно делегировать — проще сделать самому', score:{flag:0, honesty:3, potential:3}},
+        {key:'C', val:'Иногда берусь за слишком много задач сразу', score:{flag:0, honesty:3, potential:3}},
+        {key:'D', val:'У меня нет явных слабостей в профессиональном плане', score:{flag:3, honesty:0, potential:2}},
+      ]
+    },
+    {
+      phase:2, tag:'🔭 Цели', num:'11',
+      text:'Что ты хочешь показать за первые 3 месяца в новой компании?',
+      opts:[
+        {key:'A', val:'Разобраться в процессах и стать надёжным членом команды', score:{flag:0, ambition:3, realistic:4}},
+        {key:'B', val:'Показать первый ощутимый результат и инициативу', score:{flag:0, ambition:4, realistic:3}},
+        {key:'C', val:'Построить отношения с командой и руководством', score:{flag:0, ambition:2, realistic:4}},
+        {key:'D', val:'Предложить и запустить улучшение в процессах', score:{flag:1, ambition:4, realistic:2}},
+      ]
+    },
+    {
+      phase:2, tag:'🚀 Амбиции', num:'12',
+      text:'Где ты видишь себя через 2 года?',
+      opts:[
+        {key:'A', val:'На более высокой позиции в этой компании', score:{flag:0, ambition:4, loyalty:4}},
+        {key:'B', val:'Глубоким экспертом в своей области', score:{flag:0, ambition:3, loyalty:3}},
+        {key:'C', val:'Сложно сказать — смотрю по ситуации', score:{flag:2, ambition:1, loyalty:1}},
+        {key:'D', val:'Возможно открою своё дело или уйду во фриланс', score:{flag:1, ambition:3, loyalty:1}},
+      ]
+    },
+  ];
+
+  let cur = 0;
+  const answers = {};
+
+  // Init dots
+  const dotsEl = document.getElementById('qdots');
+  QS.forEach((_,i)=>{
+    const d=document.createElement('div'); d.className='qd'; d.id='qd'+i;
+    dotsEl.appendChild(d);
+  });
+
+  function render(){
+    const q=QS[cur]; const isP2=q.phase===2;
+    document.getElementById('qwrap').innerHTML=`<div class="qcard ${isP2?'ph2':''} in">
+      <div class="qnum">${q.num}</div>
+      <div class="qtag ${isP2?'t2':''}">${q.tag}</div>
+      <div class="qtext">${q.text}</div>
+      <div class="opts">${q.opts.map((o,i)=>`
+        <button class="opt ${isP2?'ph2':''} ${answers[cur]===i?'sel':''}" onclick="pick(${cur},${i})">
+          <div class="okey">${o.key}</div>
+          <div class="oval">${o.val}</div>
+        </button>`).join('')}
+      </div>
+    </div>`;
+
+    const banner=document.getElementById('phase-banner');
+    if(isP2){banner.className='phase-banner ph2';banner.innerHTML='<span style="font-size:1.2rem">🚀</span><div><div style="font-size:.65rem;opacity:.7;text-transform:uppercase;letter-spacing:.08em">Часть 2 из 2</div><div>Потенциал и стиль работы</div></div>';}
+    else{banner.className='phase-banner ph1';banner.innerHTML='<span style="font-size:1.2rem">💡</span><div><div style="font-size:.65rem;opacity:.7;text-transform:uppercase;letter-spacing:.08em">Часть 1 из 2</div><div>Мотивация и ценности</div></div>';}
+
+    document.getElementById('qnum-h').textContent=cur+1;
+    document.getElementById('prog-f').style.width=Math.round(((cur+1)/12)*100)+'%';
+    document.getElementById('btn-back').disabled=cur===0;
+    document.getElementById('btn-next').textContent=cur===11?'Завершить →':'Следующий →';
+    document.getElementById('btn-next').className='btn-next'+(isP2?' ph2':'');
+    document.getElementById('hint').classList.remove('show');
+    QS.forEach((_,i)=>{
+      const d=document.getElementById('qd'+i); if(!d)return;
+      const p2=QS[i].phase===2;
+      if(i<cur)d.className='qd '+(p2?'done2':'done');
+      else if(i===cur)d.className='qd '+(p2?'active2':'active');
+      else d.className='qd';
+    });
+  }
+
+  function pick(qi,oi){
+    answers[qi]=oi;
+    document.querySelectorAll('.opt').forEach((el,i)=>el.classList.toggle('sel',i===oi));
+    document.getElementById('hint').classList.remove('show');
+  }
+  function next(){ if(answers[cur]===undefined){document.getElementById('hint').classList.add('show');return;} if(cur===11){finish();return;} cur++;render(); }
+  function prev(){ if(cur===0)return; cur--;render(); }
+
+  async function finish(){
+    const an=document.getElementById('analyzing'); an.classList.add('show');
+    const steps=['as1','as2','as3','as4','as5'];
+    for(let i=0;i<steps.length;i++){await new Promise(r=>setTimeout(r,700));document.getElementById(steps[i]).classList.add('done');}
+
+    const answersSummary=QS.map((q,i)=>{const o=q.opts[answers[i]];return `${q.num}. ${q.tag}: ${q.text}\nОтвет: ${o?o.val:'—'}`;}).join('\n\n');
+    const candName=candData.name||'Кандидат';
+    const candPosition=candData.position||position||'Не указана';
+
+    // Get team psychotypes for compatibility
+    let teamPsychoInfo='';
+    try{
+      const all=JSON.parse(localStorage.getItem('trajecta_b2b_results')||'{}');
+      const team=all[companyId]||[];
+      if(team.length){
+        const counts={};
+        team.forEach(r=>{const c=r.psychotype_code||'D';counts[c]=(counts[c]||0)+1;});
+        teamPsychoInfo='Психотипы текущей команды: '+Object.entries(counts).map(([k,v])=>k+'('+v+')').join(', ');
+      }
+    }catch(e){}
+
+    let aiResult=null;
+    try{
+      const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:`Ты HR-аналитик. Проанализируй ответы кандидата. Верни ТОЛЬКО JSON без markdown.
+
+Кандидат: ${candName}
+Вакансия: ${candPosition}
+Компания: ${company}
+${teamPsychoInfo}
+
+Ответы:
+${answersSummary}
+
+JSON:
+{
+  "psychotype": "Аналитик/Архитектор/Коммуникатор/Исполнитель/Визионер",
+  "psychotype_code": "A/B/C/D/E",
+  "potential_score": 20-95,
+  "motivation_type": "рост/деньги/команда/свобода/вызов",
+  "compatibility_score": 20-95,
+  "compatibility_note": "почему подходит или не подходит команде (1 предложение)",
+  "red_flags": ["флаг 1","флаг 2"] или [],
+  "green_flags": ["плюс 1","плюс 2","плюс 3"],
+  "verdict": "Рекомендуем/Рассмотреть/Не рекомендуем",
+  "verdict_reason": "краткое обоснование вердикта (1-2 предложения)",
+  "interview_questions": ["вопрос 1 для интервью","вопрос 2","вопрос 3"],
+  "insight": "главный инсайт для HR (2 предложения)"
+}`}]})});
+      const d=await resp.json();
+      aiResult=JSON.parse(d.content[0].text.replace(/```json|```/g,'').trim());
+    }catch(e){ aiResult=calcFallback(); }
+
+    const result={
+      name:candName, position:candPosition,
+      company, companyId, type:'candidate',
+      ...aiResult,
+      date:new Date().toLocaleDateString('ru-RU')
+    };
+
+    // Save to candidate results
+    try{
+      const KEY='trajecta_candidates';
+      const all=JSON.parse(localStorage.getItem(KEY)||'{}');
+      if(!all[companyId])all[companyId]=[];
+      all[companyId].push(result);
+      localStorage.setItem(KEY,JSON.stringify(all));
+    }catch(e){}
+
+    // Send to Make
+    try{await fetch(B2B_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(result)});}catch(e){}
+
+    localStorage.setItem('tr_candidate_result',JSON.stringify(result));
+    localStorage.removeItem('tr_candidate');
+    await new Promise(r=>setTimeout(r,400));
+    window.location.href='candidate-result.html';
+  }
+
+  function calcFallback(){
+    let flags=0,potential=70,type='D';
+    const typeScores={A:0,B:0,C:0,D:0};
+    QS.forEach((q,i)=>{
+      const o=q.opts[answers[i]||0]; if(!o)return;
+      const s=o.score;
+      if(s.flag)flags+=s.flag;
+      if(s.type)typeScores[s.type]=(typeScores[s.type]||0)+1;
+      if(s.potential)potential+=s.potential;
+    });
+    const topType=Object.entries(typeScores).sort((a,b)=>b[1]-a[1])[0][0];
+    const NAMES={A:'Аналитик',B:'Архитектор',C:'Коммуникатор',D:'Исполнитель'};
+    const verdict=flags<=2?'Рекомендуем':flags<=5?'Рассмотреть':'Не рекомендуем';
+    return{
+      psychotype:NAMES[topType]||'Исполнитель', psychotype_code:topType,
+      potential_score:Math.min(90,Math.max(25,potential/4)),
+      motivation_type:'рост', compatibility_score:65,
+      compatibility_note:'Профиль требует детальной оценки на интервью.',
+      red_flags:flags>4?['Требует дополнительной проверки']:[], 
+      green_flags:['Прошёл тест','Ответил честно'],
+      verdict, verdict_reason:'На основе анализа ответов.',
+      interview_questions:['Расскажите о вашем опыте работы в команде','Как вы справляетесь с дедлайнами?','Что вас привлекает в этой вакансии?'],
+      insight:'Кандидат показал характерный профиль '+NAMES[topType]+'. Рекомендуется провести структурированное интервью.'
+    };
+  }
+
+  render();
+</script>
+</body>
+</html>

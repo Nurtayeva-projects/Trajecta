@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тест завершён — Trajecta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#020617;--card:#0d1b35;--accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);--orange:rgba(251,146,60,.9);--od:rgba(251,146,60,.1);--om:rgba(251,146,60,.25);--border:rgba(255,255,255,.07);--text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);--D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;}
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+    .bg-g{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 40% at 50% 30%,rgba(198,255,0,.05),transparent 55%);}
+    .card{position:relative;z-index:1;background:var(--card);border:1.5px solid rgba(198,255,0,.25);border-radius:22px;padding:48px 36px;max-width:480px;width:100%;text-align:center;animation:popIn .5s cubic-bezier(.34,1.2,.64,1) both;}
+    @keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+    .check{width:72px;height:72px;border-radius:50%;background:var(--ad);border:2px solid var(--am);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem;animation:checkPop .6s .2s cubic-bezier(.34,1.56,.64,1) both;}
+    @keyframes checkPop{from{transform:scale(0)}to{transform:scale(1)}}
+    h1{font-family:var(--D);font-size:1.6rem;font-weight:800;letter-spacing:-.03em;margin-bottom:10px;}
+    h1 em{font-style:normal;color:var(--accent);}
+    p{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:20px;}
+    .info-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;text-align:left;}
+    .info-row{display:flex;align-items:center;gap:10px;font-size:.85rem;padding:6px 0;border-bottom:1px solid var(--border);}
+    .info-row:last-child{border-bottom:none;}
+    .info-ico{font-size:1rem;width:24px;text-align:center;}
+    .note{font-size:.78rem;color:var(--dim);line-height:1.6;}
+  </style>
+</head>
+<body>
+<div class="bg-g"></div>
+<div class="card">
+  <div class="check">✅</div>
+  <h1>Тест <em>завершён!</em></h1>
+  <p>Спасибо! Твои ответы отправлены HR-менеджеру. Они помогут провести более предметное интервью.</p>
+  <div class="info-box" id="info-box">
+    <div class="info-row"><span class="info-ico">👤</span><span id="cand-name-show">—</span></div>
+    <div class="info-row"><span class="info-ico">💼</span><span id="cand-pos-show">—</span></div>
+    <div class="info-row"><span class="info-ico">🏢</span><span id="cand-company-show">—</span></div>
+  </div>
+  <p class="note">🔒 Детальный анализ видит только HR. До встречи — будь собой на интервью. Удачи! 🚀</p>
+</div>
+<script>
+  const R = JSON.parse(localStorage.getItem('tr_candidate_result')||'null');
+  if(R){
+    document.getElementById('cand-name-show').textContent = R.name||'—';
+    document.getElementById('cand-pos-show').textContent = R.position||'Вакансия не указана';
+    document.getElementById('cand-company-show').textContent = R.company||'—';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оценка кандидата — Trajecta</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#020617;--card:#0d1b35;--accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);--orange:rgba(251,146,60,.9);--od:rgba(251,146,60,.1);--om:rgba(251,146,60,.25);--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);--text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);--D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;}
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+    .bg-g{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 30%,rgba(251,146,60,.05),transparent 55%);}
+    .card{position:relative;z-index:1;background:var(--card);border:1.5px solid var(--om);border-radius:22px;padding:40px 36px;max-width:460px;width:100%;animation:popIn .5s cubic-bezier(.34,1.2,.64,1) both;}
+    @keyframes popIn{from{opacity:0;transform:scale(.92) translateY(16px)}to{opacity:1;transform:none}}
+    .logo{font-family:var(--D);font-size:1.2rem;font-weight:800;margin-bottom:4px;}
+    .logo span{color:var(--accent);}
+    .company-tag{display:inline-flex;align-items:center;gap:6px;background:var(--od);border:1px solid var(--om);color:var(--orange);font-size:.75rem;font-weight:600;padding:4px 12px;border-radius:100px;margin:10px 0 20px;}
+    h1{font-family:var(--D);font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:8px;}
+    p{font-size:.88rem;color:var(--muted);line-height:1.65;margin-bottom:22px;}
+    .features{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+    .feat{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--muted);}
+    .feat-ico{font-size:1rem;}
+    input{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--B);font-size:.95rem;padding:12px 14px;outline:none;margin-bottom:10px;}
+    input:focus{border-color:var(--om);}
+    .btn{width:100%;background:rgba(251,146,60,.9);color:#020617;font-family:var(--B);font-weight:700;font-size:.95rem;padding:14px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;margin-top:4px;}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(251,146,60,.35);}
+    .note{font-size:.75rem;color:var(--dim);text-align:center;margin-top:12px;}
+  </style>
+</head>
+<body>
+<div class="bg-g"></div>
+<div class="card">
+  <a href="index.html" class="logo" style="text-decoration:none;display:block">Traject<span>a</span></a>
+  <div class="company-tag" id="company-tag">🏢 Загрузка...</div>
+  <h1>Оценка перед собеседованием</h1>
+  <p>Пройди короткий тест — это поможет нам лучше понять твои сильные стороны и карьерные цели до встречи.</p>
+  <div class="features">
+    <div class="feat"><span class="feat-ico">⏱</span>Займёт 7–10 минут</div>
+    <div class="feat"><span class="feat-ico">🔒</span>Ответы видит только HR-менеджер</div>
+    <div class="feat"><span class="feat-ico">✅</span>Нет правильных или неправильных ответов</div>
+  </div>
+  <input type="text" id="cand-name" placeholder="Имя и фамилия *" onkeydown="if(event.key==='Enter')document.getElementById('cand-pos').focus()">
+  <input type="text" id="cand-pos" placeholder="На какую вакансию претендуешь?" onkeydown="if(event.key==='Enter')startTest()">
+  <button class="btn" onclick="startTest()">Начать тест →</button>
+  <div class="note">Твои данные используются только для подготовки к интервью</div>
+</div>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const company = decodeURIComponent(params.get('company')||'Компания');
+  const companyId = params.get('id')||'';
+  const position = decodeURIComponent(params.get('position')||'');
+  document.getElementById('company-tag').textContent = '🏢 ' + company;
+  if(position) document.getElementById('cand-pos').value = position;
+
+  function startTest(){
+    const name = document.getElementById('cand-name').value.trim();
+    const pos = document.getElementById('cand-pos').value.trim();
+    if(!name){ document.getElementById('cand-name').style.borderColor='rgba(255,80,50,.5)'; return; }
+    localStorage.setItem('tr_candidate', JSON.stringify({name, position:pos, company, companyId}));
+    window.location.href = 'candidate-test.html?company='+encodeURIComponent(company)+'&id='+companyId+'&position='+encodeURIComponent(pos);
+  }
+</script>
+</body>
+</html>

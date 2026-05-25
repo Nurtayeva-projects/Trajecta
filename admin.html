@@ -96,7 +96,7 @@
 </div>
 
 <div class="wrap" id="main" style="display:none">
-  <div class="logo">Traject<span>a</span></div>
+  <a href="index.html" class="logo" style="text-decoration:none">Traject<span>a</span></a>
   <div class="admin-tag">🔒 Admin</div>
 
   <!-- STEP 1: ВЫБОР ТИПА -->
@@ -111,6 +111,11 @@
       <div class="type-ico">🏢</div>
       <div class="type-name">B2B — Доступ для команды</div>
       <div class="type-desc">Компания оплатила → создаёшь ссылку → команда проходит тест</div>
+    </div>
+    <div class="type-btn" id="btn-cand" onclick="setType('cand')" style="grid-column:1/-1">
+      <div class="type-ico">🎯</div>
+      <div class="type-name">Кандидат — Ссылка для собеседования</div>
+      <div class="type-desc">Перед интервью → кандидат проходит тест → HR видит профиль до встречи</div>
     </div>
   </div>
 
@@ -209,6 +214,39 @@
     </div>
   </div>
 
+
+  <!-- CANDIDATE PANEL -->
+  <div class="panel" id="panel-cand">
+    <div class="card" style="border-color:rgba(251,146,60,.2);background:linear-gradient(135deg,rgba(251,146,60,.05),transparent)">
+      <div class="card-title">Создать ссылку для кандидата</div>
+      <label>Название компании</label>
+      <input type="text" id="cand-company" placeholder="ТОО «КомпанияХХХ»">
+      <label>Вакансия (необязательно)</label>
+      <input type="text" id="cand-position" placeholder="Например: Product Manager">
+      <button class="btn" style="background:rgba(251,146,60,.9)" onclick="createCandLink()">🎯 Создать ссылку</button>
+
+      <div id="cand-result" style="display:none;margin-top:16px">
+        <div style="background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.25);border-radius:12px;padding:16px;margin-bottom:10px">
+          <div style="font-size:.72rem;color:rgba(251,146,60,.8);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">🎯 Ссылка для кандидата</div>
+          <div style="font-size:.82rem;color:var(--text);word-break:break-all;margin-bottom:8px" id="cand-link-url">—</div>
+          <div style="font-size:.75rem;color:var(--muted)">Отправь эту ссылку кандидату перед интервью. Он пройдёт тест — ты увидишь профиль до встречи.</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-sm" style="background:rgba(251,146,60,.9)" onclick="copyCandMsg()">✉️ Сообщение кандидату</button>
+          <button class="btn btn-sm btn-gray" onclick="copyCandLink()">📋 Скопировать ссылку</button>
+          <a id="cand-dash-btn" href="#" target="_blank" class="btn btn-sm btn-gray" style="text-decoration:none">📊 Дашборд кандидатов</a>
+        </div>
+        <div class="msg-box" id="cand-msg" style="display:none;margin-top:10px"></div>
+      </div>
+    </div>
+
+    <!-- Candidates list -->
+    <div class="card">
+      <div class="card-title">История ссылок</div>
+      <div id="cand-list"><div style="text-align:center;padding:20px;color:var(--muted);font-size:.85rem">Ссылок пока нет</div></div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -234,8 +272,10 @@
     currentType = type;
     document.getElementById('btn-b2c').className='type-btn'+(type==='b2c'?' active-b2c':'');
     document.getElementById('btn-b2b').className='type-btn'+(type==='b2b'?' active-b2b':'');
+    document.getElementById('btn-cand').className='type-btn'+(type==='cand'?' active-b2c':'');
     document.getElementById('panel-b2c').className='panel'+(type==='b2c'?' active':'');
     document.getElementById('panel-b2b').className='panel'+(type==='b2b'?' active':'');
+    document.getElementById('panel-cand').className='panel'+(type==='cand'?' active':'');
   }
 
   // ── B2C CODES ──
@@ -357,7 +397,60 @@
     </div>`).join('');
   }
 
-  function renderAll(){ renderB2C(); renderB2B(); }
+  function renderAll(){ renderB2C(); renderB2B(); renderCandList(); }
+
+  const CAND_KEY = 'trajecta_cand_links';
+  function getCandLinks(){ try{return JSON.parse(localStorage.getItem(CAND_KEY)||'[]');}catch(e){return[];} }
+  function saveCandLinks(l){ localStorage.setItem(CAND_KEY,JSON.stringify(l)); }
+
+  function createCandLink(){
+    const company=document.getElementById('cand-company').value.trim();
+    if(!company){alert('Введите название компании');return;}
+    const position=document.getElementById('cand-position').value.trim();
+    const id=Math.random().toString(36).substring(2,8).toUpperCase();
+    const base=window.location.origin;
+    const link=base+'/candidate-entry.html?company='+encodeURIComponent(company)+'&id='+id+'&position='+encodeURIComponent(position);
+    const dashLink=base+'/candidates-dashboard.html?company='+encodeURIComponent(company)+'&id='+id;
+    const entry={id,company,position,link,dashLink,created:new Date().toLocaleDateString('ru-RU')};
+    const links=getCandLinks(); links.unshift(entry); saveCandLinks(links);
+    window._curCand=entry;
+    document.getElementById('cand-link-url').textContent=link;
+    document.getElementById('cand-dash-btn').href=dashLink;
+    const msg='Добрый день, '+company+'!\n\nПеред нашим собеседованием просим пройти короткий тест (7–10 минут).\n\nЭто поможет нам лучше понять ваши сильные стороны и сделать интервью более предметным.\n\n🔗 Ссылка:\n'+link+'\n\nНет правильных или неправильных ответов — отвечайте честно.\n\nДо встречи! — HR Trajecta';
+    document.getElementById('cand-msg').textContent=msg;
+    window._curCandMsg=msg;
+    document.getElementById('cand-result').style.display='block';
+    document.getElementById('cand-company').value='';
+    document.getElementById('cand-position').value='';
+    renderCandList();
+  }
+
+  function copyCandLink(){ navigator.clipboard?.writeText(window._curCand?.link||''); flash(event.target,'✓ Скопировано!'); }
+  function copyCandMsg(){
+    const m=document.getElementById('cand-msg');
+    m.style.display=m.style.display==='none'?'block':'none';
+    navigator.clipboard?.writeText(window._curCandMsg||'');
+    flash(event.target,'✓ Скопировано!');
+  }
+  function deleteCandLink(id){ if(!confirm('Удалить?'))return; saveCandLinks(getCandLinks().filter(l=>l.id!==id)); renderCandList(); }
+
+  function renderCandList(){
+    const links=getCandLinks();
+    const el=document.getElementById('cand-list');
+    if(!links.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:.85rem">Ссылок пока нет</div>';return;}
+    el.innerHTML=links.map(l=>`<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div style="font-weight:600;font-size:.88rem">${l.company}${l.position?' · <span style="color:var(--muted);font-weight:400">'+l.position+'</span>':''}</div>
+        <span style="font-size:.7rem;color:var(--dim)">${l.created}</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="icon-btn" onclick="navigator.clipboard?.writeText('${l.link}');flash(this,'✓')">📋 Ссылка</button>
+        <a href="${l.dashLink}" target="_blank" class="icon-btn" style="text-decoration:none">📊 Дашборд</a>
+        <button class="icon-btn" style="color:rgba(255,80,50,.5)" onclick="deleteCandLink('${l.id}')">✕</button>
+      </div>
+    </div>`).join('');
+  }
+
 
   function flash(btn,txt){
     if(!btn)return;
