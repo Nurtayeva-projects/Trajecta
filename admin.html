@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trajecta Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#020617;--card:#0d1b35;--accent:#C6FF00;--ad:rgba(198,255,0,.1);--am:rgba(198,255,0,.22);--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);--text:#f0f4ff;--muted:rgba(240,244,255,.52);--dim:rgba(240,244,255,.22);--D:'Syne',sans-serif;--B:'Space Grotesk',sans-serif;}
+    body{background:var(--bg);color:var(--text);font-family:var(--B);min-height:100vh;padding:40px 20px;}
+    .wrap{max-width:700px;margin:0 auto;}
+    .logo{font-family:var(--D);font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+    .logo span{color:var(--accent);}
+    .admin-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,80,50,.1);border:1px solid rgba(255,80,50,.3);color:rgba(255,120,80,.9);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:100px;margin-bottom:32px;}
+    h2{font-family:var(--D);font-size:1.2rem;font-weight:800;margin-bottom:16px;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;}
+    .card.accent{border-color:rgba(198,255,0,.25);background:linear-gradient(135deg,rgba(198,255,0,.06),rgba(198,255,0,.02));}
+    input,select{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--B);font-size:.9rem;padding:10px 14px;outline:none;margin-bottom:10px;box-sizing:border-box;}
+    input:focus,select:focus{border-color:rgba(198,255,0,.5);}
+    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#020617;font-family:var(--B);font-weight:700;font-size:.9rem;padding:11px 24px;border-radius:8px;border:none;cursor:pointer;transition:transform .2s;}
+    .btn:hover{transform:translateY(-2px);}
+    .btn-sm{padding:7px 14px;font-size:.8rem;}
+    .btn-red{background:rgba(255,80,50,.9);color:#fff;}
+    .btn-blue{background:rgba(96,165,250,.9);color:#020617;}
+    .btn-gray{background:rgba(255,255,255,.1);color:var(--text);}
+    .code-box{background:var(--bg);border:2px solid var(--am);border-radius:10px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin:12px 0;}
+    .code-val{font-family:var(--D);font-size:1.6rem;font-weight:800;color:var(--accent);letter-spacing:.1em;}
+    .tag{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:100px;}
+    .tag-new{background:var(--ad);border:1px solid var(--am);color:var(--accent);}
+    .tag-used{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);}
+    .tag-b2b{background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.25);color:rgba(96,165,250,.9);}
+    table{width:100%;border-collapse:collapse;font-size:.85rem;}
+    th{text-align:left;color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;padding:8px 12px;border-bottom:1px solid var(--border);}
+    td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+    tr:last-child td{border-bottom:none;}
+    .copy-btn{background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--muted);font-size:.75rem;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:var(--B);}
+    .copy-btn:hover{color:var(--text);}
+    .stat{text-align:center;padding:16px;}
+    .stat-n{font-family:var(--D);font-size:2rem;font-weight:800;color:var(--accent);}
+    .stat-l{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
+    .login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;}
+    .login-box{background:var(--card);border:1.5px solid rgba(198,255,0,.25);border-radius:20px;padding:40px;max-width:360px;width:100%;text-align:center;}
+    .pw-input{text-align:center;font-size:1.2rem;letter-spacing:.2em;}
+    .section-divider{display:flex;align-items:center;gap:12px;margin:24px 0 16px;color:var(--dim);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;}
+    .section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div style="font-family:var(--D);font-size:1.5rem;font-weight:800;margin-bottom:6px">Traject<span style="color:var(--accent)">a</span></div>
+    <div style="font-size:.85rem;color:var(--muted);margin-bottom:24px">Admin панель</div>
+    <input type="password" class="pw-input" id="pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="checkPw()">Войти →</button>
+    <div id="pw-error" style="color:rgba(255,80,50,.8);font-size:.82rem;margin-top:10px;opacity:0">Неверный пароль</div>
+  </div>
+</div>
+
+<div class="wrap" id="main" style="display:none">
+  <div class="logo">Traject<span>a</span></div>
+  <div class="admin-tag">🔒 Admin панель</div>
+
+  <!-- STATS -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px">
+    <div class="card" style="padding:16px;text-align:center">
+      <div class="stat-n" id="stat-total">0</div>
+      <div class="stat-l">Всего кодов</div>
+    </div>
+    <div class="card" style="padding:16px;text-align:center">
+      <div class="stat-n" id="stat-new" style="color:var(--accent)">0</div>
+      <div class="stat-l">Активных</div>
+    </div>
+    <div class="card" style="padding:16px;text-align:center">
+      <div class="stat-n" id="stat-used" style="color:var(--muted)">0</div>
+      <div class="stat-l">Использованных</div>
+    </div>
+    <div class="card" style="padding:16px;text-align:center">
+      <div class="stat-n" id="stat-b2b" style="color:rgba(96,165,250,.9)">0</div>
+      <div class="stat-l">B2B кодов</div>
+    </div>
+  </div>
+
+  <!-- GENERATE -->
+  <div class="card accent">
+    <h2>Создать новый код</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div>
+        <label style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px">Тип</label>
+        <select id="gen-type">
+          <option value="b2c">B2C — Полный план (4 900 ₸)</option>
+          <option value="b2b-s">B2B — Команда (24 900 ₸)</option>
+          <option value="b2b-m">B2B — Бизнес (79 900 ₸)</option>
+          <option value="b2b-e">B2B — Enterprise</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px">Клиент (необязательно)</label>
+        <input type="text" id="gen-client" placeholder="Имя клиента или телефон">
+      </div>
+    </div>
+    <button class="btn" onclick="generateCode()">⚡ Создать код</button>
+
+    <!-- Generated code display -->
+    <div id="gen-result" style="display:none;margin-top:16px">
+      <div class="code-box">
+        <div>
+          <div style="font-size:.7rem;color:var(--muted);margin-bottom:4px">Новый код доступа</div>
+          <div class="code-val" id="gen-code-val">TRAJ-0000</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-direction:column">
+          <button class="btn btn-sm" onclick="copyCode()" id="copy-btn">📋 Копировать</button>
+          <button class="btn btn-sm btn-blue" onclick="copyMessage()">✉️ Скопировать сообщение</button>
+        </div>
+      </div>
+      <div id="gen-message" style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:.85rem;color:var(--muted);line-height:1.6;white-space:pre-wrap"></div>
+    </div>
+  </div>
+
+  <!-- CODES LIST -->
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h2 style="margin:0">Все коды</h2>
+      <button class="btn btn-sm btn-red" onclick="if(confirm('Удалить использованные коды?'))clearUsed()">Удалить использованные</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Код</th>
+          <th>Тип</th>
+          <th>Клиент</th>
+          <th>Создан</th>
+          <th>Статус</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="codes-table"></tbody>
+    </table>
+    <div id="no-codes" style="text-align:center;padding:32px;color:var(--muted);font-size:.88rem">Кодов пока нет — создай первый выше</div>
+  </div>
+
+</div>
+
+<script>
+  const ADMIN_PW = 'trajecta2025';
+  const STORAGE_KEY = 'trajecta_admin_codes';
+
+  function checkPw(){
+    const val = document.getElementById('pw-input').value;
+    if(val === ADMIN_PW){
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('main').style.display='block';
+      renderAll();
+    } else {
+      const err = document.getElementById('pw-error');
+      err.style.opacity='1';
+      setTimeout(()=>err.style.opacity='0',2000);
+    }
+  }
+
+  function getCodes(){
+    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }
+    catch(e){ return []; }
+  }
+
+  function saveCodes(codes){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(codes));
+  }
+
+  function generateCode(){
+    const type = document.getElementById('gen-type').value;
+    const client = document.getElementById('gen-client').value.trim();
+
+    // Generate unique code
+    const prefix = type==='b2c'?'TRAJ':type==='b2b-s'?'B2B-S':type==='b2b-m'?'B2B-M':'B2B-E';
+    const num = Math.random().toString(36).substring(2,6).toUpperCase();
+    const code = prefix+'-'+num;
+
+    const typeLabels = {
+      'b2c':'B2C · Полный план · 4 900 ₸',
+      'b2b-s':'B2B · Команда · 24 900 ₸',
+      'b2b-m':'B2B · Бизнес · 79 900 ₸',
+      'b2b-e':'B2B · Enterprise'
+    };
+
+    const entry = {
+      code, type, client,
+      label: typeLabels[type],
+      created: new Date().toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+      used: false,
+      usedAt: null
+    };
+
+    const codes = getCodes();
+    codes.unshift(entry);
+    saveCodes(codes);
+
+    // Show result
+    document.getElementById('gen-code-val').textContent = code;
+    document.getElementById('gen-result').style.display='block';
+
+    // Generate message
+    const msg = type==='b2c'
+      ? `Привет! Твоя оплата подтверждена ✅\n\nВот твой код доступа к полному плану:\n\n🔑 ${code}\n\nКак использовать:\n1. Зайди на trajecta.site\n2. Пройди тест (если ещё не прошёл)\n3. На странице «Выбор пути» введи этот код\n4. Второй путь разблокируется\n\nЕсли вопросы — пиши сюда. Удачи! 🚀`
+      : `Привет! Оплата подтверждена ✅\n\nВот код доступа для вашей команды:\n\n🔑 ${code}\n\nКак использовать:\n1. Перейдите на trajecta.site/b2b-starter.html\n2. Введите код для активации\n3. Поделитесь ссылкой с командой\n\nЕсли вопросы — пишите. — Trajecta`;
+
+    document.getElementById('gen-message').textContent = msg;
+    window._currentCode = code;
+    window._currentMsg = msg;
+
+    renderAll();
+    document.getElementById('gen-client').value='';
+  }
+
+  function copyCode(){
+    navigator.clipboard?.writeText(window._currentCode||'');
+    const btn = document.getElementById('copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Скопировано!';
+    setTimeout(()=>btn.textContent=orig,2000);
+  }
+
+  function copyMessage(){
+    navigator.clipboard?.writeText(window._currentMsg||'');
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✓ Сообщение скопировано!';
+    setTimeout(()=>btn.textContent=orig,2000);
+  }
+
+  function clearUsed(){
+    const codes = getCodes().filter(c=>!c.used);
+    saveCodes(codes);
+    renderAll();
+  }
+
+  function deleteCode(code){
+    const codes = getCodes().filter(c=>c.code!==code);
+    saveCodes(codes);
+    renderAll();
+  }
+
+  function renderAll(){
+    const codes = getCodes();
+    const total = codes.length;
+    const active = codes.filter(c=>!c.used).length;
+    const used = codes.filter(c=>c.used).length;
+    const b2b = codes.filter(c=>c.type!=='b2c').length;
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-new').textContent = active;
+    document.getElementById('stat-used').textContent = used;
+    document.getElementById('stat-b2b').textContent = b2b;
+
+    const tbody = document.getElementById('codes-table');
+    document.getElementById('no-codes').style.display = codes.length?'none':'block';
+
+    tbody.innerHTML = codes.map(c=>`
+      <tr style="${c.used?'opacity:.5':''}">
+        <td><code style="font-family:monospace;font-size:.9rem;font-weight:700;color:${c.used?'var(--muted)':'var(--accent)'}">${c.code}</code></td>
+        <td><span class="tag ${c.type==='b2c'?'tag-new':'tag-b2b'}">${c.type.toUpperCase()}</span></td>
+        <td style="color:var(--muted);font-size:.82rem">${c.client||'—'}</td>
+        <td style="color:var(--dim);font-size:.78rem">${c.created}</td>
+        <td><span class="tag ${c.used?'tag-used':'tag-new'}">${c.used?'Использован':'Активный'}</span></td>
+        <td>
+          <button class="copy-btn" onclick="navigator.clipboard?.writeText('${c.code}')">📋</button>
+          <button class="copy-btn" style="margin-left:4px;color:rgba(255,80,50,.6)" onclick="deleteCode('${c.code}')">✕</button>
+        </td>
+      </tr>`).join('');
+  }
+
+  document.getElementById('pw-input').focus();
+</script>
+</body>
+</html>

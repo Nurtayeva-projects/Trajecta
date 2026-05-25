@@ -563,7 +563,21 @@
         <button class="btn" onclick="openLeadForm('Полный план · B2C','4 900 ₸')" style="font-size:.95rem;padding:14px 36px;display:inline-flex">
           Получить доступ →
         </button>
-        <div style="margin-top:12px;font-size:.75rem;color:var(--dim)">📲 После заявки пришлём ссылку на Kaspi оплату</div>
+        <div style="margin-top:12px;font-size:.75rem;color:var(--dim)">📲 После оплаты пришлём код доступа</div>
+
+        <!-- CODE INPUT -->
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08)">
+          <div style="font-size:.78rem;color:var(--muted);margin-bottom:10px">Уже оплатили? Введите код доступа:</div>
+          <div style="display:flex;gap:8px;max-width:320px;margin:0 auto">
+            <input id="access-code-input" type="text" placeholder="TRAJ-XXXX"
+              style="flex:1;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;color:#f0f4ff;font-family:Space Grotesk,sans-serif;font-size:.95rem;padding:10px 14px;outline:none;text-transform:uppercase;letter-spacing:.08em;text-align:center"
+              onkeydown="if(event.key==='Enter')activateCode()">
+            <button onclick="activateCode()" style="background:rgba(198,255,0,.9);color:#020617;font-family:Space Grotesk,sans-serif;font-weight:700;font-size:.88rem;padding:10px 18px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap">
+              Активировать
+            </button>
+          </div>
+          <div id="code-error" style="font-size:.78rem;color:rgba(255,80,50,.8);margin-top:8px;opacity:0;transition:opacity .3s"></div>
+        </div>
       </div>
       <!-- FINAL CTA -->
       <div class="final-cta">
@@ -1021,6 +1035,57 @@
   }
 
   // ── MODAL ──
+  function activateCode(){
+    const input = document.getElementById('access-code-input');
+    const errorEl = document.getElementById('code-error');
+    if(!input) return;
+
+    const code = input.value.trim().toUpperCase();
+    if(!code){ showCodeError('Введите код'); return; }
+
+    // Get codes from localStorage (shared with admin panel)
+    let codes = [];
+    try{ codes = JSON.parse(localStorage.getItem('trajecta_admin_codes')||'[]'); }catch(e){}
+
+    const entry = codes.find(c => c.code === code);
+
+    if(!entry){
+      showCodeError('Код не найден. Проверьте правильность ввода.');
+      return;
+    }
+    if(entry.used){
+      showCodeError('Этот код уже был использован.');
+      return;
+    }
+    if(!entry.type.startsWith('b2c')){
+      showCodeError('Этот код предназначен для B2B доступа.');
+      return;
+    }
+
+    // Mark code as used
+    entry.used = true;
+    entry.usedAt = new Date().toLocaleDateString('ru-RU');
+    localStorage.setItem('trajecta_admin_codes', JSON.stringify(codes));
+
+    // Grant access
+    localStorage.setItem('tr_paid', 'true');
+
+    // Show success and reload
+    const pw = document.querySelector('.paywall-wrap');
+    if(pw){
+      pw.innerHTML = '<div style="padding:24px;text-align:center"><div style="font-size:2.5rem;margin-bottom:12px">🎉</div><div style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:800;color:#C6FF00;margin-bottom:8px">Доступ открыт!</div><div style="font-size:.85rem;color:rgba(240,244,255,.6)">Страница обновится через секунду...</div></div>';
+    }
+    setTimeout(()=>window.location.reload(), 1500);
+  }
+
+  function showCodeError(msg){
+    const el = document.getElementById('code-error');
+    if(!el) return;
+    el.textContent = msg;
+    el.style.opacity = '1';
+    setTimeout(()=>el.style.opacity='0', 3000);
+  }
+
   function openModal(){ document.getElementById('modal').classList.add('open'); }
   function closeModal(){ document.getElementById('modal').classList.remove('open'); }
   document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
