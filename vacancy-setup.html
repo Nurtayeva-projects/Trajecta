@@ -60,6 +60,15 @@
       <p class="hero-sub">Заполните информацию о компании и вакансии — это поможет точнее оценить кандидатов и сравнить их с вашими требованиями.</p>
     </div>
 
+    <!-- Контакт -->
+    <div class="section" style="border-color:rgba(96,165,250,.25);background:linear-gradient(135deg,rgba(96,165,250,.05),transparent)">
+      <div class="section-title" style="color:rgba(96,165,250,.8)">👤 Ваши контакты</div>
+      <label>Имя и фамилия *</label>
+      <input type="text" id="f-contact" placeholder="Как к вам обращаться">
+      <label>Телефон / WhatsApp *</label>
+      <input type="tel" id="f-phone" placeholder="+7...">
+    </div>
+
     <!-- О компании -->
     <div class="section">
       <div class="section-title">🏢 О компании</div>
@@ -179,7 +188,7 @@
   <div class="success" id="success-view">
     <div class="success-ico">✅</div>
     <div class="success-title">Профиль сохранён!</div>
-    <p class="success-sub">Профиль вакансии сохранён. Мы свяжемся с вами для подтверждения оплаты и активации пакета. Ссылки для кандидатов будут готовы после оплаты.</p>
+    <p class="success-sub">Профиль вакансии сохранён! Мы свяжемся с вами в течение 2 часов для подтверждения оплаты через Kaspi. После оплаты — ссылки для кандидатов будут активированы.</p>
     <div id="pkg-summary" style="background:rgba(198,255,0,.08);border:1px solid rgba(198,255,0,.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:.85rem;font-weight:600" id="pkg-name-show">—</span><span style="font-family:var(--D);font-size:1.1rem;font-weight:800;color:var(--accent)" id="pkg-price-show">—</span></div>
     <div class="link-box">
       <div class="link-label">🔗 Ссылка для кандидатов</div>
@@ -223,14 +232,18 @@
   }
 
   function submitForm(){
+    const contact = document.getElementById('f-contact').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
     const company = document.getElementById('f-company').value.trim();
     const position = document.getElementById('f-position').value.trim();
+    if(!contact){ document.getElementById('f-contact').style.borderColor='rgba(255,80,50,.5)'; return; }
+    if(!phone){ document.getElementById('f-phone').style.borderColor='rgba(255,80,50,.5)'; return; }
     if(!company){ document.getElementById('f-company').style.borderColor='rgba(255,80,50,.5)'; return; }
     if(!position){ document.getElementById('f-position').style.borderColor='rgba(255,80,50,.5)'; return; }
 
     const id = Math.random().toString(36).substring(2,8).toUpperCase();
     const vacData = {
-      id, company, title: position,
+      id, contact, phone, company, title: position,
       industry: document.getElementById('f-industry').value.trim(),
       duties: document.getElementById('f-duties').value.trim(),
       notes: document.getElementById('f-notes').value.trim(),
@@ -258,7 +271,7 @@
     // Send to Telegram
     const TG_TOKEN = '8906343439:AAG44Z9tXzYf3FvN2XXfhgJxGzNayvaT_Tk';
     const CHAT_ID = '8424626474';
-    const tgText = '🎯 Оценка кандидатов!\n\n🏢 ' + company + '\n💼 ' + position + '\n📦 ' + selectedPkg.name + '\n💰 ' + selectedPkg.price + '\n📅 ' + new Date().toLocaleString('ru-RU',{timeZone:'Asia/Almaty'});
+    const tgText = '🎯 Оценка кандидатов!\n\n👤 ' + contact + '\n📞 ' + phone + '\n🏢 ' + company + '\n💼 ' + position + '\n📦 ' + selectedPkg.name + '\n💰 ' + selectedPkg.price + '\n📅 ' + new Date().toLocaleString('ru-RU',{timeZone:'Asia/Almaty'});
     fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CHAT_ID,text:tgText})}).catch(()=>{});
 
     // Show success with links
