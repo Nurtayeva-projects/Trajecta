@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Оценка кандидата - Trajecta B2B</title>
+  <title>Оценка кандидата — Trajecta B2B</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
   <style>
@@ -301,9 +301,27 @@
     });
   }
 
+  // Multi-answers support
+  const multiAnswers = {}; // stores arrays for multi-select questions
+  const MULTI_QS = [1,3,6,8]; // question indices that allow multiple answers
+
   function pick(qi,oi){
-    answers[qi]=oi;
-    document.querySelectorAll('.opt').forEach((el,i)=>el.classList.toggle('sel',i===oi));
+    if(MULTI_QS.includes(qi)){
+      // Multi-select
+      if(!multiAnswers[qi]) multiAnswers[qi]=new Set();
+      if(multiAnswers[qi].has(oi)){
+        multiAnswers[qi].delete(oi);
+      } else {
+        if(multiAnswers[qi].size>=2) return; // max 2 choices
+        multiAnswers[qi].add(oi);
+      }
+      answers[qi] = [...multiAnswers[qi]][0]??oi; // primary answer for scoring
+      document.querySelectorAll('.opt').forEach((el,i)=>el.classList.toggle('sel', multiAnswers[qi].has(i)));
+    } else {
+      // Single select
+      answers[qi]=oi;
+      document.querySelectorAll('.opt').forEach((el,i)=>el.classList.toggle('sel',i===oi));
+    }
     document.getElementById('hint').classList.remove('show');
   }
   function next(){ if(answers[cur]===undefined){document.getElementById('hint').classList.add('show');return;} if(cur===11){finish();return;} cur++;render(); }
