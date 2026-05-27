@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trajecta Admin</title>
+  <title>Trajecta admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
   <style>
@@ -118,10 +118,15 @@
       <div class="type-name">B2B — Доступ для команды</div>
       <div class="type-desc">Компания оплатила → создаёшь ссылку → команда проходит тест</div>
     </div>
-    <div class="type-btn" id="btn-cand" onclick="setType('cand')" style="grid-column:1/-1">
+    <div class="type-btn" id="btn-cand" onclick="setType('cand')">
       <div class="type-ico">🎯</div>
       <div class="type-name">Кандидат — Ссылка для собеседования</div>
       <div class="type-desc">Перед интервью → кандидат проходит тест → HR видит профиль до встречи</div>
+    </div>
+    <div class="type-btn" id="btn-requests" onclick="setType('requests')">
+      <div class="type-ico">📥</div>
+      <div class="type-name">Заявки на оценку кандидатов</div>
+      <div class="type-desc">Заявки с сайта → одним кликом создать ссылки → отправить HR</div>
     </div>
   </div>
 
@@ -297,6 +302,22 @@
     </div>
   </div>
 
+
+  <!-- REQUESTS PANEL -->
+  <div class="panel" id="panel-requests">
+    <div class="card" style="border-color:rgba(198,255,0,.2)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <div class="card-title" style="margin:0">📥 Заявки на оценку кандидатов</div>
+        <button class="btn btn-sm btn-gray" onclick="clearRequests()">Очистить обработанные</button>
+      </div>
+      <div id="requests-list">
+        <div style="text-align:center;padding:32px;color:var(--muted);font-size:.85rem">
+          Заявок пока нет — они появятся здесь когда HR заполнит форму на сайте
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -323,9 +344,12 @@
     document.getElementById('btn-b2c').className='type-btn'+(type==='b2c'?' active-b2c':'');
     document.getElementById('btn-b2b').className='type-btn'+(type==='b2b'?' active-b2b':'');
     document.getElementById('btn-cand').className='type-btn'+(type==='cand'?' active-b2c':'');
+    document.getElementById('btn-requests').className='type-btn'+(type==='requests'?' active-b2c':'');
     document.getElementById('panel-b2c').className='panel'+(type==='b2c'?' active':'');
     document.getElementById('panel-b2b').className='panel'+(type==='b2b'?' active':'');
     document.getElementById('panel-cand').className='panel'+(type==='cand'?' active':'');
+    document.getElementById('panel-requests').className='panel'+(type==='requests'?' active':'');
+    if(type==='requests') renderRequests();
   }
 
   // ── B2C CODES ──
@@ -448,6 +472,109 @@
   }
 
   function renderAll(){ renderB2C(); renderB2B(); renderCandList(); }
+
+  const REQ_KEY = 'trajecta_vacancy_requests';
+
+  function getRequests(){ try{return JSON.parse(localStorage.getItem(REQ_KEY)||'[]');}catch(e){return[];} }
+  function saveRequests(r){ localStorage.setItem(REQ_KEY,JSON.stringify(r)); }
+
+  function clearRequests(){
+    if(!confirm('Удалить обработанные заявки?')) return;
+    saveRequests(getRequests().filter(r=>r.status!=='done'));
+    renderRequests();
+  }
+
+  function markDone(id){
+    const reqs = getRequests();
+    const r = reqs.find(r=>r.id===id);
+    if(r) r.status = 'done';
+    saveRequests(reqs);
+    renderRequests();
+  }
+
+  function activateRequest(id){
+    const reqs = getRequests();
+    const req = reqs.find(r=>r.id===id);
+    if(!req) return;
+
+    const base = window.location.origin;
+    const candLink = base+'/candidate-entry.html?company='+encodeURIComponent(req.company)+'&id='+req.id+'&position='+encodeURIComponent(req.title||'');
+    const dashLink = base+'/candidates-dashboard.html?company='+encodeURIComponent(req.company)+'&id='+req.id;
+
+    // Save vacancy profile so candidate test can use it
+    const allVac = JSON.parse(localStorage.getItem('trajecta_vacancies')||'{}');
+    allVac[req.id] = req;
+    localStorage.setItem('trajecta_vacancies', JSON.stringify(allVac));
+
+    // Save to cand links
+    const links = getCandLinks();
+    if(!links.find(l=>l.id===req.id)){
+      links.unshift({id:req.id, company:req.company, position:req.title||'', link:candLink, dashLink, created:req.createdAt||new Date().toLocaleDateString('ru-RU')});
+      saveCandLinks(links);
+    }
+
+    // Mark as activated
+    req.status = 'done';
+    req.candLink = candLink;
+    req.dashLink = dashLink;
+    saveRequests(reqs);
+
+    // Generate message
+    const msg = 'Добрый день, '+req.contact+'!\n\nОплата подтверждена ✅\n\nВот ссылки для оценки кандидатов:\n\n🔗 Ссылка для кандидатов:\n'+candLink+'\n\n📊 Ваш HR дашборд (только для вас):\n'+dashLink+'\n\nКандидат открывает ссылку, проходит тест (7–10 мин), вы видите профиль в дашборде.\n\nЕсли вопросы — пишите! — Trajecta';
+    
+    // Copy message
+    navigator.clipboard?.writeText(msg);
+
+    renderRequests();
+    flash(null, '');
+    alert('✅ Ссылки созданы! Сообщение скопировано — вставьте в WhatsApp клиенту '+req.contact);
+  }
+
+  function renderRequests(){
+    const reqs = getRequests();
+    const el = document.getElementById('requests-list');
+    if(!el) return;
+
+    if(!reqs.length){
+      el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:.85rem">Заявок пока нет — они появятся здесь когда HR заполнит форму на сайте</div>';
+      return;
+    }
+
+    el.innerHTML = reqs.map(req=>{
+      const isDone = req.status==='done';
+      return `<div style="background:var(--bg);border:1px solid ${isDone?'var(--border)':'rgba(198,255,0,.2)'};border-radius:12px;padding:16px;margin-bottom:10px;opacity:${isDone?'.5':'1'}">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+          <div>
+            <div style="font-weight:700;font-size:.95rem;margin-bottom:3px">${req.contact||'—'} · ${req.phone||'—'}</div>
+            <div style="font-size:.82rem;color:var(--muted)">${req.company} · ${req.title||'Вакансия не указана'}</div>
+            <div style="font-size:.75rem;color:var(--dim);margin-top:3px">📦 ${req.package||'—'} · 💰 ${req.price||'—'} · ${req.createdAt||'—'}</div>
+          </div>
+          ${isDone
+            ? '<span style="font-size:.72rem;color:var(--muted);padding:4px 10px;background:rgba(255,255,255,.05);border-radius:100px">✓ Обработано</span>'
+            : `<button class="btn btn-sm" style="background:var(--accent);color:#020617" onclick="activateRequest('${req.id}')">⚡ Активировать и скопировать сообщение</button>`
+          }
+        </div>
+        ${req.candLink?`<div style="font-size:.75rem;color:var(--muted);word-break:break-all">🔗 ${req.candLink}</div>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  // Listen for new vacancy requests from vacancy-setup.html (same device)
+  window.addEventListener('storage', (e)=>{
+    if(e.key === 'trajecta_new_request' && e.newValue){
+      try{
+        const req = JSON.parse(e.newValue);
+        const reqs = getRequests();
+        if(!reqs.find(r=>r.id===req.id)){
+          reqs.unshift(req);
+          saveRequests(reqs);
+        }
+        localStorage.removeItem('trajecta_new_request');
+        if(currentType==='requests') renderRequests();
+      }catch(err){}
+    }
+  });
+
 
   const CAND_KEY = 'trajecta_cand_links';
   function getCandLinks(){ try{return JSON.parse(localStorage.getItem(CAND_KEY)||'[]');}catch(e){return[];} }
