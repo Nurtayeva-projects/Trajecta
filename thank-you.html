@@ -102,12 +102,23 @@
     if(h1) h1.innerHTML = 'Заявка <em>принята!</em>';
   }
 
-  // Change CTA based on source
+  // Change CTA based on plan
   const isB2B = plan && (plan.includes('B2B') || plan.includes('Команда') || plan.includes('Бизнес') || plan.includes('Enterprise') || plan.includes('Демо'));
+  const isCandidate = plan && (plan.includes('Найм') || plan.toLowerCase().includes('кандидат'));
   const ctaEl = document.getElementById('main-cta');
-  if(ctaEl && isB2B){
-    ctaEl.href = 'b2b.html';
-    ctaEl.textContent = 'Вернуться на B2B страницу →';
+
+  if(ctaEl && isCandidate){
+    ctaEl.removeAttribute('href');
+    ctaEl.textContent = 'Ожидайте — свяжемся в WhatsApp';
+    ctaEl.style.cssText += ';background:rgba(251,146,60,.7);pointer-events:none;cursor:default;';
+    // Update steps for candidate
+    const steps = document.querySelectorAll('.step-txt');
+    if(steps[0]) steps[0].innerHTML = '<strong>В течение 2 часов</strong> — напишем в WhatsApp или Telegram';
+    if(steps[1]) steps[1].innerHTML = '<strong>Пришлём ссылку</strong> — для заполнения профиля вакансии';
+    if(steps[2]) steps[2].innerHTML = '<strong>Настроим оценку</strong> — пришлём ссылки для кандидатов';
+  } else if(ctaEl && isB2B){
+    ctaEl.href = 'b2b-starter.html';
+    ctaEl.textContent = 'Открыть демо дашборд →';
   }
 
   // Update steps for B2B
