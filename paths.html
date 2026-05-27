@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Стратегия Развития — Trajecta</title>
+  <title>Стратегия развития — Trajecta</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -1185,7 +1185,17 @@
     if(btn){btn.textContent='Отправляем...';btn.disabled=true;}
     await sendToTelegram({name,phone,email,plan,price});
     document.getElementById('lead-modal').remove();
-    setTimeout(()=>{ window.location.href='thank-you.html?plan='+encodeURIComponent(plan); }, 800);
+    // Close modal and show success message - stay on paths page
+    const modal = document.getElementById('lead-modal');
+    if(modal) modal.remove();
+    // Show success toast with code reminder
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#0d1b35;border:1.5px solid rgba(198,255,0,.4);border-radius:14px;padding:18px 24px;z-index:9999;max-width:400px;width:calc(100% - 32px);text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.4);';
+    toast.innerHTML = '<div style="font-size:1.3rem;margin-bottom:8px">✅</div><div style="font-family:Syne,sans-serif;font-weight:800;margin-bottom:6px">Заявка принята!</div><div style="font-size:.82rem;color:rgba(240,244,255,.6);line-height:1.5">Пришлём код доступа в течение 2 часов.<br>Введи его в поле ниже — второй путь откроется.</div>';
+    document.body.appendChild(toast);
+    setTimeout(()=>toast.remove(), 6000);
+    // Scroll to code input
+    setTimeout(()=>{ const el=document.getElementById('access-code-input'); if(el){ el.scrollIntoView({behavior:'smooth',block:'center'}); el.focus(); }}, 500);
   }
 
 </script>
