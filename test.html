@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Настройка сценария — Trajecta</title>
+  <title>Настройка сценария - Trajecta</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -844,8 +844,8 @@
     const tm = r.tm*sp.tm;
     const gm = b.growth*h.gm*sm.growthMul;
 
-    const n0  = Math.round(b.min*im/10)*10;
-    const n0x = Math.round(b.max*im/10)*10;
+    let n0  = Math.round(b.min*im/10)*10;
+    let n0x = Math.round(b.max*im/10)*10;
     let n2  = Math.round(n0*(1+gm*2*tm)/10)*10;
     let n2x = Math.round(n0x*(1+gm*2*tm)/10)*10;
     let n5  = Math.round(n0*(1+gm*5*tm)/10)*10;
