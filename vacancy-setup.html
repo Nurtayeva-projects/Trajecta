@@ -187,20 +187,27 @@
   <!-- SUCCESS -->
   <div class="success" id="success-view">
     <div class="success-ico">✅</div>
-    <div class="success-title">Профиль сохранён!</div>
-    <p class="success-sub">Профиль вакансии сохранён! Мы свяжемся с вами в течение 2 часов для подтверждения оплаты через Kaspi. После оплаты — ссылки для кандидатов будут активированы.</p>
-    <div id="pkg-summary" style="background:rgba(198,255,0,.08);border:1px solid rgba(198,255,0,.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:.85rem;font-weight:600" id="pkg-name-show">—</span><span style="font-family:var(--D);font-size:1.1rem;font-weight:800;color:var(--accent)" id="pkg-price-show">—</span></div>
-    <div class="link-box">
-      <div class="link-label">🔗 Ссылка для кандидатов</div>
-      <div class="link-url" id="cand-link">—</div>
-      <button class="copy-btn" onclick="copyLink()">📋 Скопировать ссылку</button>
-      <p class="step-note">Отправьте эту ссылку каждому кандидату перед интервью. Тест займёт 7–10 минут.</p>
+    <div class="success-title">Заявка принята!</div>
+    <p class="success-sub">Мы свяжемся с вами в течение 2 часов для подтверждения оплаты через Kaspi. После оплаты пришлём ссылку для кандидатов.</p>
+    <div id="pkg-summary" style="background:rgba(198,255,0,.08);border:1px solid rgba(198,255,0,.2);border-radius:10px;padding:14px 18px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:.88rem;font-weight:600" id="pkg-name-show">—</span>
+      <span style="font-family:var(--D);font-size:1.2rem;font-weight:800;color:var(--accent)" id="pkg-price-show">—</span>
     </div>
-    <div style="margin-top:14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
-      <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">📊 Дашборд с результатами</div>
-      <div class="link-url" id="dash-link">—</div>
-      <a id="dash-btn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);color:var(--muted);font-family:var(--B);font-weight:600;font-size:.82rem;padding:8px 16px;border-radius:8px;text-decoration:none;margin-top:6px">📊 Открыть дашборд →</a>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <span style="font-size:1.2rem">💬</span>
+        <div style="font-size:.85rem;color:var(--muted)"><strong style="color:var(--text)">Шаг 1</strong> — Свяжемся в WhatsApp и пришлём реквизиты Kaspi</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <span style="font-size:1.2rem">💳</span>
+        <div style="font-size:.85rem;color:var(--muted)"><strong style="color:var(--text)">Шаг 2</strong> — Вы оплачиваете через Kaspi</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <span style="font-size:1.2rem">🔗</span>
+        <div style="font-size:.85rem;color:var(--muted)"><strong style="color:var(--text)">Шаг 3</strong> — Получаете ссылку для кандидатов и HR дашборд</div>
+      </div>
     </div>
+    <a href="b2b.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);color:var(--muted);font-family:var(--B);font-weight:600;font-size:.88rem;padding:10px 20px;border-radius:8px;text-decoration:none">← Вернуться на B2B страницу</a>
   </div>
 
 </div>
@@ -259,6 +266,14 @@
     allVac[id] = vacData;
     localStorage.setItem('trajecta_vacancies', JSON.stringify(allVac));
     localStorage.setItem('trajecta_last_vacancy', id);
+
+    // Save to requests queue for admin panel
+    const REQ_KEY = 'trajecta_vacancy_requests';
+    const reqs = JSON.parse(localStorage.getItem(REQ_KEY)||'[]');
+    reqs.unshift({...vacData, status:'new'});
+    localStorage.setItem(REQ_KEY, JSON.stringify(reqs));
+    // Trigger storage event for admin panel (if open on same device)
+    localStorage.setItem('trajecta_new_request', JSON.stringify({...vacData, status:'new'}));
 
     // Send to Make
     // Add package to vacData
