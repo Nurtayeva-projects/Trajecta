@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Профиль вакансии — Trajecta B2B</title>
+  <title>Профиль вакансии v2 - Trajecta B2B</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23020617'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial Black' font-weight='900' font-size='20' fill='%23C6FF00'>T</text></svg>">
   <style>
@@ -181,7 +181,7 @@
       <div style="font-size:.75rem;color:var(--dim);margin-top:10px;text-align:center">📲 После сохранения свяжемся и пришлём ссылку на оплату через Kaspi</div>
     </div>
 
-    <button class="submit-btn" onclick="submitForm()">Сохранить и оформить →</button>
+    <button class="submit-btn" id="submit-btn" onclick="submitForm()">Сохранить и оформить →</button>
   </div>
 
   <!-- SUCCESS -->
@@ -239,6 +239,8 @@
   }
 
   function submitForm(){
+    const btn = document.getElementById('submit-btn');
+    if(btn){ btn.disabled=true; btn.textContent='Отправляем...'; btn.style.opacity='.6'; }
     const contact = document.getElementById('f-contact').value.trim();
     const phone = document.getElementById('f-phone').value.trim();
     const company = document.getElementById('f-company').value.trim();
